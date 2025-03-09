@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع نشر السكربتات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .menu-button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .menu-button:hover {
+            background-color: #45a049;
+        }
+        .script-form {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
+            height: 200px;
+            font-family: monospace;
+        }
+        .publish-button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+        .publish-button:hover {
+            background-color: #0b7dda;
+        }
+        .scripts-list {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .script-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        .script-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .script-code {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .no-scripts {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>موقع نشر السكربتات</h1>
+        
+        <div class="menu">
+            <button class="menu-button" id="add-script-btn">نشر سكربت جديد</button>
+            <button class="menu-button" id="view-scripts-btn">عرض السكربتات</button>
+        </div>
+        
+        <div class="script-form" id="script-form">
+            <h2>نشر سكربت جديد</h2>
+            <div class="form-group">
+                <label for="script-name">اسم السكربت:</label>
+                <input type="text" id="script-name" placeholder="أدخل اسم السكربت">
+            </div>
+            <div class="form-group">
+                <label for="script-code">كود السكربت:</label>
+                <textarea id="script-code" placeholder="أدخل كود السكربت هنا..."></textarea>
+            </div>
+            <button class="publish-button" id="publish-btn">نشر</button>
+        </div>
+        
+        <div class="scripts-list" id="scripts-list">
+            <h2>السكربتات المنشورة</h2>
+            <div id="scripts-container">
+                <div class="no-scripts">لا توجد سكربتات منشورة حالياً</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // عناصر DOM
+        const addScriptBtn = document.getElementById('add-script-btn');
+        const viewScriptsBtn = document.getElementById('view-scripts-btn');
+        const scriptForm = document.getElementById('script-form');
+        const scriptsList = document.getElementById('scripts-list');
+        const scriptsContainer = document.getElementById('scripts-container');
+        const scriptNameInput = document.getElementById('script-name');
+        const scriptCodeInput = document.getElementById('script-code');
+        const publishBtn = document.getElementById('publish-btn');
+        
+        // تحميل السكربتات المحفوظة من التخزين المحلي
+        let scripts = JSON.parse(localStorage.getItem('scripts')) || [];
+        
+        // عرض قائمة السكربتات
+        function displayScripts() {
+            if (scripts.length === 0) {
+                scriptsContainer.innerHTML = '<div class="no-scripts">لا توجد سكربتات منشورة حالياً</div>';
+                return;
+            }
+            
+            scriptsContainer.innerHTML = '';
+            scripts.forEach((script, index) => {
+                const scriptElement = document.createElement('div');
+                scriptElement.className = 'script-item';
+                scriptElement.innerHTML = `
+                    <div class="script-title">${script.name}</div>
+                    <div class="script-code">${escapeHtml(script.code)}</div>
+                `;
+                scriptsContainer.appendChild(scriptElement);
+            });
+        }
+        
+        // الوظيفة لتهرب الأحرف الخاصة في HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // نشر سكربت جديد
+        publishBtn.addEventListener('click', function() {
+            const name = scriptNameInput.value.trim();
+            const code = scriptCodeInput.value.trim();
+            
+            if (!name || !code) {
+                alert('يرجى إدخال اسم السكربت والكود');
+                return;
+            }
+            
+            // إضافة السكربت الجديد
+            scripts.push({
+                name: name,
+                code: code,
+                date: new Date().toISOString()
+            });
+            
+            // حفظ في التخزين المحلي
+            localStorage.setItem('scripts', JSON.stringify(scripts));
+            
+            // إعادة تعيين النموذج
+            scriptNameInput.value = '';
+            scriptCodeInput.value = '';
+            
+            // إظهار رسالة نجاح
+            alert('تم نشر السكربت بنجاح!');
+            
+            // الانتقال إلى عرض السكربتات
+            scriptForm.style.display = 'none';
+            scriptsList.style.display = 'block';
+            
+            // تحديث قائمة السكربتات
+            displayScripts();
+        });
+        
+        // أزرار القائمة
+        addScriptBtn.addEventListener('click', function() {
+            scriptForm.style.display = 'block';
+            scriptsList.style.display = 'none';
+        });
+        
+        viewScriptsBtn.addEventListener('click', function() {
+            scriptsList.style.display = 'block';
+            scriptForm.style.display = 'none';
+            displayScripts();
+        });
+        
+        // إظهار قائمة السكربتات عند تحميل الصفحة
+        displayScripts();
+        scriptsList.style.display = 'block';
+        scriptForm.style.display = 'none';
+    </script>
+</body>
+</html>
