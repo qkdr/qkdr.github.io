@@ -1,415 +1,153 @@
 <!DOCTYPE html>
 <html dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع نشر السكربتات</title>
-    <!-- Firebase SDK -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-database-compat.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .menu {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        .menu-button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .menu-button:hover {
-            background-color: #45a049;
-        }
-        .script-form {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        textarea {
-            height: 200px;
-            font-family: monospace;
-        }
-        .publish-button {
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 0 auto;
-        }
-        .publish-button:hover {
-            background-color: #0b7dda;
-        }
-        .scripts-list {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .script-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 15px;
-        }
-        .script-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .script-date {
-            font-size: 12px;
-            color: #777;
-            margin-bottom: 10px;
-        }
-        .script-code {
-            background-color: #f8f8f8;
-            padding: 10px;
-            border-radius: 4px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            overflow-x: auto;
-        }
-        .no-scripts {
-            text-align: center;
-            color: #777;
-            padding: 20px;
-        }
-        .loading {
-            text-align: center;
-            padding: 20px;
-        }
-        .status-message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            text-align: center;
-        }
-        .success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-        }
-        .error {
-            background-color: #ffebee;
-            color: #c62828;
-        }
-        .copy-button {
-            background-color: #673ab7;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .copy-button:hover {
-            background-color: #5e35b1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موقع نشر السكربتات</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    .scripts-list {
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .script-item {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 15px;
+    }
+    .script-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .script-date {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+    .script-code {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .copy-button {
+      background-color: #673ab7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .copy-button:hover {
+      background-color: #5e35b1;
+    }
+    .no-scripts {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>موقع نشر السكربتات</h1>
-        
-        <div class="menu">
-            <button class="menu-button" id="add-script-btn">نشر سكربت جديد</button>
-            <button class="menu-button" id="view-scripts-btn">عرض السكربتات</button>
-        </div>
-        
-        <div id="status-area"></div>
-        
-        <div class="script-form" id="script-form">
-            <h2>نشر سكربت جديد</h2>
-            <div class="form-group">
-                <label for="script-name">اسم السكربت:</label>
-                <input type="text" id="script-name" placeholder="أدخل اسم السكربت">
-            </div>
-            <div class="form-group">
-                <label for="script-code">كود السكربت:</label>
-                <textarea id="script-code" placeholder="أدخل كود السكربت هنا..."></textarea>
-            </div>
-            <button class="publish-button" id="publish-btn">نشر</button>
-        </div>
-        
-        <div class="scripts-list" id="scripts-list">
-            <h2>السكربتات المنشورة</h2>
-            <div id="scripts-container">
-                <div class="loading">جاري تحميل السكربتات...</div>
-            </div>
-        </div>
+  <div class="container">
+    <h1>موقع نشر السكربتات</h1>
+    <div class="scripts-list" id="scripts-list">
+      <h2>السكربتات المنشورة</h2>
+      <div id="scripts-container">
+        <!-- سيتم عرض السكربتات هنا -->
+      </div>
     </div>
-    
-    <script>
-        // تهيئة Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDOCAbC123dEf456GhI789jKl01-MnO",
-            authDomain: "script-publisher.firebaseapp.com",
-            databaseURL: "https://script-publisher-default-rtdb.firebaseio.com",
-            projectId: "script-publisher",
-            storageBucket: "script-publisher.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:a1b2c3d4e5f6g7h8"
-        };
-        
-        // تهيئة Firebase (استخدام try/catch للتعامل مع الأخطاء المحتملة)
-        try {
-            firebase.initializeApp(firebaseConfig);
-            console.log("تم تهيئة Firebase بنجاح");
-        } catch (e) {
-            showStatus("حدث خطأ في الاتصال بقاعدة البيانات. سيتم استخدام التخزين المحلي بدلاً من ذلك.", "error");
-            console.error("خطأ في تهيئة Firebase:", e);
-        }
-        
-        // مرجع لقاعدة البيانات
-        let database = null;
-        try {
-            database = firebase.database();
-        } catch (e) {
-            console.error("خطأ في الوصول إلى قاعدة البيانات:", e);
-        }
-        
-        // عناصر DOM
-        const addScriptBtn = document.getElementById('add-script-btn');
-        const viewScriptsBtn = document.getElementById('view-scripts-btn');
-        const scriptForm = document.getElementById('script-form');
-        const scriptsList = document.getElementById('scripts-list');
-        const scriptsContainer = document.getElementById('scripts-container');
-        const scriptNameInput = document.getElementById('script-name');
-        const scriptCodeInput = document.getElementById('script-code');
-        const publishBtn = document.getElementById('publish-btn');
-        const statusArea = document.getElementById('status-area');
-        
-        // إظهار رسالة حالة
-        function showStatus(message, type = 'success') {
-            statusArea.innerHTML = `<div class="status-message ${type}">${message}</div>`;
-            setTimeout(() => {
-                statusArea.innerHTML = '';
-            }, 5000);
-        }
-        
-        // تنسيق التاريخ
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleString('ar-SA');
-        }
-        
-        // الوظيفة لتهرب الأحرف الخاصة في HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // نسخ كود السكربت إلى الحافظة
-        function copyScriptCode(code) {
-            navigator.clipboard.writeText(code)
-                .then(() => {
-                    showStatus("تم نسخ الكود بنجاح!");
-                })
-                .catch(err => {
-                    console.error('حدث خطأ أثناء نسخ النص: ', err);
-                    showStatus("حدث خطأ أثناء نسخ الكود.", "error");
-                });
-        }
-        
-        // عرض قائمة السكربتات
-        function displayScripts(scripts) {
-            if (!scripts || scripts.length === 0) {
-                scriptsContainer.innerHTML = '<div class="no-scripts">لا توجد سكربتات منشورة حالياً</div>';
-                return;
-            }
-            
-            scriptsContainer.innerHTML = '';
-            scripts.forEach((script) => {
-                const scriptElement = document.createElement('div');
-                scriptElement.className = 'script-item';
-                scriptElement.innerHTML = `
-                    <div class="script-title">${escapeHtml(script.name)}</div>
-                    <div class="script-date">تاريخ النشر: ${formatDate(script.date)}</div>
-                    <div class="script-code">${escapeHtml(script.code)}</div>
-                    <button class="copy-button" onclick="copyScriptCode('${script.code.replace(/'/g, "\\'")}')">نسخ الكود</button>
-                `;
-                scriptsContainer.appendChild(scriptElement);
-            });
-        }
-        
-        // تحميل السكربتات من Firebase
-        function loadScriptsFromFirebase() {
-            scriptsContainer.innerHTML = '<div class="loading">جاري تحميل السكربتات...</div>';
-            
-            if (!database) {
-                // إذا كان Firebase غير متاح، استخدم التخزين المحلي بدلاً من ذلك
-                const scripts = JSON.parse(localStorage.getItem('scripts')) || [];
-                displayScripts(scripts);
-                return;
-            }
-            
-            const scriptsRef = database.ref('scripts');
-            scriptsRef.once('value')
-                .then((snapshot) => {
-                    const data = snapshot.val();
-                    const scripts = [];
-                    
-                    if (data) {
-                        Object.keys(data).forEach((key) => {
-                            scripts.push({
-                                id: key,
-                                ...data[key]
-                            });
-                        });
-                    }
-                    
-                    // ترتيب السكربتات حسب التاريخ (الأحدث أولاً)
-                    scripts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    
-                    displayScripts(scripts);
-                })
-                .catch((error) => {
-                    console.error("حدث خطأ في تحميل السكربتات:", error);
-                    showStatus("حدث خطأ في تحميل السكربتات، جاري استخدام البيانات المحلية.", "error");
-                    
-                    // استخدم التخزين المحلي في حالة الفشل
-                    const scripts = JSON.parse(localStorage.getItem('scripts')) || [];
-                    displayScripts(scripts);
-                });
-        }
-        
-        // نشر سكربت جديد
-        publishBtn.addEventListener('click', function() {
-            const name = scriptNameInput.value.trim();
-            const code = scriptCodeInput.value.trim();
-            
-            if (!name || !code) {
-                showStatus("يرجى إدخال اسم السكربت والكود", "error");
-                return;
-            }
-            
-            const newScript = {
-                name: name,
-                code: code,
-                date: new Date().toISOString()
-            };
-            
-            // حفظ في Firebase
-            if (database) {
-                const scriptsRef = database.ref('scripts');
-                scriptsRef.push(newScript)
-                    .then(() => {
-                        // إعادة تعيين النموذج
-                        scriptNameInput.value = '';
-                        scriptCodeInput.value = '';
-                        
-                        showStatus("تم نشر السكربت بنجاح!");
-                        
-                        // الانتقال إلى عرض السكربتات
-                        scriptForm.style.display = 'none';
-                        scriptsList.style.display = 'block';
-                        
-                        // تحميل السكربتات من جديد
-                        loadScriptsFromFirebase();
-                    })
-                    .catch((error) => {
-                        console.error("حدث خطأ في نشر السكربت:", error);
-                        showStatus("حدث خطأ في نشر السكربت. جاري الحفظ محلياً.", "error");
-                        
-                        // في حالة الفشل، حفظ في التخزين المحلي
-                        saveToLocalStorage(newScript);
-                    });
-            } else {
-                // حفظ في التخزين المحلي إذا كان Firebase غير متاح
-                saveToLocalStorage(newScript);
-            }
+  </div>
+  <script>
+    // أضف هنا السكربتات يدويًا، يمكنك تعديل الاسم والكود والتاريخ كما تشاء.
+    const scripts = [
+      {
+        name: "سكربت تجريبي 1",
+        code: "console.log('Hello World 1');",
+        date: "2025-03-09T12:00:00"
+      },
+      {
+        name: "سكربت تجريبي 2",
+        code: "alert('مرحبا بالعالم 2');",
+        date: "2025-03-09T13:00:00"
+      }
+    ];
+
+    // دالة لتنسيق التاريخ بطريقة عربية
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString('ar-SA');
+    }
+
+    // دالة لهروب الأحرف الخاصة لتفادي مشاكل عرض النصوص
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // دالة نسخ الكود إلى الحافظة
+    function copyScriptCode(code) {
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          alert("تم نسخ الكود بنجاح!");
+        })
+        .catch(err => {
+          console.error('حدث خطأ أثناء نسخ النص:', err);
+          alert("حدث خطأ أثناء نسخ الكود.");
         });
-        
-        // حفظ السكربت في التخزين المحلي
-        function saveToLocalStorage(newScript) {
-            // الحصول على السكربتات الحالية
-            const scripts = JSON.parse(localStorage.getItem('scripts')) || [];
-            
-            // إضافة السكربت الجديد
-            scripts.push(newScript);
-            
-            // حفظ في التخزين المحلي
-            localStorage.setItem('scripts', JSON.stringify(scripts));
-            
-            // إعادة تعيين النموذج
-            scriptNameInput.value = '';
-            scriptCodeInput.value = '';
-            
-            showStatus("تم حفظ السكربت محلياً بنجاح!");
-            
-            // الانتقال إلى عرض السكربتات
-            scriptForm.style.display = 'none';
-            scriptsList.style.display = 'block';
-            
-            // عرض السكربتات المحلية
-            displayScripts(scripts);
-        }
-        
-        // وظيفة عامة لنسخ النص إلى الحافظة
-        window.copyScriptCode = copyScriptCode;
-        
-        // أزرار القائمة
-        addScriptBtn.addEventListener('click', function() {
-            scriptForm.style.display = 'block';
-            scriptsList.style.display = 'none';
-        });
-        
-        viewScriptsBtn.addEventListener('click', function() {
-            scriptsList.style.display = 'block';
-            scriptForm.style.display = 'none';
-            loadScriptsFromFirebase();
-        });
-        
-        // تحميل السكربتات عند تحميل الصفحة
-        loadScriptsFromFirebase();
-        scriptsList.style.display = 'block';
-        scriptForm.style.display = 'none';
-    </script>
+    }
+
+    // دالة عرض السكربتات في الصفحة
+    function displayScripts(scripts) {
+      const scriptsContainer = document.getElementById('scripts-container');
+      if (!scripts || scripts.length === 0) {
+        scriptsContainer.innerHTML = '<div class="no-scripts">لا توجد سكربتات منشورة حالياً</div>';
+        return;
+      }
+      // ترتيب السكربتات حسب التاريخ (الأحدث أولاً)
+      scripts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      scriptsContainer.innerHTML = '';
+      scripts.forEach((script) => {
+        const scriptElement = document.createElement('div');
+        scriptElement.className = 'script-item';
+        scriptElement.innerHTML = `
+          <div class="script-title">${escapeHtml(script.name)}</div>
+          <div class="script-date">تاريخ النشر: ${formatDate(script.date)}</div>
+          <div class="script-code">${escapeHtml(script.code)}</div>
+          <button class="copy-button" onclick="copyScriptCode('${script.code.replace(/'/g, "\\'")}')">نسخ الكود</button>
+        `;
+        scriptsContainer.appendChild(scriptElement);
+      });
+    }
+
+    // عرض السكربتات عند تحميل الصفحة
+    displayScripts(scripts);
+  </script>
 </body>
 </html>
