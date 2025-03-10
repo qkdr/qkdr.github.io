@@ -1,153 +1,60 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع نشر السكربتات</title>
+  <title>موقع بايثون شبيه بتيرمكس</title>
+  <!-- تضمين مكتبة Brython -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython_stdlib.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-      direction: rtl;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h1, h2 {
-      text-align: center;
-      color: #333;
-    }
-    .scripts-list {
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    .script-item {
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 15px;
-    }
-    .script-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .script-date {
-      font-size: 12px;
-      color: #777;
-      margin-bottom: 10px;
-    }
-    .script-code {
-      background-color: #f8f8f8;
-      padding: 10px;
-      border-radius: 4px;
+      background-color: #000;
+      color: #0f0;
       font-family: monospace;
-      white-space: pre-wrap;
-      overflow-x: auto;
+      margin: 0;
+      padding: 0;
     }
-    .copy-button {
-      background-color: #673ab7;
-      color: #fff;
+    #terminal {
+      padding: 10px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    #input {
+      background: none;
       border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
-      margin-top: 10px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .copy-button:hover {
-      background-color: #5e35b1;
-    }
-    .no-scripts {
-      text-align: center;
-      color: #777;
-      padding: 20px;
+      outline: none;
+      color: #0f0;
+      width: 100%;
+      font-family: monospace;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>موقع نشر السكربتات</h1>
-    <div class="scripts-list" id="scripts-list">
-      <h2>السكربتات المنشورة</h2>
-      <div id="scripts-container">
-        <!-- سيتم عرض السكربتات هنا -->
-      </div>
-    </div>
+<body onload="brython()">
+  <div id="terminal">
+    <pre id="output">مرحبا بك في بيئة بايثون! اكتب الكود واضغط Enter للتنفيذ.</pre>
+    <input type="text" id="input" placeholder="اكتب كود بايثون واضغط Enter" autofocus>
   </div>
-  <script>
-    // أضف هنا السكربتات يدويًا، يمكنك تعديل الاسم والكود والتاريخ كما تشاء.
-    const scripts = [
-      {
-        name: "سكربت تجريبي 1",
-        code: "console.log('Hello World 1');",
-        date: "2025-03-09T12:00:00"
-      },
-      {
-        name: "سكربت تجريبي 2",
-        code: "alert('مرحبا بالعالم 2');",
-        date: "2025-03-09T13:00:00"
-      }
-    ];
+  
+  <script type="text/python">
+from browser import document
 
-    // دالة لتنسيق التاريخ بطريقة عربية
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleString('ar-SA');
-    }
+output = document["output"]
+input_field = document["input"]
 
-    // دالة لهروب الأحرف الخاصة لتفادي مشاكل عرض النصوص
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
+def run_code(event):
+    # عند الضغط على Enter
+    if event.keyCode == 13:
+        code = input_field.value
+        input_field.value = ""
+        output.text += "\n>>> " + code
+        try:
+            # تنفيذ الكود المكتوب
+            exec_globals = {}
+            exec(code, exec_globals)
+        except Exception as e:
+            output.text += "\nError: " + str(e)
 
-    // دالة نسخ الكود إلى الحافظة
-    function copyScriptCode(code) {
-      navigator.clipboard.writeText(code)
-        .then(() => {
-          alert("تم نسخ الكود بنجاح!");
-        })
-        .catch(err => {
-          console.error('حدث خطأ أثناء نسخ النص:', err);
-          alert("حدث خطأ أثناء نسخ الكود.");
-        });
-    }
-
-    // دالة عرض السكربتات في الصفحة
-    function displayScripts(scripts) {
-      const scriptsContainer = document.getElementById('scripts-container');
-      if (!scripts || scripts.length === 0) {
-        scriptsContainer.innerHTML = '<div class="no-scripts">لا توجد سكربتات منشورة حالياً</div>';
-        return;
-      }
-      // ترتيب السكربتات حسب التاريخ (الأحدث أولاً)
-      scripts.sort((a, b) => new Date(b.date) - new Date(a.date));
-      
-      scriptsContainer.innerHTML = '';
-      scripts.forEach((script) => {
-        const scriptElement = document.createElement('div');
-        scriptElement.className = 'script-item';
-        scriptElement.innerHTML = `
-          <div class="script-title">${escapeHtml(script.name)}</div>
-          <div class="script-date">تاريخ النشر: ${formatDate(script.date)}</div>
-          <div class="script-code">${escapeHtml(script.code)}</div>
-          <button class="copy-button" onclick="copyScriptCode('${script.code.replace(/'/g, "\\'")}')">نسخ الكود</button>
-        `;
-        scriptsContainer.appendChild(scriptElement);
-      });
-    }
-
-    // عرض السكربتات عند تحميل الصفحة
-    displayScripts(scripts);
+input_field.bind("keypress", run_code)
   </script>
 </body>
 </html>
