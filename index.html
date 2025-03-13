@@ -1,60 +1,119 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>موقع بايثون شبيه بتيرمكس</title>
-  <!-- تضمين مكتبة Brython -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython_stdlib.js"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: #0f0;
-      font-family: monospace;
-      margin: 0;
-      padding: 0;
-    }
-    #terminal {
-      padding: 10px;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    #input {
-      background: none;
-      border: none;
-      outline: none;
-      color: #0f0;
-      width: 100%;
-      font-family: monospace;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع لكتابة الأكواد البرمجية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .editor {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #1e1e1e;
+            color: white;
+            resize: none;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .run-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .run-button:hover {
+            background-color: #45a049;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .output-container {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            min-height: 150px;
+            color: #333;
+        }
+
+    </style>
 </head>
-<body onload="brython()">
-  <div id="terminal">
-    <pre id="output">مرحبا بك في بيئة بايثون! اكتب الكود واضغط Enter للتنفيذ.</pre>
-    <input type="text" id="input" placeholder="اكتب كود بايثون واضغط Enter" autofocus>
-  </div>
-  
-  <script type="text/python">
-from browser import document
+<body>
 
-output = document["output"]
-input_field = document["input"]
+<div class="container">
+    <h1>محرر الأكواد البرمجية</h1>
 
-def run_code(event):
-    # عند الضغط على Enter
-    if event.keyCode == 13:
-        code = input_field.value
-        input_field.value = ""
-        output.text += "\n>>> " + code
-        try:
-            # تنفيذ الكود المكتوب
-            exec_globals = {}
-            exec(code, exec_globals)
-        except Exception as e:
-            output.text += "\nError: " + str(e)
+    <textarea id="codeEditor" class="editor" placeholder="اكتب كودك هنا..."></textarea>
 
-input_field.bind("keypress", run_code)
-  </script>
+    <div class="button-container">
+        <button class="run-button" onclick="runCode()">تشغيل الكود</button>
+    </div>
+
+    <h2>نتيجة الكود</h2>
+    <div class="output-container" id="output"></div>
+</div>
+
+<script>
+    function runCode() {
+        const code = document.getElementById('codeEditor').value;
+        const output = document.getElementById('output');
+
+        try {
+            // عرض الكود المدخل كـ HTML داخل الحاوية المخصصة
+            output.innerHTML = code;
+        } catch (error) {
+            output.textContent = "حدث خطأ: " + error.message;
+        }
+    }
+</script>
+
 </body>
 </html>
