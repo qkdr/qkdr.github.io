@@ -1,600 +1,102 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لعبة الذاكرة – مركز النقاط والمتجر</title>
-  
-  <!-- أيقونات Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
-        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+import { useState } from "react";
+import { Authenticated } from "convex/react";
+import { SignInForm } from "./SignInForm";
+import { SignOutButton } from "./SignOutButton";
+import { Toaster } from "./components/ui/toaster";
+import { useToast } from "./hooks/use-toast";
 
-  <!-- سكربت تلغرام -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+const scripts = [
+  {
+    id: 1,
+    name: "Speed Boost",
+    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.WalkSpeed = 50',
+    description: "زيادة سرعة الشخصية",
+  },
+  {
+    id: 2,
+    name: "Jump Power",
+    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.JumpPower = 100',
+    description: "زيادة قوة القفز",
+  },
+  {
+    id: 3,
+    name: "Infinite Health",
+    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.MaxHealth = math.huge\nhumanoid.Health = humanoid.MaxHealth',
+    description: "صحة لا نهائية",
+  }
+];
 
-  <style>
-    /* إعدادات عامة */
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background: #312c51;
-      color: #f0c38e;
-      overflow-x: hidden;
-    }
-    /* رأس الصفحة: عرض النقاط وأزرار المتجر والترتيب */
-    #header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5em 1em;
-      background: #48426d;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-    #scoreDisplay {
-      font-size: 1.2em;
-      display: flex;
-      align-items: center;
-    }
-    #scoreDisplay i { margin-right: 0.3em; }
-    /* زر المتجر وترتيبين: أحدهما لمركز النقاط وواحد لمركز الفوز */
-    #actions {
-      display: flex;
-      gap: 1em;
-      font-size: 1.4em;
-    }
-    #actions i {
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    #actions i:hover { transform: scale(1.2); }
-    /* منطقة اللعبة – شبكة البطاقات */
-    .game {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      width: 90vh;
-      height: 90vh;
-      margin: 1em auto;
-      perspective: 1000px;
-    }
-    /* تصميم البطاقة: استخدام تقنية Flip Card مع تأثيرات ديناميكية */
-    .card {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-    }
-    .card.flip .card-inner { transform: rotateY(180deg); }
-    .card-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
-      font-weight: bold;
-      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-    }
-    /* الوجه الخلفي: يظهر قبل قلب البطاقة */
-    .card-face.back {
-      background: #48426d;
-      color: #f0c38e;
-    }
-    /* الوجه الأمامي: يظهر عند قلب البطاقة بحيث لا يكون الرقم مقلوباً */
-    .card-face.front {
-      background: #f1aa9b;
-      color: #48426d;
-      transform: rotateY(180deg);
-    }
-    .card:hover { box-shadow: 0 0 15px rgba(0,0,0,0.5); transform: scale(1.03); }
-    /* زر المؤقت وإعادة اللعبة */
-    #timer, #newgame {
-      text-align: center;
-      margin: 0.5em auto;
-      padding: 0.8em 1em;
-      border-radius: 5px;
-      font-size: 1.2em;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      background: #f1aa9b;
-      color: #48426d;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      width: fit-content;
-    }
-    #timer:hover, #newgame:hover { transform: scale(1.05); }
-    #newgame { display: none; }
-    /* النوافذ (المودالات) – المتجر، مركز النقاط، مركز الفوز، وشراء وقت إضافي */
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #48426d;
-      color: #f0c38e;
-      padding: 1.5em;
-      border-radius: 10px;
-      z-index: 1000;
-      width: 80%;
-      max-width: 400px;
-      display: none;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    }
-    .modal h2 { margin-top: 0; text-align: center; }
-    .modal .modal-close {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      font-size: 1.5em;
-      cursor: pointer;
-    }
-    /* عناصر المتجر وترتيب القوائم */
-    #storeModal .item, 
-    #rankingModalScore .rankItem,
-    #rankingModalWin .rankItem {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5em 0;
-      border-bottom: 1px solid #777;
-    }
-    #storeModal .item:last-child, 
-    #rankingModalScore .rankItem:last-child,
-    #rankingModalWin .rankItem:last-child {
-      border-bottom: none;
-    }
-    #storeModal .item button {
-      background: #f1aa9b;
-      border: none;
-      padding: 0.3em 0.6em;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #48426d;
-    }
-    /* نافذة شراء وقت إضافي */
-    #timePurchaseModal p { text-align: center; margin: 0.5em 0; }
-    #timePurchaseModal button {
-      background: #f1aa9b;
-      border: none;
-      padding: 0.5em 1em;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #48426d;
-      font-size: 1em;
-      display: block;
-      margin: 0.5em auto;
-    }
-    /* مدخل اسم المستخدم */
-    #usernameModal input {
-      width: 80%;
-      padding: 0.5em;
-      border-radius: 5px;
-      border: none;
-      margin-top: 1em;
-      font-size: 1em;
-    }
-    #usernameModal button {
-      margin-top: 1em;
-      background: #f1aa9b;
-      border: none;
-      padding: 0.5em 1em;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #48426d;
-      font-size: 1em;
-    }
-    /* الاستجابة للشاشات العمودية */
-    @media screen and (orientation: portrait) {
-      .game { width: 90vw; height: 90vw; }
-      #timer, #newgame { font-size: 1.2em; }
-    }
-  </style>
-</head>
-<body>
-  <!-- رأس الصفحة -->
-  <div id="header">
-    <div id="scoreDisplay">
-      <i class="fas fa-star"></i>
-      <span id="score">0</span> نقطة
-    </div>
-    <!-- أزرار: المتجر، مركز النقاط، ومركز الفوز -->
-    <div id="actions">
-      <i class="fas fa-store" id="storeButton" title="المتجر"></i>
-      <i class="fas fa-chart-line" id="rankingScoreButton" title="مركز النقاط"></i>
-      <i class="fas fa-trophy" id="rankingWinButton" title="مركز الفوز"></i>
-    </div>
-  </div>
-  
-  <!-- منطقة اللعبة -->
-  <div class="game"></div>
-  
-  <!-- المؤقت وزر إعادة اللعبة -->
-  <div id="timer">30</div>
-  <div id="newgame">اللعب مرة أخرى</div>
+export default function App() {
+  const { toast } = useToast();
+  const [selectedScript, setSelectedScript] = useState<number | null>(null);
 
-  <!-- نافذة المتجر -->
-  <div class="modal" id="storeModal">
-    <i class="fas fa-times modal-close" id="closeStore"></i>
-    <h2>المتجر</h2>
-    <div class="item">
-      <span><i class="fas fa-tint"></i> تأثير تغيير اللون</span>
-      <span>السعر: <span id="itemPrice">5</span> نقطة</span>
-      <button id="buyItem">شراء</button>
-    </div>
-  </div>
-
-  <!-- نافذة مركز النقاط -->
-  <div class="modal" id="rankingModalScore">
-    <i class="fas fa-times modal-close" id="closeRankingScore"></i>
-    <h2>مركز النقاط</h2>
-    <div id="rankingListScore">
-      <!-- ترتيب نقاط اللاعبين -->
-    </div>
-  </div>
-
-  <!-- نافذة مركز الفوز -->
-  <div class="modal" id="rankingModalWin">
-    <i class="fas fa-times modal-close" id="closeRankingWin"></i>
-    <h2>مركز الفوز</h2>
-    <div id="rankingListWin">
-      <!-- ترتيب عدد الفوز -->
-    </div>
-  </div>
-
-  <!-- نافذة شراء وقت إضافي (تظهر عند انخفاض الوقت إلى 15 ثانية) -->
-  <div class="modal" id="timePurchaseModal">
-    <i class="fas fa-times modal-close" id="closeTimePurchase"></i>
-    <h2><i class="fas fa-clock"></i> نفذت وقتك!</h2>
-    <p id="timePurchaseMsg">لديك أقل من 15 ثانية. هل ترغب في شراء وقت إضافي؟</p>
-    <button id="buyTime">شراء وقت إضافي (-3 نقطة)</button>
-  </div>
-
-  <!-- نافذة إدخال اسم المستخدم -->
-  <div class="modal" id="usernameModal">
-    <h2>أدخل اسمك</h2>
-    <p>يمكن تغييره مرة واحدة كل أسبوع</p>
-    <input type="text" id="usernameInput" placeholder="اسم المستخدم">
-    <button id="saveUsername">حفظ</button>
-  </div>
-
-  <script>
-    /* ------------- الإعدادات الأولية والتخزين الدائم ------------- */
-    let tg = window.Telegram.WebApp;
-    tg.expand();
-    document.body.style.background = tg.themeParams.bg_color ? tg.themeParams.bg_color : "#312c51";
-    document.getElementById('newgame').style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
-    document.getElementById('newgame').style.color = tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#f0c38e";
-    
-    // الثوابت والمتغيرات العامة:
-    const cardCount = 16;
-    let firstCard = null;
-    let timerInterval;
-    // عند شراء تأثير تغيير اللون، نحفظ الحالة في localStorage بحيث يبقى التأثير بعد إعادة التحميل:
-    let purchasedEffect = localStorage.getItem("purchasedEffect") === "true" ? true : false;
-    const itemPrice = 5; // سعر شراء التأثير
-    const timePurchaseCost = 3; // تكلفة شراء وقت إضافي
-    const extraTimeAmount = 15; // الوقت الإضافي عند الشراء
-    
-    // حفظ الوقت المتبقي في localStorage (في حالة استكمال اللعبة)
-    let persistentTimer = parseInt(localStorage.getItem("game_timer")) || 30;
-    // النتيجة الدائمة (مركز النقاط)
-    let persistentScore = parseInt(localStorage.getItem("score_center")) || 0;
-    
-    // عناصر الواجهة:
-    const scoreDisplay = document.getElementById('score');
-    const gameContainer = document.querySelector('.game');
-    const newGameBtn = document.getElementById('newgame');
-    const timerElement = document.getElementById("timer");
-    
-    // النوافذ:
-    const storeModal = document.getElementById('storeModal');
-    const rankingModalScore = document.getElementById('rankingModalScore');
-    const rankingModalWin = document.getElementById('rankingModalWin');
-    const timePurchaseModal = document.getElementById('timePurchaseModal');
-    const usernameModal = document.getElementById('usernameModal');
-    
-    // أزرار النوافذ:
-    const storeButton = document.getElementById('storeButton');
-    const rankingScoreButton = document.getElementById('rankingScoreButton');
-    const rankingWinButton = document.getElementById('rankingWinButton');
-    
-    const closeStore = document.getElementById('closeStore');
-    const closeRankingScore = document.getElementById('closeRankingScore');
-    const closeRankingWin = document.getElementById('closeRankingWin');
-    const closeTimePurchase = document.getElementById('closeTimePurchase');
-    
-    const buyItem = document.getElementById('buyItem');
-    const buyTime = document.getElementById('buyTime');
-    
-    // مدخل اسم المستخدم:
-    const usernameInput = document.getElementById('usernameInput');
-    const saveUsernameBtn = document.getElementById('saveUsername');
-    
-    // مفاتيح التخزين:
-    const USERNAME_KEY = "game_username";
-    const USERNAME_TIMESTAMP_KEY = "game_username_timestamp";
-    const RANKING_SCORE_KEY = "game_ranking_score"; // ترتيب النقاط لكل لاعب [{ name, points }]
-    const RANKING_WIN_KEY = "game_ranking_win";     // ترتيب الفوز لكل لاعب [{ name, wins }]
-    
-    /* ------------- التأكد من اسم المستخدم ------------- */
-    function checkUsername() {
-      let storedName = localStorage.getItem(USERNAME_KEY);
-      let storedTimestamp = localStorage.getItem(USERNAME_TIMESTAMP_KEY);
-      const weekInMs = 7 * 24 * 60 * 60 * 1000;
-      if (storedName && storedTimestamp && (Date.now() - storedTimestamp < weekInMs)) {
-        tg.username = storedName;
-      } else {
-        usernameModal.style.display = "block";
-      }
-    }
-    saveUsernameBtn.addEventListener('click', () => {
-      const nameVal = usernameInput.value.trim();
-      if (nameVal !== "") {
-        localStorage.setItem(USERNAME_KEY, nameVal);
-        localStorage.setItem(USERNAME_TIMESTAMP_KEY, Date.now());
-        tg.username = nameVal;
-        usernameModal.style.display = "none";
-      }
+  const copyToClipboard = async (code: string) => {
+    await navigator.clipboard.writeText(code);
+    toast({
+      title: "تم النسخ!",
+      description: "تم نسخ السكربت إلى الحافظة",
+      duration: 2000,
     });
-    checkUsername();
-    
-    /* ------------- تحديث وعرض النقاط ------------- */
-    function updateScore(newScore) {
-      persistentScore = newScore;
-      scoreDisplay.innerText = persistentScore;
-      localStorage.setItem("score_center", persistentScore);
-      updateRankingData();
-    }
-    
-    /* تحديث بيانات مركز النقاط (Score Ranking) */
-    function updateRankingData() {
-      const username = tg.username || "اللاعب";
-      let rankingScore = JSON.parse(localStorage.getItem(RANKING_SCORE_KEY)) || [];
-      const index = rankingScore.findIndex(item => item.name === username);
-      if (index > -1) {
-        rankingScore[index].points = persistentScore;
-      } else {
-        rankingScore.push({ name: username, points: persistentScore });
-      }
-      rankingScore.sort((a, b) => b.points - a.points);
-      localStorage.setItem(RANKING_SCORE_KEY, JSON.stringify(rankingScore));
-    }
-    
-    /* تحديث بيانات مركز الفوز (Win Ranking) عند الفوز */
-    function updateWinRanking() {
-      const username = tg.username || "اللاعب";
-      let rankingWin = JSON.parse(localStorage.getItem(RANKING_WIN_KEY)) || [];
-      const index = rankingWin.findIndex(item => item.name === username);
-      if (index > -1) {
-        rankingWin[index].wins += 1;
-      } else {
-        rankingWin.push({ name: username, wins: 1 });
-      }
-      rankingWin.sort((a, b) => b.wins - a.wins);
-      localStorage.setItem(RANKING_WIN_KEY, JSON.stringify(rankingWin));
-    }
-    
-    /* ------------- دوال لإنشاء المصفوفة العشوائية للبطاقات ------------- */
-    function generateNumbers() {
-      let numbers = [];
-      while (numbers.length < cardCount) {
-        const rand = Math.floor(Math.random() * (cardCount / 2)) + 1;
-        if (numbers.filter(num => num === rand).length < 2) {
-          numbers.push(rand);
-        }
-      }
-      return numbers.sort(() => Math.random() - 0.5);
-    }
-    
-    /* ------------- إنشاء اللعبة ------------- */
-    function createGame() {
-      firstCard = null;
-      gameContainer.innerHTML = "";
-      gameContainer.style.pointerEvents = "auto";
-      newGameBtn.style.display = "none";
-      timerElement.style.display = "block";
-    
-      // استعادة النقاط والوقت من التخزين الدائم:
-      persistentScore = parseInt(localStorage.getItem("score_center")) || 0;
-      scoreDisplay.innerText = persistentScore;
-      persistentTimer = parseInt(localStorage.getItem("game_timer")) || 30;
-      timerElement.innerText = persistentTimer;
-    
-      const numbers = generateNumbers();
-      for (let i = 0; i < cardCount; i++) {
-        const card = document.createElement('div');
-        card.classList.add('card');
-    
-        const cardInner = document.createElement('div');
-        cardInner.classList.add('card-inner');
-    
-        const frontFace = document.createElement('div');
-        frontFace.classList.add('card-face', 'front');
-        frontFace.innerText = numbers[i];
-    
-        const backFace = document.createElement('div');
-        backFace.classList.add('card-face', 'back');
-        backFace.innerHTML = "<i class='fas fa-question'></i>";
-    
-        cardInner.append(frontFace);
-        cardInner.append(backFace);
-        card.append(cardInner);
-    
-        // عند النقر نطبق التأثيرات الديناميكية
-        card.addEventListener('click', function() {
-          if (card.classList.contains('flip')) return;
-          flipCard(card);
-        });
-    
-        gameContainer.append(card);
-      }
-    
-      // إعادة تهيئة المؤقت اعتمادًا على persistentTimer
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        let t = parseInt(timerElement.innerText);
-        if (t > 0) {
-          t--;
-          persistentTimer = t;
-          timerElement.innerText = t;
-          localStorage.setItem("game_timer", t);
-          // إذا وصل الوقت إلى 15 ثانية ونافذة شراء الوقت لم تُعرض بعد:
-          if (t <= 15 && !timePurchaseModal.style.display) {
-            timePurchaseModal.style.display = "block";
-          }
-        } else {
-          endGame(false);
-        }
-      }, 1000);
-    }
-    
-    /* ------------- قلب البطاقة ومقارنة القيم مع تأثيرات ديناميكية ------------- */
-    function flipCard(card) {
-      card.classList.add('flip');
-      // تطبيق تأثير اللون المُشتَرَى مع انتقال متدرج إذا كان مفعل
-      if (purchasedEffect) {
-        card.querySelector('.card-inner').style.transition = "background 0.5s ease-in-out";
-        card.querySelector('.card-inner').style.background = "#28a745";
-      }
-      // لتفعيل حركة بسيطة على البطاقة عند النقر:
-      card.style.transform = "scale(1.05)";
-      setTimeout(() => {
-        card.style.transform = "scale(1)";
-      }, 300);
-    
-      gameContainer.style.pointerEvents = "none";
-      if (!firstCard) {
-        firstCard = card;
-        gameContainer.style.pointerEvents = "auto";
-      } else {
-        const firstValue = firstCard.querySelector('.card-face.front').innerText;
-        const secondValue = card.querySelector('.card-face.front').innerText;
-    
-        if (firstValue === secondValue) {
-          updateScore(persistentScore + 1);
-          firstCard = null;
-          gameContainer.style.pointerEvents = "auto";
-          // إذا جميع البطاقات مقلوبة فأن اللعبة انتهت بنجاح:
-          if (document.querySelectorAll('.card.flip').length === cardCount) {
-            updateWinRanking();
-            endGame(true);
-          }
-        } else {
-          setTimeout(() => {
-            firstCard.classList.remove('flip');
-            card.classList.remove('flip');
-            gameContainer.style.pointerEvents = "auto";
-            firstCard = null;
-          }, 600);
-        }
-      }
-    }
-    
-    /* ------------- إنهاء اللعبة ------------- */
-    function endGame(won) {
-      clearInterval(timerInterval);
-      timerElement.style.display = "none";
-      gameContainer.style.pointerEvents = "none";
-      localStorage.removeItem("game_timer");
-      if (won) {
-        newGameBtn.innerText = "فزت! العب مرة أخرى";
-      } else {
-        newGameBtn.innerText = "انتهى الوقت! العب مرة أخرى";
-      }
-      newGameBtn.style.display = "block";
-    }
-    
-    /* ------------- إعادة بدء اللعبة ------------- */
-    newGameBtn.addEventListener('click', createGame);
-    
-    /* ------------- المتجر: فتح وغلق النافذة وشراء التأثير ------------- */
-    storeButton.addEventListener('click', () => { storeModal.style.display = "block"; });
-    closeStore.addEventListener('click', () => { storeModal.style.display = "none"; });
-    buyItem.addEventListener('click', () => {
-      if (persistentScore >= itemPrice && !purchasedEffect) {
-        updateScore(persistentScore - itemPrice);
-        purchasedEffect = true;
-        localStorage.setItem("purchasedEffect", "true");
-        buyItem.disabled = true;
-        buyItem.innerText = "تم الشراء";
-      }
-    });
-    
-    /* ------------- فتح وغلق نافذتي الترتيب ------------- */
-    rankingScoreButton.addEventListener('click', () => { showRankingScore(); rankingModalScore.style.display = "block"; });
-    closeRankingScore.addEventListener('click', () => { rankingModalScore.style.display = "none"; });
-    rankingWinButton.addEventListener('click', () => { showRankingWin(); rankingModalWin.style.display = "block"; });
-    closeRankingWin.addEventListener('click', () => { rankingModalWin.style.display = "none"; });
-    
-    /* عرض ترتيب مركز النقاط */
-    function showRankingScore() {
-      let rankingScore = JSON.parse(localStorage.getItem(RANKING_SCORE_KEY)) || [];
-      const rankingListScore = document.getElementById('rankingListScore');
-      rankingListScore.innerHTML = "";
-      if(rankingScore.length === 0) {
-        rankingListScore.innerHTML = "<p>لا توجد بيانات بعد</p>";
-        return;
-      }
-      rankingScore.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.classList.add('rankItem');
-        div.style.padding = "0.3em 0";
-        div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.points} نقطة</span>`;
-        rankingListScore.append(div);
-      });
-    }
-    
-    /* عرض ترتيب مركز الفوز */
-    function showRankingWin() {
-      let rankingWin = JSON.parse(localStorage.getItem(RANKING_WIN_KEY)) || [];
-      const rankingListWin = document.getElementById('rankingListWin');
-      rankingListWin.innerHTML = "";
-      if(rankingWin.length === 0) {
-        rankingListWin.innerHTML = "<p>لا توجد بيانات بعد</p>";
-        return;
-      }
-      rankingWin.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.classList.add('rankItem');
-        div.style.padding = "0.3em 0";
-        div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.wins} فوز</span>`;
-        rankingListWin.append(div);
-      });
-    }
-    
-    /* ------------- شراء وقت إضافي عند انخفاض الوقت إلى 15 ثانية ------------- */
-    buyTime.addEventListener('click', () => {
-      if (persistentScore >= timePurchaseCost) {
-        updateScore(persistentScore - timePurchaseCost);
-        // زيادة الوقت الإضافي:
-        persistentTimer = parseInt(timerElement.innerText) + extraTimeAmount;
-        timerElement.innerText = persistentTimer;
-        localStorage.setItem("game_timer", persistentTimer);
-        timePurchaseModal.style.display = "none";
-      } else {
-        alert("النقاط غير كافية لشراء وقت إضافي!");
-      }
-    });
-    closeTimePurchase.addEventListener('click', () => { timePurchaseModal.style.display = "none"; });
-    
-    /* ------------- بدء اللعبة عند تحميل الصفحة ------------- */
-    createGame();
-  </script>
-</body>
-  </html>
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+      <header className="sticky top-0 z-10 bg-white/10 backdrop-blur-md p-4 flex justify-between items-center border-b border-white/20">
+        <h2 className="text-2xl font-bold text-white">Roblox Scripts</h2>
+        <SignOutButton />
+      </header>
+
+      <main className="container mx-auto p-8">
+        <div className="max-w-4xl mx-auto">
+          <Authenticated>
+            <div className="grid gap-8">
+              {scripts.map((script) => (
+                <div
+                  key={script.id}
+                  className={`bg-white/10 backdrop-blur-md rounded-lg p-6 transform transition-all duration-300 hover:scale-102 ${
+                    selectedScript === script.id ? 'ring-2 ring-yellow-400' : ''
+                  }`}
+                  onClick={() => setSelectedScript(script.id)}
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-white">{script.name}</h3>
+                    <button
+                      onClick={() => copyToClipboard(script.code)}
+                      className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md font-medium transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span>نسخ السكربت</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                      </svg>
+                    </button>
+                  </div>
+                  <p className="text-white/80 mb-4 text-right">{script.description}</p>
+                  <pre className="bg-black/30 p-4 rounded-md overflow-x-auto">
+                    <code className="text-green-400">{script.code}</code>
+                  </pre>
+                </div>
+              ))}
+            </div>
+          </Authenticated>
+          {!selectedScript && (
+            <div className="text-center text-white">
+              <SignInForm />
+            </div>
+          )}
+        </div>
+      </main>
+      <Toaster />
+    </div>
+  );
+}
