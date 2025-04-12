@@ -4,30 +4,36 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لعبة الذاكرة مع المتجر والترتيب</title>
+  <title>لعبة الذاكرة – مركز النقاط والمتجر</title>
   
   <!-- أيقونات Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- سكربت تلغرام -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    /* تنسيقات عامة */
+    /* إعدادات عامة */
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
       font-family: sans-serif;
       background: #312c51;
       color: #f0c38e;
+      overflow-x: hidden;
     }
-    /* رأس الصفحة مع النقاط والمتجر والترتيب */
+    /* رأس الصفحة: عرض النقاط وأزرار المتجر واللوحة */
     #header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0.5em 1em;
       background: #48426d;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
     #scoreDisplay {
       font-size: 1.2em;
@@ -35,88 +41,96 @@
       align-items: center;
     }
     #scoreDisplay i {
-      margin-left: 0.3em;
+      margin-right: 0.3em;
     }
     #actions {
       display: flex;
       gap: 1em;
-      font-size: 1.2em;
+      font-size: 1.4em;
     }
     #actions i {
       cursor: pointer;
+      transition: transform 0.3s;
     }
-    /* منطقة اللعبة */
+    #actions i:hover {
+      transform: scale(1.2);
+    }
+    /* منطقة اللعبة: شبكة البطاقات */
     .game {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-gap: 10px;
+      gap: 10px;
       width: 90vh;
       height: 90vh;
       margin: 1em auto;
-      font-size: 40px;
+      perspective: 1000px;
     }
+    /* تصميم البطاقة مع دوران ثلاثي الأبعاد */
     .card {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #48426d;
-      color: #f0c38e;
-      cursor: pointer;
-      transition: transform 0.5s, background 0.3s;
-      border-radius: 5px;
       position: relative;
-      overflow: hidden;
-    }
-    /* تأثير دوران عند النقر */
-    .card.flipped {
-      transform: rotateY(180deg);
-    }
-    .card div {
-      backface-visibility: hidden;
-      transition: opacity 500ms, transform 500ms;
       width: 100%;
       height: 100%;
+      cursor: pointer;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .card.flip .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 5px;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
-      top: 0;
-      left: 0;
+      font-size: 2em;
+      font-weight: bold;
+      transition: background 0.3s, box-shadow 0.3s;
     }
-    .card .front {
-      opacity: 0;
-      transform: rotateY(180deg);
+    /* الوجه الخلفي (يظهر دائماً قبل قلب البطاقة) */
+    .card-face.back {
+      background: #48426d;
+      color: #f0c38e;
     }
-    .card.flipped .front {
-      opacity: 1;
-      transform: rotateY(0deg);
-    }
-    .card .back {
-      opacity: 1;
-    }
-    /* زر إعادة اللعبة */
-    #newgame {
-      display: none;
-      font-size: 20px;
+    /* الوجه الأمامي (يظهر عند قلب البطاقة) */
+    .card-face.front {
       background: #f1aa9b;
       color: #48426d;
+      transform: rotateY(180deg);
+    }
+    .card:hover {
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    /* زر إعادة اللعبة والمؤقت */
+    #newgame, #timer {
+      text-align: center;
+      margin: 0.5em auto;
       padding: 0.8em 1em;
-      text-align: center;
-      margin: 0.5em auto;
-      width: fit-content;
-      cursor: pointer;
       border-radius: 5px;
-    }
-    /* المؤقت */
-    #timer {
-      font-size: 20px;
-      padding: 0.5em;
-      text-align: center;
+      font-size: 1.2em;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      background: #f1aa9b;
+      color: #48426d;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
       width: fit-content;
-      margin: 0.5em auto;
     }
-    /* متجر */
-    #storeModal, #rankingModal, #usernameModal {
+    #newgame:hover, #timer:hover {
+      transform: scale(1.05);
+    }
+    #newgame {
+      display: none;
+    }
+    /* النوافذ (مودالات) – المتجر، ترتيب النقاط وإدخال اسم المستخدم */
+    .modal {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -129,10 +143,18 @@
       width: 80%;
       max-width: 400px;
       display: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
     }
-    #storeModal h2, #rankingModal h2, #usernameModal h2 {
+    .modal h2 {
       margin-top: 0;
       text-align: center;
+    }
+    .modal .modal-close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      font-size: 1.5em;
+      cursor: pointer;
     }
     #storeModal .item, #rankingModal .rankItem {
       display: flex;
@@ -151,13 +173,6 @@
       border-radius: 5px;
       cursor: pointer;
       color: #48426d;
-    }
-    .modal-close {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      font-size: 1.5em;
-      cursor: pointer;
     }
     /* مدخل اسم المستخدم */
     #usernameModal input {
@@ -185,7 +200,7 @@
         height: 90vw;
       }
       #newgame, #timer {
-        font-size: 20px;
+        font-size: 1.2em;
       }
     }
   </style>
@@ -194,26 +209,27 @@
   <!-- رأس الصفحة -->
   <div id="header">
     <div id="scoreDisplay">
-      النقاط: <span id="score">0</span>
       <i class="fas fa-star"></i>
+      <span id="score">0</span> نقطة
     </div>
     <div id="actions">
       <i class="fas fa-store" id="storeButton" title="المتجر"></i>
-      <i class="fas fa-trophy" id="rankingButton" title="الترتيب"></i>
+      <i class="fas fa-trophy" id="rankingButton" title="مركز النقاط"></i>
     </div>
   </div>
-
+  
   <!-- منطقة اللعبة -->
   <div class="game"></div>
-  <!-- المؤقت وإعادة اللعبة -->
+  
+  <!-- المؤقت وزر إعادة اللعبة -->
   <div id="timer">30</div>
   <div id="newgame">اللعب مرة أخرى</div>
 
-  <!-- متجر -->
-  <div id="storeModal">
+  <!-- نافذة المتجر -->
+  <div class="modal" id="storeModal">
     <i class="fas fa-times modal-close" id="closeStore"></i>
     <h2>المتجر</h2>
-    <!-- عنصر المتجر: تغيير لون البطاقات عند النقر -->
+    <!-- عنصر المتجر: تأثير تغيير لون البطاقات عند النقر -->
     <div class="item">
       <span><i class="fas fa-tint"></i> تأثير اللون الخاص</span>
       <span>السعر: <span id="itemPrice">5</span> نقطة</span>
@@ -221,67 +237,65 @@
     </div>
   </div>
 
-  <!-- ترتيب اللاعبين -->
-  <div id="rankingModal">
+  <!-- نافذة ترتيب النقاط / مركز النقاط -->
+  <div class="modal" id="rankingModal">
     <i class="fas fa-times modal-close" id="closeRanking"></i>
-    <h2>الترتيب</h2>
+    <h2>مركز النقاط</h2>
     <div id="rankingList">
-      <!-- هنا سيتم إدراج ترتيب اللاعبين -->
+      <!-- هنا يتم تعبئة ترتيب النقاط -->
     </div>
   </div>
 
-  <!-- مدخل اسم المستخدم -->
-  <div id="usernameModal">
+  <!-- نافذة إدخال اسم المستخدم -->
+  <div class="modal" id="usernameModal">
     <h2>أدخل اسمك</h2>
-    <p>يمكنك تغييره مرة واحدة كل أسبوع</p>
+    <p>يمكن تغييره مرة واحدة كل أسبوع</p>
     <input type="text" id="usernameInput" placeholder="اسم المستخدم">
     <button id="saveUsername">حفظ</button>
   </div>
 
   <script>
-    // تهيئة Telegram WebApp
+    // تهيئة Telegram WebApp والتأكد من تطبيق الثيم
     let tg = window.Telegram.WebApp;
     tg.expand();
     document.body.style.background = tg.themeParams.bg_color ? tg.themeParams.bg_color : "#312c51";
-
-    // تطبيق ألوان الثيم للتطبيقات (زر إعادة اللعبة) مثلاً
     document.getElementById('newgame').style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
     document.getElementById('newgame').style.color = tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#f0c38e";
-
-    // المتغيرات العالمية
+    
+    // المتغيرات العامة
     const cardCount = 16;
     let firstCard = null;
-    let score = 0;
-    let timerElement = document.getElementById("timer");
-    let gameContainer = document.querySelector('.game');
-    let newGameBtn = document.getElementById('newgame');
     let timerInterval;
-    let purchasedEffect = false; // هل تم شراء التأثير من المتجر؟
-    let itemPrice = 5; // السعر الذي سيخصم من النقاط عند الشراء
-
+    let purchasedEffect = false; // هل تم شراء التأثير؟
+    const itemPrice = 5; // السعر الخاص بالتأثير
+    // تخزين النقاط بشكل دائم (مركز النقاط)؛ إذا لم يوجد يتم تهيئته ب 0
+    let persistentScore = parseInt(localStorage.getItem("score_center")) || 0;
+    
     // عناصر الواجهة
-    let scoreDisplay = document.getElementById('score');
-    let storeModal = document.getElementById('storeModal');
-    let rankingModal = document.getElementById('rankingModal');
-    let usernameModal = document.getElementById('usernameModal');
-
-    // عناصر الأزرار
-    let storeButton = document.getElementById('storeButton');
-    let rankingButton = document.getElementById('rankingButton');
-    let closeStore = document.getElementById('closeStore');
-    let closeRanking = document.getElementById('closeRanking');
-    let buyItem = document.getElementById('buyItem');
-
-    // عناصر اسم المستخدم
-    let usernameInput = document.getElementById('usernameInput');
-    let saveUsernameBtn = document.getElementById('saveUsername');
-
-    // مفتاحين للتخزين في localStorage
+    const scoreDisplay = document.getElementById('score');
+    const gameContainer = document.querySelector('.game');
+    const newGameBtn = document.getElementById('newgame');
+    const timerElement = document.getElementById("timer");
+    
+    const storeModal = document.getElementById('storeModal');
+    const rankingModal = document.getElementById('rankingModal');
+    const usernameModal = document.getElementById('usernameModal');
+    
+    const storeButton = document.getElementById('storeButton');
+    const rankingButton = document.getElementById('rankingButton');
+    const closeStore = document.getElementById('closeStore');
+    const closeRanking = document.getElementById('closeRanking');
+    const buyItem = document.getElementById('buyItem');
+    
+    const usernameInput = document.getElementById('usernameInput');
+    const saveUsernameBtn = document.getElementById('saveUsername');
+    
+    // مفاتيح التخزين
     const USERNAME_KEY = "game_username";
     const USERNAME_TIMESTAMP_KEY = "game_username_timestamp";
-    const RANKING_KEY = "game_ranking"; // سيخزن مصفوفة من الكائنات [{name: ..., wins: ...}, ...]
-
-    // التحقق من اسم المستخدم (يمكن تغييره مرة واحدة في الأسبوع)
+    const RANKING_KEY = "game_ranking"; // مصفوفة من الكائنات: [{ name: ..., points: ...}, ...]
+    
+    // التحقق من اسم المستخدم (تغيير مرة واحدة في الأسبوع)
     function checkUsername() {
       let storedName = localStorage.getItem(USERNAME_KEY);
       let storedTimestamp = localStorage.getItem(USERNAME_TIMESTAMP_KEY);
@@ -289,14 +303,11 @@
       if (storedName && storedTimestamp && (Date.now() - storedTimestamp < weekInMs)) {
         tg.username = storedName;
       } else {
-        // عرض نافذة إدخال الاسم
         usernameModal.style.display = "block";
       }
     }
-
-    // حفظ اسم المستخدم
     saveUsernameBtn.addEventListener('click', () => {
-      let nameVal = usernameInput.value.trim();
+      const nameVal = usernameInput.value.trim();
       if (nameVal !== "") {
         localStorage.setItem(USERNAME_KEY, nameVal);
         localStorage.setItem(USERNAME_TIMESTAMP_KEY, Date.now());
@@ -304,150 +315,173 @@
         usernameModal.style.display = "none";
       }
     });
-
     checkUsername();
-
-    // تحديث عرض النقاط
-    function updateScore(val) {
-      score = val;
-      scoreDisplay.innerText = score;
+    
+    // تحديث النقاط وحفظها في الـ localStorage وتحديث مركز النقاط
+    function updateScore(newScore) {
+      persistentScore = newScore;
+      scoreDisplay.innerText = persistentScore;
+      localStorage.setItem("score_center", persistentScore);
+      updateRankingData();
     }
-
-    // إنشاء اللعبة
-    function createGame() {
-      firstCard = null;
-      gameContainer.innerHTML = "";
-      // إعادة تفعيل الواجهة
-      gameContainer.style.pointerEvents = "auto";
-      newGameBtn.style.display = "none";
-      timerElement.style.display = "block";
-      updateScore(0);
-
-      // إنشاء مصفوفة أرقام عشوائية (لكل رقم يظهر مرتين)
+    
+    // تحديث بيانات مركز النقاط لكل لاعب
+    function updateRankingData() {
+      const username = tg.username || "اللاعب";
+      let ranking = JSON.parse(localStorage.getItem(RANKING_KEY)) || [];
+      const index = ranking.findIndex(item => item.name === username);
+      if (index > -1) {
+        ranking[index].points = persistentScore;
+      } else {
+        ranking.push({ name: username, points: persistentScore });
+      }
+      // ترتيب تنازلي حسب النقاط
+      ranking.sort((a, b) => b.points - a.points);
+      localStorage.setItem(RANKING_KEY, JSON.stringify(ranking));
+    }
+    
+    // إنشاء مصفوفة عشوائية للأرقام، كل رقم يظهر مرتين
+    function generateNumbers() {
       let numbers = [];
-      while(numbers.length < cardCount) {
-        let rand = Math.floor(Math.random() * (cardCount/2)) + 1;
-        // التأكد من أن كل رقم يوجد مرتين فقط
+      while (numbers.length < cardCount) {
+        const rand = Math.floor(Math.random() * (cardCount / 2)) + 1;
         if (numbers.filter(num => num === rand).length < 2) {
           numbers.push(rand);
         }
       }
-      // خلط المصفوفة
-      numbers = numbers.sort(() => Math.random() - 0.5);
-
-      // إنشاء البطاقات
+      // خلط المصفوفة عشوائيًا
+      return numbers.sort(() => Math.random() - 0.5);
+    }
+    
+    // إنشاء البطاقات باستخدام تقنية flip card (بطاقة داخلها عنصر داخلي يدور)
+    function createGame() {
+      firstCard = null;
+      gameContainer.innerHTML = "";
+      gameContainer.style.pointerEvents = "auto";
+      newGameBtn.style.display = "none";
+      timerElement.style.display = "block";
+      // عدم إعادة تعيين النقاط؛ نستمر بنفس النقاط المخزنة
+      // في حالة عدم وجود نقاط يتم اعتبارها 0
+      persistentScore = parseInt(localStorage.getItem("score_center")) || 0;
+      scoreDisplay.innerText = persistentScore;
+    
+      const numbers = generateNumbers();
+    
+      // إنشاء كل بطاقة
       for (let i = 0; i < cardCount; i++) {
-        let card = document.createElement('div');
+        const card = document.createElement('div');
         card.classList.add('card');
-        card.dataset.value = numbers[i];
-
-        // الخلفية (المقابلة للبطاقة)
-        let backDiv = document.createElement('div');
-        backDiv.classList.add('back');
-        backDiv.innerHTML = ""; // يمكن وضع رمز أو صورة للوجه الخلفي
-
-        // الجهة الأمامية (تظهر عند قلب البطاقة)
-        let frontDiv = document.createElement('div');
-        frontDiv.classList.add('front');
-        frontDiv.innerText = numbers[i];
-
-        card.append(backDiv);
-        card.append(frontDiv);
-
-        // حدث النقر على البطاقة
+    
+        const cardInner = document.createElement('div');
+        cardInner.classList.add('card-inner');
+    
+        // الوجه الأمامي: يظهر الرقم عند التقليب (مع تدوير داخلي بحيث لا يظهر معكوسًا)
+        const frontFace = document.createElement('div');
+        frontFace.classList.add('card-face', 'front');
+        frontFace.innerText = numbers[i];
+    
+        // الوجه الخلفي: تصميم ثابت يمكن وضع رمز أو صورة
+        const backFace = document.createElement('div');
+        backFace.classList.add('card-face', 'back');
+        backFace.innerHTML = "<i class='fas fa-question'></i>";
+    
+        cardInner.append(frontFace);
+        cardInner.append(backFace);
+        card.append(cardInner);
+    
+        // عند النقر على البطاقة
         card.addEventListener('click', function() {
-          // منع النقر على بطاقة مقلوبة بالفعل
-          if (this.classList.contains('flipped')) return;
-          
-          flipCard(this);
+          if (card.classList.contains('flip')) return;
+          flipCard(card);
         });
+    
         gameContainer.append(card);
       }
-      // إعداد المؤقت
+    
+      // إعادة ضبط المؤقت (30 ثانية)
       timerElement.innerText = 30;
+      clearInterval(timerInterval);
       timerInterval = setInterval(() => {
         let t = parseInt(timerElement.innerText);
         if (t > 0) {
           timerElement.innerText = t - 1;
         } else {
-          // انتهاء الوقت => خسارة اللعبة
           endGame(false);
         }
       }, 1000);
     }
-
-    // دالة قلب البطاقة وإضافة تأثير الشراء (إذا تم شراؤه)
+    
+    // دالة قلب البطاقة ومقارنة القيم
     function flipCard(card) {
-      card.classList.add('flipped');
+      card.classList.add('flip');
       if (purchasedEffect) {
-        // تغير لون الخلفية حسب اللون المشتراة (مثلاً، أخضر فاتح)
-        card.style.background = "#28a745";
+        // إذا تم شراء التأثير، يمكن تغيير لون البطاقة عند النقر
+        card.querySelector('.card-inner').style.background = "#28a745";
       }
-      // منع النقر على باقي البطاقات مؤقتاً
       gameContainer.style.pointerEvents = "none";
       if (!firstCard) {
         firstCard = card;
         gameContainer.style.pointerEvents = "auto";
       } else {
-        // مقارنة القيم
-        if (firstCard.dataset.value === card.dataset.value) {
-          // تطابق => زيادة النقاط
-          updateScore(score + 1);
+        // مقارنة الرقم بين البطاقة الأولى والثانية
+        const firstValue = firstCard.querySelector('.card-face.front').innerText;
+        const secondValue = card.querySelector('.card-face.front').innerText;
+    
+        if (firstValue === secondValue) {
+          // تطابق، زيادة النقاط بمقدار نقطة واحدة
+          updateScore(persistentScore + 1);
           firstCard = null;
           gameContainer.style.pointerEvents = "auto";
-          // التحقق من انتهاء اللعبة
-          if (document.querySelectorAll('.card.flipped').length === cardCount) {
+          // التحقق من انتهاء اللعبة (جميع البطاقات مقلوبة)
+          if (document.querySelectorAll('.card.flip').length === cardCount) {
             endGame(true);
           }
         } else {
           setTimeout(() => {
-            firstCard.classList.remove('flipped');
-            firstCard.style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
-            card.classList.remove('flipped');
-            card.style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
-            firstCard = null;
+            firstCard.classList.remove('flip');
+            card.classList.remove('flip');
             gameContainer.style.pointerEvents = "auto";
-          }, 500);
+            firstCard = null;
+          }, 600);
         }
       }
     }
-
-    // إنهاء اللعبة: فوز أو خسارة
+    
+    // انتهاء اللعبة: فوز أو خسارة
     function endGame(won) {
       clearInterval(timerInterval);
       timerElement.style.display = "none";
       gameContainer.style.pointerEvents = "none";
       if (won) {
         newGameBtn.innerText = "فزت! العب مرة أخرى";
-        updateRanking(); // تحديث ترتيب اللاعبين
       } else {
-        newGameBtn.innerText = "خسرت! العب مرة أخرى";
+        newGameBtn.innerText = "انتهى الوقت! العب مرة أخرى";
       }
       newGameBtn.style.display = "block";
     }
-
-    // إعادة تشغيل اللعبة
+    
+    // إعادة بدء اللعبة عند النقر على زر "اللعب مرة أخرى"
     newGameBtn.addEventListener('click', createGame);
-
-    // المتجر: فتح وغلق
+    
+    // فتح وإغلاق نافذة المتجر
     storeButton.addEventListener('click', () => {
       storeModal.style.display = "block";
     });
     closeStore.addEventListener('click', () => {
       storeModal.style.display = "none";
     });
-
-    // شراء التأثير من المتجر
+    
+    // شراء التأثير إذا توفر عدد نقاط كافٍ
     buyItem.addEventListener('click', () => {
-      if (score >= itemPrice && !purchasedEffect) {
-        updateScore(score - itemPrice);
+      if (persistentScore >= itemPrice && !purchasedEffect) {
+        updateScore(persistentScore - itemPrice);
         purchasedEffect = true;
         buyItem.disabled = true;
         buyItem.innerText = "تم الشراء";
       }
     });
-
-    // الترتيب: فتح وغلق
+    
+    // فتح وإغلاق نافذة مركز النقاط
     rankingButton.addEventListener('click', () => {
       showRanking();
       rankingModal.style.display = "block";
@@ -455,42 +489,29 @@
     closeRanking.addEventListener('click', () => {
       rankingModal.style.display = "none";
     });
-
-    // تحديث ترتيب اللاعبين في localStorage
-    function updateRanking() {
-      let username = tg.username || "اللاعب";
-      let ranking = JSON.parse(localStorage.getItem(RANKING_KEY)) || [];
-      // البحث عن المستخدم في الترتيب وتحديث عدد الفوز
-      let userIndex = ranking.findIndex(item => item.name === username);
-      if (userIndex > -1) {
-        ranking[userIndex].wins += 1;
-      } else {
-        ranking.push({ name: username, wins: 1 });
-      }
-      // ترتيب القائمة تنازلياً حسب عدد الفوز
-      ranking.sort((a, b) => b.wins - a.wins);
-      localStorage.setItem(RANKING_KEY, JSON.stringify(ranking));
-    }
-
-    // عرض ترتيب اللاعبين
+    
+    // عرض مركز النقاط
     function showRanking() {
       let ranking = JSON.parse(localStorage.getItem(RANKING_KEY)) || [];
-      let rankingList = document.getElementById('rankingList');
+      const rankingList = document.getElementById('rankingList');
       rankingList.innerHTML = "";
+      if(ranking.length === 0) {
+        rankingList.innerHTML = "<p>لا توجد بيانات بعد</p>";
+        return;
+      }
       ranking.forEach((item, index) => {
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.classList.add('rankItem');
-        div.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.wins} فوز</span>`;
+        div.style.padding = "0.3em 0";
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.points} نقطة</span>`;
         rankingList.append(div);
       });
-      if (ranking.length === 0) {
-        rankingList.innerHTML = "<p>لا توجد بيانات بعد</p>";
-      }
     }
-
+    
     // بدء اللعبة عند تحميل الصفحة
     createGame();
-
   </script>
 </body>
-     </html>
+</html>
