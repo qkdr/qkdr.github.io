@@ -1,22 +1,246 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-    <style>
-        #editor { width: 100%; height: 100vh; font-size: 14px; border: 1px solid #ccc; }
-    </style>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+
+   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+   <style>
+      body {
+         margin: 0;
+         padding: 0;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         height: 99vh;
+         width: 100%;
+         font-family: sans-serif;
+         font-weight: bold;
+         background: #312c51;
+         /* background: var(--tg-theme-bg-color); */
+      }
+
+      .game {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         grid-row-gap: 10px;
+         grid-column-gap: 10px;
+         width: 90vh;
+         height: 90vh;
+         font-size: 40px;
+         margin-bottom: 20px;
+      }
+
+      .card {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         background: #48426d;
+         color: #f0c38e;
+         /* background: var(--tg-theme-button-color);
+         color: var(--tg-theme-text-color); */
+         cursor: pointer;
+         transition-duration: 0.5s;
+         transition-property: transform;
+      }
+
+      .hidden:hover{
+         opacity: 1;
+         filter: brightness(98%);
+      }
+
+      .hidden:active, .hidden:focus{
+         opacity: 1;
+         filter: brightness(98%);
+      }
+
+      .hidden>div {
+         transition: 500ms;
+         transition-property: opacity, transform;
+         opacity: 0;
+      }
+
+      #newgame {
+         display: none;
+         font-size: 20px;
+         background: #f1aa9b;
+         /* color: white; */
+         color: #48426d;
+         padding: 1em;
+         cursor: pointer;
+         /* opacity: 0; */
+      }
+
+      #timer{
+         /* display: none; */
+         font-size: 20px;
+         /* color: white; */
+         padding: 1em;
+         cursor: pointer;
+         /* opacity: 0; */
+      }
+
+
+      @media screen and (orientation: portrait) {
+         .game {
+            width: 90vw;
+            height: 90vw;
+         }
+         #newgame{
+            font-size: 20px;
+         }
+      }
+
+   </style>
 </head>
+
 <body>
+   <div class="game">
+   </div>
 
-    <div id="editor"></div>
-
-    <script>
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/php");
-        editor.setValue(""); 
-    </script>
-
+   <div id="timer">00</div>
+   <div id="newgame">
+      Сыграть еще раз
+   </div>
 </body>
+
+<script type="text/javascript">
+
+   //telegram 
+   let tg = window.Telegram.WebApp;
+
+   tg.expand();
+
+   document.body.style.background = tg.themeParams.bg_color ? tg.themeParams.bg_color : "#312c51"
+   document.querySelector('#newgame').style.background =  tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
+   document.querySelector('#newgame').style.color =  tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#f0c38e";
+
+
+   //game
+   let first_card = '';
+   card_number = 16;
+   let game = document.querySelector('.game');
+   let newgame = document.getElementById('newgame');
+   let timer = document.getElementById("timer");
+   timer.style.color = tg.themeParams.button_color ? tg.themeParams.button_color : "#fff";
+
+   function randomInteger(min, max) {
+      let rand = min - 0.5 + Math.random() * (max - min + 1);
+      return Math.round(rand);
+   }
+
+   function create_game(){
+      let card_arr = [];
+      let new_numbs = [];
+
+      game.style.pointerEvents = "auto";
+      newgame.style.display = "none";
+      timer.style.display = "block";
+      
+      for (let i = 0; i < card_number; i++){
+         let div = document.createElement('div');
+         div.classList.add('card');
+         div.classList.add('hidden');
+         div.id = `card${i+1}`;
+
+         div.style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#48426d";
+         div.style.color = tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#f0c38e";
+
+         while (true) {
+            newone = randomInteger(1, card_number/2);
+            if (new_numbs.indexOf(newone) == -1) {
+               new_numbs.push(newone);
+               break;
+            }
+            else if (new_numbs.indexOf(newone) == new_numbs.lastIndexOf(newone)) {
+               new_numbs.push(newone);
+               break;
+            }
+         }
+
+         let in_div = document.createElement('div');
+         in_div.innerText =  newone;
+
+         div.append(in_div)
+
+         div.addEventListener('click', function () {
+            
+            if (!this.classList.contains('hidden'))
+               return false;
+            
+            game.style.pointerEvents = "none";
+            if (first_card == '') {
+               first_card = this.id;
+               this.classList.remove('hidden');
+               game.style.pointerEvents = "auto";
+            }
+            else {
+               this.classList.remove('hidden');
+               if (this.textContent == document.getElementById(first_card).textContent) {
+                  first_card = '';
+                  game.style.pointerEvents = "auto";
+               }
+               else { 
+                  setTimeout(() => {
+                     document.getElementById(first_card).classList.add('hidden');
+                     this.classList.add('hidden');
+                     first_card = '';
+                     game.style.pointerEvents = "auto";
+                  }, 150);
+               }
+
+               let hidden_cards = document.getElementsByClassName("hidden"); //узнаем сколько скрытых карточек
+
+               if (hidden_cards.length == 0) { 
+                  newgame.innerText = 'فزت العب مجددا';
+                  game.style.pointerEvents = "none";
+                  newgame.style.opacity = 1;
+                  newgame.style.display = 'block';
+
+                  clearInt();
+                  newgame.addEventListener('click', remove_newgame);
+               }
+            }
+         });
+
+         game.append(div);
+      }
+
+      function remove_newgame() {
+         // this.style.opacity = 0; 
+         newgame.removeEventListener('click', remove_newgame);
+         game.innerHTML = '';
+         create_game();
+      }
+
+      timer.innerText = 30;
+
+      let timerI = setInterval(()=>{
+         console.log('in interval')
+         if(+timer.innerText > 0){
+            timer.innerText = timer.innerText - 1;
+         }
+         else{
+            newgame.innerText = 'خسرت العب مجددا';
+            game.style.pointerEvents = "none";
+            newgame.style.display = "block";
+            newgame.addEventListener('click', remove_newgame);
+            clearInt();
+         }
+      }, 1000);
+
+      function clearInt(){
+         clearInterval(timerI);
+         timer.style.display = "none";
+      }
+   }
+
+   create_game();
+</script>
+
 </html>
