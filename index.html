@@ -1,102 +1,103 @@
-import { useState } from "react";
-import { Authenticated } from "convex/react";
-import { SignInForm } from "./SignInForm";
-import { SignOutButton } from "./SignOutButton";
-import { Toaster } from "./components/ui/toaster";
-import { useToast } from "./hooks/use-toast";
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة سكربتات</title>
+  <style>
+    /* تنسيق عام للصفحة */
+    body {
+      background-color: #f2f2f2;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    /* رأس اللوحة */
+    header {
+      background: #3498db;
+      color: #fff;
+      padding: 20px;
+      font-size: 1.5em;
+    }
+    /* قسم عرض الشفرة مع تأثيرات */
+    .code-panel {
+      position: relative;
+      padding: 20px;
+      background: #2d2d2d;
+      color: #f8f8f2;
+      font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+      font-size: 14px;
+      overflow: auto;
+      max-height: 400px;
+      transition: background 0.3s ease;
+    }
+    .code-panel:hover {
+      background: #3e3e3e;
+    }
+    /* زر النسخ */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #e67e22;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+    .copy-btn:hover {
+      background: #d35400;
+    }
+  </style>
+</head>
+<body>
 
-const scripts = [
-  {
-    id: 1,
-    name: "Speed Boost",
-    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.WalkSpeed = 50',
-    description: "زيادة سرعة الشخصية",
-  },
-  {
-    id: 2,
-    name: "Jump Power",
-    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.JumpPower = 100',
-    description: "زيادة قوة القفز",
-  },
-  {
-    id: 3,
-    name: "Infinite Health",
-    code: 'local player = game.Players.LocalPlayer\nlocal character = player.Character\nlocal humanoid = character:WaitForChild("Humanoid")\nhumanoid.MaxHealth = math.huge\nhumanoid.Health = humanoid.MaxHealth',
-    description: "صحة لا نهائية",
-  }
-];
-
-export default function App() {
-  const { toast } = useToast();
-  const [selectedScript, setSelectedScript] = useState<number | null>(null);
-
-  const copyToClipboard = async (code: string) => {
-    await navigator.clipboard.writeText(code);
-    toast({
-      title: "تم النسخ!",
-      description: "تم نسخ السكربت إلى الحافظة",
-      duration: 2000,
-    });
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-      <header className="sticky top-0 z-10 bg-white/10 backdrop-blur-md p-4 flex justify-between items-center border-b border-white/20">
-        <h2 className="text-2xl font-bold text-white">Roblox Scripts</h2>
-        <SignOutButton />
-      </header>
-
-      <main className="container mx-auto p-8">
-        <div className="max-w-4xl mx-auto">
-          <Authenticated>
-            <div className="grid gap-8">
-              {scripts.map((script) => (
-                <div
-                  key={script.id}
-                  className={`bg-white/10 backdrop-blur-md rounded-lg p-6 transform transition-all duration-300 hover:scale-102 ${
-                    selectedScript === script.id ? 'ring-2 ring-yellow-400' : ''
-                  }`}
-                  onClick={() => setSelectedScript(script.id)}
-                >
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white">{script.name}</h3>
-                    <button
-                      onClick={() => copyToClipboard(script.code)}
-                      className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md font-medium transition-colors duration-200 flex items-center gap-2"
-                    >
-                      <span>نسخ السكربت</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="text-white/80 mb-4 text-right">{script.description}</p>
-                  <pre className="bg-black/30 p-4 rounded-md overflow-x-auto">
-                    <code className="text-green-400">{script.code}</code>
-                  </pre>
-                </div>
-              ))}
-            </div>
-          </Authenticated>
-          {!selectedScript && (
-            <div className="text-center text-white">
-              <SignInForm />
-            </div>
-          )}
-        </div>
-      </main>
-      <Toaster />
+  <div class="container">
+    <!-- اسم السكربت -->
+    <header>
+      اسم السكربت: عرض الشفرة التفاعلية
+    </header>
+    
+    <!-- لوحة عرض الشفرة -->
+    <div class="code-panel" id="codeContent">
+      <button class="copy-btn" onclick="copyCode()">نسخ</button>
+      <pre>
+<!-- بداية الشفرة -->
+&lt;!-- مثال على شفرة HTML --&gt;
+&lt;div class="example"&gt;
+  &lt;p&gt;هذا نص تجريبي&lt;/p&gt;
+&lt;/div&gt;
+<!-- نهاية الشفرة -->
+      </pre>
     </div>
-  );
-}
+  </div>
+
+  <script>
+    // دالة لنسخ محتوى الشفرة إلى الحافظة
+    function copyCode() {
+      // استخراج محتوى العنصر <pre>
+      const codeText = document.querySelector('#codeContent pre').innerText;
+      // استخدام واجهة الحافظة
+      navigator.clipboard.writeText(codeText)
+        .then(() => {
+          alert('تم نسخ الشفرة إلى الحافظة!');
+        })
+        .catch(err => {
+          alert('حدث خطأ أثناء النسخ: ' + err);
+        });
+    }
+  </script>
+
+</body>
+</html>
