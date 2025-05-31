@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>موقعي الفخم</title>
 
-  <!-- ربط خطوط Google Fonts -->
+  <!-- ربط خطين من Google Fonts لأسلوب فاخر -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
+    /* ===== استيراد الخطوط ===== */
+    /* الخط الافتراضي للنص العربي: Cairo */
+    /* الخط للعناوين الفخمة: Playfair Display */
+
     :root {
-      /* ألوان افتراضية (الثيم الداكن) */
+      /* ألوان فخمة */
       --gold: #d4af37;
       --dark-bg: #111111;
       --dark-secondary: #1e1e1e;
@@ -23,20 +27,9 @@
       --btn-text: #111111;
       --border-color: #333333;
       --shadow-color: rgba(0, 0, 0, 0.7);
+      
+      /* انتقالات ناعمة */
       --transition: 0.3s ease-in-out;
-    }
-
-    /* إعداد الثيم الفاتح عند إضافة الصنف .light-theme إلى الجسم */
-    .light-theme {
-      --dark-bg: #f5f5f5;
-      --dark-secondary: #ffffff;
-      --light-text: #111111;
-      --gray-light: #555555;
-      --overlay-bg: rgba(255, 255, 255, 0.85);
-      --notification-bg: #eeeeee;
-      --notification-text: #111111;
-      --border-color: #dddddd;
-      --shadow-color: rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -88,12 +81,12 @@
       color: var(--gold);
     }
 
-    .navbar .nav-links {
+    .navbar ul {
       display: flex;
       gap: 20px;
     }
 
-    .navbar .nav-links li a {
+    .navbar li a {
       font-size: 16px;
       color: var(--light-text);
       padding: 8px 12px;
@@ -101,30 +94,22 @@
       transition: background-color var(--transition);
     }
 
-    .navbar .nav-links li a:hover {
+    .navbar li a:hover {
       background-color: var(--gold);
       color: var(--dark-bg);
     }
 
-    .navbar .menu-toggle {
-      display: none;
-      font-size: 24px;
-      color: var(--light-text);
-      cursor: pointer;
-    }
-
-    /* زر تبديل الثيم */
-    .navbar #themeToggle {
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: var(--light-text);
-      cursor: pointer;
-      transition: color var(--transition);
-    }
-
-    .navbar #themeToggle:hover {
-      color: var(--gold);
+    /* عند التصغير */
+    @media (max-width: 768px) {
+      .navbar ul {
+        display: none;
+      }
+      .navbar .menu-toggle {
+        display: block;
+        cursor: pointer;
+        font-size: 24px;
+        color: var(--light-text);
+      }
     }
 
     /* ===== إشعار عند التحميل ===== */
@@ -308,9 +293,9 @@
 
     .modal-content h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 24px;
+      font-size: 28px;
       color: var(--gold);
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-align: center;
     }
 
@@ -327,16 +312,8 @@
       margin-bottom: 20px;
     }
 
-    .modal-buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn-copy,
-    .btn-nav {
+    .btn-copy {
+      display: inline-block;
       background-color: var(--btn-bg);
       color: var(--btn-text);
       padding: 10px 20px;
@@ -349,8 +326,7 @@
       text-align: center;
     }
 
-    .btn-copy:hover,
-    .btn-nav:hover {
+    .btn-copy:hover {
       background-color: #b8932d;
     }
 
@@ -368,45 +344,7 @@
       color: var(--gold);
     }
 
-    /* ===== قسم "من نحن" و "تواصل معنا" ===== */
-    #about,
-    #contact {
-      padding: 80px 30px;
-    }
-
-    #about {
-      background-color: var(--dark-bg);
-    }
-
-    #about h2,
-    #contact h2 {
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      color: var(--gold);
-      margin-bottom: 30px;
-    }
-
-    #about p,
-    #contact p {
-      max-width: 800px;
-      margin: 0 auto;
-      font-size: 18px;
-      color: var(--light-text);
-      line-height: 1.8;
-      text-align: center;
-    }
-
-    #contact {
-      background-color: var(--dark-secondary);
-    }
-
-    #contact a {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* ===== الفوتر ===== */
+    /* ===== قسم الفوتر ===== */
     footer {
       background-color: var(--dark-secondary);
       padding: 30px;
@@ -419,52 +357,33 @@
       color: var(--gray-light);
       font-size: 14px;
     }
-
-    /* ===== استجابة الأجهزة الصغيرة ===== */
-    @media (max-width: 768px) {
-      .navbar .nav-links {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 30px;
-        flex-direction: column;
-        background-color: var(--dark-secondary);
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px var(--shadow-color);
-        gap: 10px;
-      }
-
-      .navbar .nav-links.open {
-        display: flex;
-      }
-
-      .navbar .menu-toggle {
-        display: block;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- شريط التنقل -->
+  <!-- ======================================
+       شريط التنقل (Navbar)
+       ====================================== -->
   <nav class="navbar">
     <div class="logo">موقعي الفخم</div>
+    <div class="menu-toggle">&#9776;</div>
     <ul class="nav-links">
       <li><a href="#intro">الرئيسية</a></li>
       <li><a href="#gallery">الصور</a></li>
       <li><a href="#contact">تواصل معنا</a></li>
       <li><a href="#about">من نحن</a></li>
     </ul>
-    <button id="themeToggle" title="تبديل الثيم">🌙</button>
-    <div class="menu-toggle">&#9776;</div>
   </nav>
 
-  <!-- إشعار عند التحميل -->
+  <!-- ======================================
+       إشعار فخم عند تحميل الصفحة (Notification)
+       ====================================== -->
   <div id="notification" class="notification">
     مرحبًا بك في موقعي الفخم! تصفح واستمتع بأفضل تجربة.
   </div>
 
-  <!-- قسم المقدمة -->
+  <!-- ======================================
+       قسم المقدمة (Intro Section)
+       ====================================== -->
   <section id="intro">
     <div class="intro-text">
       <h1>مرحبًا بك في موقعنا الفاخر</h1>
@@ -480,188 +399,192 @@
     </div>
   </section>
 
-  <!-- قسم غاليري الصور -->
+  <!-- ======================================
+       قسم غاليري الصور (Gallery Section)
+       ====================================== -->
   <section id="gallery">
     <h2>مجموعة الصور</h2>
     <div class="gallery-grid">
-      <!-- عنصر غاليري مع أكثر من كود -->
-      <div class="gallery-item" data-codes='[
-        "function sayHello() { console.log(\'Hello, world!\'); }",
-        "// مثال على كود ثاني بلغة JavaScript\\nfunction sum(a, b) { return a + b; }"
-      ]'>
+      <!-- مثال على عنصر غاليري -->
+      <div class="gallery-item" data-code="// مثال على شيفرة 1:
+function sayHello() {
+  console.log('Hello, world!');
+}">
         <img src="https://picsum.photos/400/300?random=1" alt="صورة 1" />
-        <div class="gallery-caption">اضغط لعرض الشيفرات</div>
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
       </div>
 
-      <div class="gallery-item" data-codes='[
-        "/* مثال على كود C++ 1 */\\n#include <iostream>\\nusing namespace std;\\nint main() { cout << \'Hello from C++!\'; return 0; }",
-        "/* مثال على كود C++ 2 */\\n#include <vector>\\n#include <algorithm>\\nusing namespace std;\\nint main() { vector<int> v = {3, 1, 2}; sort(v.begin(), v.end()); return 0; }"
-      ]'>
+      <div class="gallery-item" data-code="/* مثال على شيفرة 1 */
+#include <iostream>
+using namespace std;
+int main() {
+  cout << &quot;Hello from C++!&quot; << endl;
+  return 0;
+}">
+
+<div class="gallery-item" data-code="/* مثال على شيفرة 2 */
+#include <iostream>
+using namespace std;
+int main() {
+  cout << &quot;Hello from C++!&quot; << endl;
+  return 0;
+}">
         <img src="https://picsum.photos/400/300?random=2" alt="صورة 2" />
-        <div class="gallery-caption">اضغط لعرض الشيفرات</div>
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
       </div>
 
-      <div class="gallery-item" data-codes='[
-        "# Python مثال 1\\ndef greet(name):\\n    print(f\'Hello, {name}!\')\\n\\ngreet(\'User\')",
-        "# Python مثال 2\\ndef factorial(n):\\n    return 1 if n == 0 else n * factorial(n - 1)\\n\\nprint(factorial(5))"
-      ]'>
+      <div class="gallery-item" data-code="# Python مثال 3:
+def greet(name):
+    print(f'Hello, {name}!')
+
+greet('User')">
         <img src="https://picsum.photos/400/300?random=3" alt="صورة 3" />
-        <div class="gallery-caption">اضغط لعرض الشيفرات</div>
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
       </div>
 
-      <div class="gallery-item" data-codes='[
-        "<!DOCTYPE html>\\n<html>\\n  <head>\\n    <title>مثال HTML 1</title>\\n  </head>\\n  <body>\\n    <h1>مرحبا بالعالم</h1>\\n  </body>\\n</html>",
-        "<!DOCTYPE html>\\n<html>\\n  <head>\\n    <title>مثال HTML 2</title>\\n  </head>\\n  <body>\\n    <p>هذا مثال لنص في الصفحة</p>\\n  </body>\\n</html>"
-      ]'>
+      <div class="gallery-item" data-code="/* مثال على شيفرة 4 */
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>مثال HTML</title>
+  </head>
+  <body>
+    <h1>مرحبا بالعالم</h1>
+  </body>
+</html>">
         <img src="https://picsum.photos/400/300?random=4" alt="صورة 4" />
-        <div class="gallery-caption">اضغط لعرض الشيفرات</div>
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
       </div>
+
+      <!-- يمكنك إضافة المزيد من العناصر هنا بنفس النمط -->
     </div>
   </section>
 
-  <!-- نافذة الشيفرة المنبثقة -->
+  <!-- ======================================
+       نافذة الشيفرة المنبثقة (Code Modal)
+       ====================================== -->
   <div id="modalOverlay" class="modal-overlay">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal()">&times;</span>
-      <h3 id="modalTitle">الشيفرة 1 من 1</h3>
-      <pre id="codeBlock">// هنا ستظهر الشيفرة عند الضغط على الصورة</pre>
-      <div class="modal-buttons">
-        <button id="prevCode" class="btn-nav">السابق</button>
-        <button id="copyCode" class="btn-copy">نسخ الشيفرة</button>
-        <button id="nextCode" class="btn-nav">التالي</button>
-      </div>
+      <h3>الشيفرة المعروضة</h3>
+      <pre id="codeBlock">
+// هنا ستظهر الشيفرة عند الضغط على الصورة
+      </pre>
+      <button class="btn-copy" onclick="copyCode()">نسخ الشيفرة</button>
     </div>
   </div>
 
-  <!-- قسم "من نحن" -->
-  <section id="about">
-    <h2>من نحن</h2>
-    <p>
+  <!-- ======================================
+       قسم معلومات إضافية (About & Contact)
+       ====================================== -->
+  <section id="about" style="padding: 80px 30px; background-color: var(--dark-bg);">
+    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">من نحن</h2>
+    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--light-text); line-height: 1.8;">
       هذا الموقع تم تصميمه ليكون واجهة فخمة لعرض الصور والشيفرات المميزة. يمكنك استخدام هذا الهيكل الأساسي
       وتعديله بحسب احتياجاتك الخاصة. كما يمكنك ربطه بأي نظام خلفي (Back-end) في المستقبل لإضافة
       وظائف متقدمة مثل تسجيل المستخدمين أو رفع الصور مباشرة.
     </p>
   </section>
 
-  <!-- قسم "تواصل معنا" -->
-  <section id="contact">
-    <h2>تواصل معنا</h2>
-    <p>
+  <section id="contact" style="padding: 80px 30px; background-color: var(--dark-secondary);">
+    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">تواصل معنا</h2>
+    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--gray-light); line-height: 1.8; text-align: center;">
       لأي استفسار أو تعاون، يمكنك مراسلتنا على:
-      <br /><a href="mailto:info@example.com">info@example.com</a>
+      <br /><a href="mailto:info@example.com" style="color: var(--gold); font-weight: 600;">info@example.com</a>
     </p>
   </section>
 
-  <!-- الفوتر -->
+  <!-- ======================================
+       الفوتر (Footer)
+       ====================================== -->
   <footer>
     <p>جميع الحقوق محفوظة &copy; 2025</p>
   </footer>
 
-  <!-- أكواد JavaScript -->
+  <!-- ======================================
+       أكواد JavaScript للتحكم في السلوك
+       ====================================== -->
   <script>
+    // 1. التحكم في إشعار التحميل
     document.addEventListener('DOMContentLoaded', () => {
-      /* إشعار التحميل */
       const notification = document.getElementById('notification');
+      // بعد نصف ثانية، نظهر الإشعار
       setTimeout(() => {
         notification.classList.add('show');
       }, 500);
+      // بعد 4 ثواني، نخفيه
       setTimeout(() => {
         notification.classList.remove('show');
       }, 4500);
+    });
 
-      /* صور الغاليري والـ Modal المتعدد الشيفرات */
-      const galleryItems = document.querySelectorAll('.gallery-item');
-      const modalOverlay = document.getElementById('modalOverlay');
-      const codeBlock = document.getElementById('codeBlock');
-      const modalTitle = document.getElementById('modalTitle');
-      const prevBtn = document.getElementById('prevCode');
-      const nextBtn = document.getElementById('nextCode');
-      const copyBtn = document.getElementById('copyCode');
+    // 2. فتح وإغلاق نافذة الشيفرة المنبثقة
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const codeBlock = document.getElementById('codeBlock');
 
-      let currentCodes = [];
-      let currentIndex = 0;
-
-      galleryItems.forEach((item) => {
-        item.addEventListener('click', () => {
-          const codesJson = item.getAttribute('data-codes');
-          try {
-            currentCodes = JSON.parse(codesJson);
-          } catch (e) {
-            currentCodes = [ "// خطأ في جلب الشيفرات" ];
-          }
-          currentIndex = 0;
-          showModal();
-        });
-      });
-
-      function showModal() {
-        // تحديث عنوان النافذة بناءً على عدد الشيفرات
-        modalTitle.textContent = \`الشيفرة \${currentIndex + 1} من \${currentCodes.length}\`;
-        codeBlock.textContent = currentCodes[currentIndex];
+    galleryItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        // نأخذ الشيفرة المخزنة في data-code
+        const codeText = item.getAttribute('data-code');
+        // نضعها في عنصر <pre>
+        codeBlock.textContent = codeText.trim();
+        // نظهر النافذة المنبثقة
         modalOverlay.classList.add('show');
-        updateNavButtons();
-      }
-
-      function closeModal() {
-        modalOverlay.classList.remove('show');
-      }
-
-      function updateNavButtons() {
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === currentCodes.length - 1;
-      }
-
-      prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-          currentIndex--;
-          showModal();
-        }
-      });
-
-      nextBtn.addEventListener('click', () => {
-        if (currentIndex < currentCodes.length - 1) {
-          currentIndex++;
-          showModal();
-        }
-      });
-
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(currentCodes[currentIndex]).then(
-          () => {
-            alert('تم نسخ الشيفرة بنجاح!');
-          },
-          (err) => {
-            alert('حدث خطأ أثناء النسخ.');
-            console.error('Clipboard error:', err);
-          }
-        );
-      });
-
-      // إغلاق النافذة عند النقر خارج المحتوى
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-          closeModal();
-        }
-      });
-
-      /* زر تبديل الثيم */
-      const themeToggle = document.getElementById('themeToggle');
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        if (document.body.classList.contains('light-theme')) {
-          themeToggle.textContent = '☀️';
-        } else {
-          themeToggle.textContent = '🌙';
-        }
-      });
-
-      /* قائمة الأجهزة الصغيرة */
-      const menuToggle = document.querySelector('.menu-toggle');
-      const navLinks = document.querySelector('.nav-links');
-      menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
       });
     });
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+    }
+
+    // إغلاق النافذة عند النقر خارج المحتوى
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    // 3. وظيفة نسخ الشيفرة إلى الحافظة
+    function copyCode() {
+      const codeText = codeBlock.textContent;
+      // استخدام Clipboard API لنسخ النص
+      navigator.clipboard.writeText(codeText).then(
+        () => {
+          alert('تم نسخ الشيفرة بنجاح!');
+        },
+        (err) => {
+          alert('حدث خطأ أثناء النسخ.');
+          console.error('Clipboard error:', err);
+        }
+      );
+    }
+
+    // 4. التحكم في إظهار/إخفاء القائمة عند الأجهزة الصغيرة
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      if (navLinks.style.display === 'flex') {
+        navLinks.style.display = 'none';
+      } else {
+        navLinks.style.display = 'flex';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.backgroundColor = varGet('--dark-secondary');
+        navLinks.style.position = 'absolute';
+        navLinks.style.top = '60px';
+        navLinks.style.right = '30px';
+        navLinks.style.padding = '15px';
+        navLinks.style.borderRadius = '8px';
+        navLinks.style.boxShadow = '0 2px 10px var(--shadow-color)';
+      }
+    });
+
+    // دالة مساعدة للحصول على قيمة متغير CSS
+    function varGet(variableName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(variableName);
+    }
   </script>
 </body>
 </html>
