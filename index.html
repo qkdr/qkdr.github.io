@@ -1,806 +1,582 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معرض الصور الفخم</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle cx="25" cy="25" r="20" fill="url(%23g)"/><circle cx="75" cy="75" r="15" fill="url(%23g)"/></svg>') repeat;
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .floating-particles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: float 6s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
-        }
-        
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .logo {
-            font-family: 'Amiri', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-item a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-item a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ff6b6b, #feca57);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-item a:hover::after {
-            width: 100%;
-        }
-        
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-content {
-            z-index: 10;
-            max-width: 800px;
-            padding: 2rem;
-        }
-        
-        .hero h1 {
-            font-family: 'Amiri', serif;
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 1s ease-out;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-        
-        .cta-button {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .gallery-section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .section-title {
-            text-align: center;
-            color: white;
-            font-family: 'Amiri', serif;
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, #ff9a9e, #fecfef);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .gallery-item:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, 
-                rgba(255, 107, 107, 0.8), 
-                rgba(254, 202, 87, 0.8),
-                rgba(138, 43, 226, 0.8),
-                rgba(30, 144, 255, 0.8)
-            );
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .gallery-item:hover::before {
-            opacity: 1;
-        }
-        
-        .gallery-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            z-index: 5;
-        }
-        
-        .gallery-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.8;
-        }
-        
-        .gallery-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .gallery-desc {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 800px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            color: white;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 1rem;
-        }
-        
-        .modal-title {
-            font-family: 'Amiri', serif;
-            font-size: 2rem;
-            margin: 0;
-        }
-        
-        .close-btn {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .close-btn:hover {
-            transform: rotate(90deg) scale(1.1);
-        }
-        
-        .code-section {
-            margin: 2rem 0;
-        }
-        
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .code-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #feca57;
-        }
-        
-        .copy-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .code-block {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 1.5rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #00ff88;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            position: relative;
-        }
-        
-        .code-block::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 12px;
-            height: 12px;
-            background: #ff5f57;
-            border-radius: 50%;
-            box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #28ca42;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
-        
-        .action-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: linear-gradient(45deg, #00ff88, #00d4ff);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-            z-index: 3000;
-            font-weight: 600;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .footer {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 3rem 2rem;
-            text-align: center;
-            color: white;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .footer h3 {
-            font-family: 'Amiri', serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #feca57;
-        }
-        
-        .footer p {
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.1rem; }
-            .nav-menu { display: none; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .modal-content { padding: 2rem; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>موقعي الفخم</title>
+
+  <!-- ربط خطين من Google Fonts لأسلوب فاخر -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== استيراد الخطوط ===== */
+    /* الخط الافتراضي للنص العربي: Cairo */
+    /* الخط للعناوين الفخمة: Playfair Display */
+
+    :root {
+      /* ألوان فخمة */
+      --gold: #d4af37;
+      --dark-bg: #111111;
+      --dark-secondary: #1e1e1e;
+      --light-text: #f5f5f5;
+      --gray-light: #bbbbbb;
+      --overlay-bg: rgba(0, 0, 0, 0.85);
+      --notification-bg: #222222;
+      --notification-text: #ffffff;
+      --btn-bg: #d4af37;
+      --btn-text: #111111;
+      --border-color: #333333;
+      --shadow-color: rgba(0, 0, 0, 0.7);
+      
+      /* انتقالات ناعمة */
+      --transition: 0.3s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ===== شريط التنقل ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: var(--dark-secondary);
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 2px 10px var(--shadow-color);
+    }
+
+    .navbar .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .navbar ul {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar li a {
+      font-size: 16px;
+      color: var(--light-text);
+      padding: 8px 12px;
+      border-radius: 5px;
+      transition: background-color var(--transition);
+    }
+
+    .navbar li a:hover {
+      background-color: var(--gold);
+      color: var(--dark-bg);
+    }
+
+    /* عند التصغير */
+    @media (max-width: 768px) {
+      .navbar ul {
+        display: none;
+      }
+      .navbar .menu-toggle {
+        display: block;
+        cursor: pointer;
+        font-size: 24px;
+        color: var(--light-text);
+      }
+    }
+
+    /* ===== إشعار عند التحميل ===== */
+    .notification {
+      position: fixed;
+      top: 80px;
+      right: 30px;
+      background-color: var(--notification-bg);
+      color: var(--notification-text);
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity var(--transition), transform var(--transition);
+      z-index: 1000;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== قسم المقدمة ===== */
+    #intro {
+      height: 100vh;
+      background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.6),
+          rgba(0, 0, 0, 0.6)
+        ),
+        url('https://images.unsplash.com/photo-1613298765429-59404cdd6b25?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
+          no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    #intro .intro-text {
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px 30px;
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      box-shadow: 0 0 20px var(--shadow-color);
+    }
+
+    #intro h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    #intro p {
+      font-size: 20px;
+      color: var(--light-text);
+      margin-bottom: 30px;
+    }
+
+    #intro .btn-intro {
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color var(--transition);
+    }
+
+    #intro .btn-intro:hover {
+      background-color: #b8932d;
+    }
+
+    /* ===== قسم الغاليري ===== */
+    #gallery {
+      padding: 100px 30px 50px;
+      background-color: var(--dark-secondary);
+      min-height: 100vh;
+    }
+
+    #gallery h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--gold);
+      margin-bottom: 40px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 0 15px var(--shadow-color);
+      transition: transform var(--transition);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition);
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: var(--light-text);
+      text-align: center;
+      padding: 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .gallery-item:hover .gallery-caption {
+      opacity: 1;
+    }
+
+    /* ===== نافذة الشيفرة المنبثقة (Modal) ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--overlay-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition), visibility var(--transition);
+      z-index: 2000;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background-color: var(--dark-secondary);
+      padding: 30px;
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 0 25px var(--shadow-color);
+      position: relative;
+    }
+
+    .modal-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .modal-content pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .btn-copy {
+      display: inline-block;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color var(--transition);
+      text-align: center;
+    }
+
+    .btn-copy:hover {
+      background-color: #b8932d;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      color: var(--light-text);
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--gold);
+    }
+
+    /* ===== قسم الفوتر ===== */
+    footer {
+      background-color: var(--dark-secondary);
+      padding: 30px;
+      text-align: center;
+      border-top: 2px solid var(--border-color);
+      margin-top: 50px;
+    }
+
+    footer p {
+      color: var(--gray-light);
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-    <div class="floating-particles" id="particles"></div>
-    
-    <nav class="navbar" id="navbar">
-        <div class="nav-content">
-            <div class="logo">🎨 معرض الفخامة</div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#home">الرئيسية</a></li>
-                <li class="nav-item"><a href="#gallery">المعرض</a></li>
-                <li class="nav-item"><a href="#about">حولنا</a></li>
-                <li class="nav-item"><a href="#contact">اتصل بنا</a></li>
-            </ul>
-        </div>
-    </nav>
-    
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>مرحباً بك في معرض الصور الفخم</h1>
-            <p>استكشف مجموعة رائعة من الصور والأكواد المتقدمة في واجهة تفاعلية فريدة من نوعها</p>
-            <a href="#gallery" class="cta-button">استكشف المعرض</a>
-        </div>
-    </section>
-    
-    <section class="gallery-section" id="gallery">
-        <h2 class="section-title">معرض الصور والأكواد</h2>
-        <div class="gallery-grid">
-            <div class="gallery-item" onclick="openModal('web-design')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">🌐</div>
-                    <div class="gallery-title">تصميم المواقع</div>
-                    <div class="gallery-desc">أكواد HTML & CSS متقدمة</div>
-                </div>
-            </div>
-            
-            <div class="gallery-item" onclick="openModal('javascript')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">⚡</div>
-                    <div class="gallery-title">جافاسكريبت</div>
-                    <div class="gallery-desc">برمجة تفاعلية متطورة</div>
-                </div>
-            </div>
-            
-            <div class="gallery-item" onclick="openModal('python')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">🐍</div>
-                    <div class="gallery-title">بايثون</div>
-                    <div class="gallery-desc">خوارزميات وتطبيقات ذكية</div>
-                </div>
-            </div>
-            
-            <div class="gallery-item" onclick="openModal('ai-ml')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">🤖</div>
-                    <div class="gallery-title">الذكاء الاصطناعي</div>
-                    <div class="gallery-desc">تعلم الآلة والشبكات العصبية</div>
-                </div>
-            </div>
-            
-            <div class="gallery-item" onclick="openModal('mobile')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">📱</div>
-                    <div class="gallery-title">تطبيقات الجوال</div>
-                    <div class="gallery-desc">React Native & Flutter</div>
-                </div>
-            </div>
-            
-            <div class="gallery-item" onclick="openModal('database')">
-                <div class="gallery-content">
-                    <div class="gallery-icon">🗄️</div>
-                    <div class="gallery-title">قواعد البيانات</div>
-                    <div class="gallery-desc">SQL و NoSQL متقدمة</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">عنوان الكود</h2>
-                <button class="close-btn" onclick="closeModal()">×</button>
-            </div>
-            
-            <div class="code-section">
-                <div class="code-header">
-                    <div class="code-title" id="code-title">كود المثال</div>
-                    <button class="copy-btn" onclick="copyCode()">نسخ الكود</button>
-                </div>
-                <div class="code-block" id="code-content">
-                    // سيتم عرض الكود هنا
-                </div>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="action-btn" onclick="runCode()">تشغيل الكود</button>
-                <button class="action-btn" onclick="downloadCode()">تحميل الكود</button>
-                <button class="action-btn" onclick="shareCode()">مشاركة الكود</button>
-            </div>
-        </div>
+  <!-- ======================================
+       شريط التنقل (Navbar)
+       ====================================== -->
+  <nav class="navbar">
+    <div class="logo">موقعي الفخم</div>
+    <div class="menu-toggle">&#9776;</div>
+    <ul class="nav-links">
+      <li><a href="#intro">الرئيسية</a></li>
+      <li><a href="#gallery">الصور</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+      <li><a href="#about">من نحن</a></li>
+    </ul>
+  </nav>
+
+  <!-- ======================================
+       إشعار فخم عند تحميل الصفحة (Notification)
+       ====================================== -->
+  <div id="notification" class="notification">
+    مرحبًا بك في موقعي الفخم! تصفح واستمتع بأفضل تجربة.
+  </div>
+
+  <!-- ======================================
+       قسم المقدمة (Intro Section)
+       ====================================== -->
+  <section id="intro">
+    <div class="intro-text">
+      <h1>مرحبًا بك في موقعنا الفاخر</h1>
+      <p>
+        هذا الموقع يقدم لك تجربة استثنائية من حيث التصميم والجودة. استمتع بمشاهدة الصور
+        الفخمة مع إمكانية عرض الشيفرات المصاحبة بكل سهولة.
+      </p>
+      <button class="btn-intro" onclick="document
+        .getElementById('gallery')
+        .scrollIntoView({ behavior: 'smooth' });">
+        تصفح الصور
+      </button>
     </div>
-    
-    <div class="notification" id="notification">
-        تم نسخ الكود بنجاح! ✨
+  </section>
+
+  <!-- ======================================
+       قسم غاليري الصور (Gallery Section)
+       ====================================== -->
+  <section id="gallery">
+    <h2>مجموعة الصور</h2>
+    <div class="gallery-grid">
+      <!-- مثال على عنصر غاليري -->
+      <div class="gallery-item" data-code="// مثال على شيفرة 1:
+function sayHello() {
+  console.log('Hello, world!');
+}">
+        <img src="https://picsum.photos/400/300?random=1" alt="صورة 1" />
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
+      </div>
+
+      <div class="gallery-item" data-code="/* مثال على شيفرة 2 */
+#include <iostream>
+using namespace std;
+int main() {
+  cout << &quot;Hello from C++!&quot; << endl;
+  return 0;
+}">
+        <img src="https://picsum.photos/400/300?random=2" alt="صورة 2" />
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
+      </div>
+
+      <div class="gallery-item" data-code="# Python مثال 3:
+def greet(name):
+    print(f'Hello, {name}!')
+
+greet('User')">
+        <img src="https://picsum.photos/400/300?random=3" alt="صورة 3" />
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
+      </div>
+
+      <div class="gallery-item" data-code="/* مثال على شيفرة 4 */
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>مثال HTML</title>
+  </head>
+  <body>
+    <h1>مرحبا بالعالم</h1>
+  </body>
+</html>">
+        <img src="https://picsum.photos/400/300?random=4" alt="صورة 4" />
+        <div class="gallery-caption">اضغط لعرض الشفرة</div>
+      </div>
+
+      <!-- يمكنك إضافة المزيد من العناصر هنا بنفس النمط -->
     </div>
-    
-    <footer class="footer">
-        <div class="footer-content">
-            <h3>معرض الفخامة للبرمجة</h3>
-            <p>نقدم أفضل الأكواد والحلول البرمجية المتقدمة في واجهة فاخرة وسهلة الاستخدام. 
-            استكشف عالم البرمجة بطريقة جديدة ومبتكرة.</p>
-        </div>
-    </footer>
-    
-    <script>
-        // إنشاء الجسيمات المتحركة
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                container.appendChild(particle);
-            }
-        }
-        
-        // تأثير الشريط العلوي عند التمرير
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-        
-        // بيانات الأكواد
-        const codeData = {
-            'web-design': {
-                title: 'تصميم المواقع المتقدم',
-                codeTitle: 'HTML & CSS متقدم',
-                code: `<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <title>صفحة متقدمة</title>
-    <style>
-        .container {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            padding: 2rem;
-            border-radius: 15px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .card {
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <h2>عنوان رائع</h2>
-            <p>محتوى مميز بتصميم احترافي</p>
-        </div>
+  </section>
+
+  <!-- ======================================
+       نافذة الشيفرة المنبثقة (Code Modal)
+       ====================================== -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h3>الشيفرة المعروضة</h3>
+      <pre id="codeBlock">
+// هنا ستظهر الشيفرة عند الضغط على الصورة
+      </pre>
+      <button class="btn-copy" onclick="copyCode()">نسخ الشيفرة</button>
     </div>
+  </div>
+
+  <!-- ======================================
+       قسم معلومات إضافية (About & Contact)
+       ====================================== -->
+  <section id="about" style="padding: 80px 30px; background-color: var(--dark-bg);">
+    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">من نحن</h2>
+    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--light-text); line-height: 1.8;">
+      هذا الموقع تم تصميمه ليكون واجهة فخمة لعرض الصور والشيفرات المميزة. يمكنك استخدام هذا الهيكل الأساسي
+      وتعديله بحسب احتياجاتك الخاصة. كما يمكنك ربطه بأي نظام خلفي (Back-end) في المستقبل لإضافة
+      وظائف متقدمة مثل تسجيل المستخدمين أو رفع الصور مباشرة.
+    </p>
+  </section>
+
+  <section id="contact" style="padding: 80px 30px; background-color: var(--dark-secondary);">
+    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">تواصل معنا</h2>
+    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--gray-light); line-height: 1.8; text-align: center;">
+      لأي استفسار أو تعاون، يمكنك مراسلتنا على:
+      <br /><a href="mailto:info@example.com" style="color: var(--gold); font-weight: 600;">info@example.com</a>
+    </p>
+  </section>
+
+  <!-- ======================================
+       الفوتر (Footer)
+       ====================================== -->
+  <footer>
+    <p>جميع الحقوق محفوظة &copy; 2025</p>
+  </footer>
+
+  <!-- ======================================
+       أكواد JavaScript للتحكم في السلوك
+       ====================================== -->
+  <script>
+    // 1. التحكم في إشعار التحميل
+    document.addEventListener('DOMContentLoaded', () => {
+      const notification = document.getElementById('notification');
+      // بعد نصف ثانية، نظهر الإشعار
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 500);
+      // بعد 4 ثواني، نخفيه
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 4500);
+    });
+
+    // 2. فتح وإغلاق نافذة الشيفرة المنبثقة
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const codeBlock = document.getElementById('codeBlock');
+
+    galleryItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        // نأخذ الشيفرة المخزنة في data-code
+        const codeText = item.getAttribute('data-code');
+        // نضعها في عنصر <pre>
+        codeBlock.textContent = codeText.trim();
+        // نظهر النافذة المنبثقة
+        modalOverlay.classList.add('show');
+      });
+    });
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+    }
+
+    // إغلاق النافذة عند النقر خارج المحتوى
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    // 3. وظيفة نسخ الشيفرة إلى الحافظة
+    function copyCode() {
+      const codeText = codeBlock.textContent;
+      // استخدام Clipboard API لنسخ النص
+      navigator.clipboard.writeText(codeText).then(
+        () => {
+          alert('تم نسخ الشيفرة بنجاح!');
+        },
+        (err) => {
+          alert('حدث خطأ أثناء النسخ.');
+          console.error('Clipboard error:', err);
+        }
+      );
+    }
+
+    // 4. التحكم في إظهار/إخفاء القائمة عند الأجهزة الصغيرة
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      if (navLinks.style.display === 'flex') {
+        navLinks.style.display = 'none';
+      } else {
+        navLinks.style.display = 'flex';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.backgroundColor = varGet('--dark-secondary');
+        navLinks.style.position = 'absolute';
+        navLinks.style.top = '60px';
+        navLinks.style.right = '30px';
+        navLinks.style.padding = '15px';
+        navLinks.style.borderRadius = '8px';
+        navLinks.style.boxShadow = '0 2px 10px var(--shadow-color)';
+      }
+    });
+
+    // دالة مساعدة للحصول على قيمة متغير CSS
+    function varGet(variableName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(variableName);
+    }
+  </script>
 </body>
-</html>`
-            },
-            'javascript': {
-                title: 'جافاسكريبت التفاعلي',
-                codeTitle: 'تطبيق تفاعلي بـ JavaScript',
-                code: `// تطبيق تفاعلي متقدم
-class InteractiveApp {
-    constructor() {
-        this.data = [];
-        this.init();
-    }
-    
-    init() {
-        this.createInterface();
-        this.bindEvents();
-        this.startAnimation();
-    }
-    
-    createInterface() {
-        const container = document.createElement('div');
-        container.innerHTML = \`
-            <div class="app-container">
-                <h1>تطبيق تفاعلي</h1>
-                <button id="addBtn">إضافة عنصر</button>
-                <div id="itemsList"></div>
-            </div>
-        \`;
-        document.body.appendChild(container);
-    }
-    
-    bindEvents() {
-        document.getElementById('addBtn').addEventListener('click', () => {
-            this.addItem();
-        });
-    }
-    
-    addItem() {
-        const item = {
-            id: Date.now(),
-            text: \`عنصر جديد \${this.data.length + 1}\`,
-            timestamp: new Date().toLocaleString('ar-SA')
-        };
-        this.data.push(item);
-        this.renderItems();
-    }
-    
-    renderItems() {
-        const list = document.getElementById('itemsList');
-        list.innerHTML = this.data.map(item => \`
-            <div class="item" data-id="\${item.id}">
-                <h3>\${item.text}</h3>
-                <p>\${item.timestamp}</p>
-            </div>
-        \`).join('');
-    }
-    
-    startAnimation() {
-        setInterval(() => {
-            const items = document.querySelectorAll('.item');
-            items.forEach((item, index) => {
-                item.style.transform = \`translateX(\${Math.sin(Date.now() * 0.001 + index) * 10}px)\`;
-            });
-        }, 50);
-    }
-}
-
-// تشغيل التطبيق
-const app = new InteractiveApp();`
-            },
-            'python': {
-                title: 'بايثون المتقدم',
-                codeTitle: 'خوارزمية الذكاء الاصطناعي',
-                code: `# خوارزمية التعلم الآلي المتقدمة
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
-
-class AIModel:
-    def __init__(self, model_type='random_forest'):
-        self.model_type = model_type
-        self.model = None
-        self.is_trained = False
-        
-    def prepare_data(self, data, target_column):
-        """تحضير البيانات للتدريب"""
-        X = data.drop(columns=[target_column])
-        y = data[target_column]
-        
-        # تقسيم البيانات
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
-        )
-        
-        return X_train, X_test, y_train, y_test
-    
-    def train_model(self, X_train, y_train):
-        """تدريب النموذج"""
-        if self.model_type == 'random_forest':
-            self.model = RandomForestClassifier(
-                n_estimators=100,
-                max_depth=10,
-                random_state=42
-            )
-        
-        self.model.fit(X_train, y_train)
-        self.is_trained = True
-        print("✅ تم تدريب النموذج بنجاح!")
-    
-    def evaluate_model(self, X_test, y_test):
-        """تقييم النموذج"""
-        if not self.is_trained:
-            raise ValueError("يجب تدريب النموذج أولاً!")
-        
-        predictions = self.model.predict(X_test)
-        accuracy = accuracy_score(y_test, predictions)
-        
-        print(f"🎯 دقة النموذج: {accuracy:.2%}")
-        print("\\n📊 تقرير التقييم:")
-        print(classification_report(y_test, predictions))
-        
-        return accuracy
-    
-    def predict(self, new_data):
-        """التنبؤ بالبيانات الجديدة"""
-        if not self.is_trained:
-            raise ValueError("يجب تدريب النموذج أولاً!")
-        
-        predictions = self.model.predict(new_data)
-        probabilities = self.model.predict_proba(new_data)
-        
-        return predictions, probabilities
-
-# مثال على الاستخدام
-def main():
-    # إنشاء بيانات تجريبية
-    data = pd.DataFrame({
-        'feature_1': np.random.randn(1000),
-        'feature_2': np.random.randn(1000),
-        'feature_3': np.random.randn(1000),
-        'target': np.random.choice([0, 1], 1000)
-    })
-    
-    # إنشاء النموذج
-    ai_model = AIModel()
-    
-    # تحضير البيانات
-    X_train, X_test, y_train, y_test = ai_model.prepare_data(data, 'target')
-    
-    #
+</html>
