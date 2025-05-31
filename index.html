@@ -3,582 +3,302 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقعي الفخم</title>
-
-  <!-- ربط خطين من Google Fonts لأسلوب فاخر -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
-
+  <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <style>
-    /* ===== استيراد الخطوط ===== */
-    /* الخط الافتراضي للنص العربي: Cairo */
-    /* الخط للعناوين الفخمة: Playfair Display */
-
-    :root {
-      /* ألوان فخمة */
-      --gold: #d4af37;
-      --dark-bg: #111111;
-      --dark-secondary: #1e1e1e;
-      --light-text: #f5f5f5;
-      --gray-light: #bbbbbb;
-      --overlay-bg: rgba(0, 0, 0, 0.85);
-      --notification-bg: #222222;
-      --notification-text: #ffffff;
-      --btn-bg: #d4af37;
-      --btn-text: #111111;
-      --border-color: #333333;
-      --shadow-color: rgba(0, 0, 0, 0.7);
-      
-      /* انتقالات ناعمة */
-      --transition: 0.3s ease-in-out;
-    }
-
-    * {
+    /* ======= تصميم عام للصفحة ======= */
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: var(--dark-bg);
-      color: var(--light-text);
-      line-height: 1.6;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    /* ===== شريط التنقل ===== */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: var(--dark-secondary);
-      padding: 15px 30px;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      font-family: "Arial", sans-serif;
+      color: #fff;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      z-index: 1000;
-      box-shadow: 0 2px 10px var(--shadow-color);
     }
 
-    .navbar .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--gold);
+    /* ======= إطار المقدمة ======= */
+    .intro-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 30px 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #fff;
+      border-radius: 12px;
+      padding: 20px 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+    }
+    .intro-container h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .intro-container p {
+      line-height: 1.6;
+      text-align: justify;
     }
 
-    .navbar ul {
+    /* ======= الإطارات المتداخلة (Nested Boxes) ======= */
+    .outer-box {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+    }
+    .frame-box {
+      background: rgba(255, 255, 255, 0.07);
+      border: 2px dashed #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .inner-box {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #fff;
+      border-radius: 6px;
+      padding: 20px;
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      align-items: center;
     }
-
-    .navbar li a {
-      font-size: 16px;
-      color: var(--light-text);
-      padding: 8px 12px;
+    .inner-box input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      border: none;
       border-radius: 5px;
-      transition: background-color var(--transition);
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+    .inner-box button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: #e67e22;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .inner-box button:hover {
+      background: #d35400;
     }
 
-    .navbar li a:hover {
-      background-color: var(--gold);
-      color: var(--dark-bg);
+    /* ======= عرض الأكواد ======= */
+    #codes-container {
+      width: 90%;
+      max-width: 700px;
+      margin-bottom: 40px;
+    }
+    .code-card {
+      background: #1e272e;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+    .code-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+      color: #f39c12;
+    }
+    .code-block {
+      background: #2f3640;
+      border: 1px solid #444;
+      border-radius: 5px;
+      padding: 10px;
+      overflow-x: auto;
+      color: #ecf0f1;
+      font-family: "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
 
-    /* عند التصغير */
-    @media (max-width: 768px) {
-      .navbar ul {
-        display: none;
-      }
-      .navbar .menu-toggle {
-        display: block;
-        cursor: pointer;
-        font-size: 24px;
-        color: var(--light-text);
-      }
-    }
-
-    /* ===== إشعار عند التحميل ===== */
+    /* ======= الإشعارات ======= */
     .notification {
       position: fixed;
-      top: 80px;
-      right: 30px;
-      background-color: var(--notification-bg);
-      color: var(--notification-text);
-      padding: 15px 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px var(--shadow-color);
+      top: 20px;
+      right: 20px;
+      background: #27ae60;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transform: translateY(-20px);
-      transition: opacity var(--transition), transform var(--transition);
+      transition: opacity 0.4s ease, transform 0.4s ease;
       z-index: 1000;
+      font-size: 1rem;
     }
-
     .notification.show {
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* ===== قسم المقدمة ===== */
-    #intro {
-      height: 100vh;
-      background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.6),
-          rgba(0, 0, 0, 0.6)
-        ),
-        url('https://images.unsplash.com/photo-1613298765429-59404cdd6b25?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
-          no-repeat center center/cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    #intro .intro-text {
-      max-width: 800px;
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 40px 30px;
-      border: 2px solid var(--gold);
-      border-radius: 10px;
-      box-shadow: 0 0 20px var(--shadow-color);
-    }
-
-    #intro h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 48px;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    #intro p {
-      font-size: 20px;
-      color: var(--light-text);
-      margin-bottom: 30px;
-    }
-
-    #intro .btn-intro {
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      padding: 12px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color var(--transition);
-    }
-
-    #intro .btn-intro:hover {
-      background-color: #b8932d;
-    }
-
-    /* ===== قسم الغاليري ===== */
-    #gallery {
-      padding: 100px 30px 50px;
-      background-color: var(--dark-secondary);
-      min-height: 100vh;
-    }
-
-    #gallery h2 {
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      color: var(--gold);
-      margin-bottom: 40px;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .gallery-item {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      box-shadow: 0 0 15px var(--shadow-color);
-      transition: transform var(--transition);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform var(--transition);
-    }
-
-    .gallery-item:hover {
-      transform: scale(1.03);
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.1);
-    }
-
-    .gallery-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      color: var(--light-text);
-      text-align: center;
-      padding: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .gallery-item:hover .gallery-caption {
-      opacity: 1;
-    }
-
-    /* ===== نافذة الشيفرة المنبثقة (Modal) ===== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--overlay-bg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity var(--transition), visibility var(--transition);
-      z-index: 2000;
-    }
-
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-content {
-      background-color: var(--dark-secondary);
-      padding: 30px;
-      border: 2px solid var(--gold);
-      border-radius: 10px;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 0 25px var(--shadow-color);
-      position: relative;
-    }
-
-    .modal-content h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--gold);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .modal-content pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      border: 1px solid var(--border-color);
-      margin-bottom: 20px;
-    }
-
-    .btn-copy {
-      display: inline-block;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color var(--transition);
-      text-align: center;
-    }
-
-    .btn-copy:hover {
-      background-color: #b8932d;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 24px;
-      color: var(--light-text);
-      cursor: pointer;
-      transition: color var(--transition);
-    }
-
-    .modal-close:hover {
-      color: var(--gold);
-    }
-
-    /* ===== قسم الفوتر ===== */
-    footer {
-      background-color: var(--dark-secondary);
-      padding: 30px;
-      text-align: center;
-      border-top: 2px solid var(--border-color);
-      margin-top: 50px;
-    }
-
-    footer p {
-      color: var(--gray-light);
-      font-size: 14px;
+    .notification.error {
+      background: #c0392b;
     }
   </style>
 </head>
 <body>
-  <!-- ======================================
-       شريط التنقل (Navbar)
-       ====================================== -->
-  <nav class="navbar">
-    <div class="logo">موقعي الفخم</div>
-    <div class="menu-toggle">&#9776;</div>
-    <ul class="nav-links">
-      <li><a href="#intro">الرئيسية</a></li>
-      <li><a href="#gallery">الصور</a></li>
-      <li><a href="#contact">تواصل معنا</a></li>
-      <li><a href="#about">من نحن</a></li>
-    </ul>
-  </nav>
-
-  <!-- ======================================
-       إشعار فخم عند تحميل الصفحة (Notification)
-       ====================================== -->
-  <div id="notification" class="notification">
-    مرحبًا بك في موقعي الفخم! تصفح واستمتع بأفضل تجربة.
+  <!-- ======= مقدمة الموقع ======= -->
+  <div class="intro-container">
+    <h1>مرحباً بك في موقع عرض أكواد سكربتات روبلوكس</h1>
+    <p>
+      هذا الموقع يتيح لك إدخال اسم السكربت (مثل "سكربت الأول") في المربع أدناه، ثم عرض جميع الأكواد المتعلقة بهذا السكربت بشكل منسق وجميل داخل واجهة أنيقة. يمكنك إضافة أسماء سكربتات أخرى وتعديل الكود بسهولة ليتناسب مع احتياجاتك.
+    </p>
+    <p>
+      وظائف الموقع:
+      <ul>
+        <li>إطار فخم متداخل من ثلاثة مستويات لإدخال اسم السكربت.</li>
+        <li>عرض أكثر من كود لكل سكربت ضمن بطاقات مميزة.</li>
+        <li>إشعارات فخمة تظهر عند نجاح أو فشل عرض الأكواد.</li>
+        <li>تصميم جذاب باستخدام ألوان وظلال وإطارات أنيقة.</li>
+      </ul>
+    </p>
   </div>
 
-  <!-- ======================================
-       قسم المقدمة (Intro Section)
-       ====================================== -->
-  <section id="intro">
-    <div class="intro-text">
-      <h1>مرحبًا بك في موقعنا الفاخر</h1>
-      <p>
-        هذا الموقع يقدم لك تجربة استثنائية من حيث التصميم والجودة. استمتع بمشاهدة الصور
-        الفخمة مع إمكانية عرض الشيفرات المصاحبة بكل سهولة.
-      </p>
-      <button class="btn-intro" onclick="document
-        .getElementById('gallery')
-        .scrollIntoView({ behavior: 'smooth' });">
-        تصفح الصور
-      </button>
-    </div>
-  </section>
-
-  <!-- ======================================
-       قسم غاليري الصور (Gallery Section)
-       ====================================== -->
-  <section id="gallery">
-    <h2>مجموعة الصور</h2>
-    <div class="gallery-grid">
-      <!-- مثال على عنصر غاليري -->
-      <div class="gallery-item" data-code="// مثال على شيفرة 1:
-function sayHello() {
-  console.log('Hello, world!');
-}">
-        <img src="https://picsum.photos/400/300?random=1" alt="صورة 1" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
+  <!-- ======= الإطارات المتداخلة التي تحتوي على مربع الإدخال ======= -->
+  <div class="outer-box">
+    <div class="frame-box">
+      <div class="inner-box">
+        <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+        <button onclick="showCodes()">عرض الأكواد</button>
       </div>
-
-    <div class="gallery-item" data-code="// شيفرة JavaScript بسيطة
-function hello(name) {
-  alert(&quot;أهلاً، &quot; + name + &quot;!&quot;);
-}
-
-hello(&quot;المستخدم&quot;);">
-  <img src="https://picsum.photos/400/300?random=1" alt="صورة 1" />
-  <div class="gallery-caption">اضغط لعرض الشفرة</div>
-</div>
-      
-  <img src="https://picsum.photos/400/300?random=2" alt="صورة 2" />
-  <div class="gallery-caption">اضغط لعرض الشفرة</div>
-</div>
-
-      <div class="gallery-item" data-code="# Python مثال 3:
-def greet(name):
-    print(f'Hello, {name}!')
-
-greet('User')">
-        <img src="https://picsum.photos/400/300?random=3" alt="صورة 3" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
-
-      <div class="gallery-item" data-code="/* مثال على شيفرة 4 */
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>مثال HTML</title>
-  </head>
-  <body>
-    <h1>مرحبا بالعالم</h1>
-  </body>
-</html>">
-        <img src="https://picsum.photos/400/300?random=4" alt="صورة 4" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
-
-      <!-- يمكنك إضافة المزيد من العناصر هنا بنفس النمط -->
-    </div>
-  </section>
-
-  <!-- ======================================
-       نافذة الشيفرة المنبثقة (Code Modal)
-       ====================================== -->
-  <div id="modalOverlay" class="modal-overlay">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">&times;</span>
-      <h3>الشيفرة المعروضة</h3>
-      <pre id="codeBlock">
-// هنا ستظهر الشيفرة عند الضغط على الصورة
-      </pre>
-      <button class="btn-copy" onclick="copyCode()">نسخ الشيفرة</button>
     </div>
   </div>
 
-  <!-- ======================================
-       قسم معلومات إضافية (About & Contact)
-       ====================================== -->
-  <section id="about" style="padding: 80px 30px; background-color: var(--dark-bg);">
-    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">من نحن</h2>
-    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--light-text); line-height: 1.8;">
-      هذا الموقع تم تصميمه ليكون واجهة فخمة لعرض الصور والشيفرات المميزة. يمكنك استخدام هذا الهيكل الأساسي
-      وتعديله بحسب احتياجاتك الخاصة. كما يمكنك ربطه بأي نظام خلفي (Back-end) في المستقبل لإضافة
-      وظائف متقدمة مثل تسجيل المستخدمين أو رفع الصور مباشرة.
-    </p>
-  </section>
+  <!-- ======= حاوية عرض الأكواد ======= -->
+  <div id="codes-container"></div>
 
-  <section id="contact" style="padding: 80px 30px; background-color: var(--dark-secondary);">
-    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">تواصل معنا</h2>
-    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--gray-light); line-height: 1.8; text-align: center;">
-      لأي استفسار أو تعاون، يمكنك مراسلتنا على:
-      <br /><a href="mailto:info@example.com" style="color: var(--gold); font-weight: 600;">info@example.com</a>
-    </p>
-  </section>
+  <!-- ======= عنصر الإشعار ======= -->
+  <div id="notification" class="notification"></div>
 
-  <!-- ======================================
-       الفوتر (Footer)
-       ====================================== -->
-  <footer>
-    <p>جميع الحقوق محفوظة &copy; 2025</p>
-  </footer>
-
-  <!-- ======================================
-       أكواد JavaScript للتحكم في السلوك
-       ====================================== -->
   <script>
-    // 1. التحكم في إشعار التحميل
-    document.addEventListener('DOMContentLoaded', () => {
-      const notification = document.getElementById('notification');
-      // بعد نصف ثانية، نظهر الإشعار
-      setTimeout(() => {
-        notification.classList.add('show');
-      }, 500);
-      // بعد 4 ثواني، نخفيه
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 4500);
-    });
+    // ======= قاعدة بيانات بسيطة للأكواد كمثال =======
+    const scriptsData = {
+      "سكربت الأول": [
+        {
+          title: "كود التحكم بالحركة",
+          code: `-- سكربت الأول: كود التحكم بالحركة
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
 
-    // 2. فتح وإغلاق نافذة الشيفرة المنبثقة
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const codeBlock = document.getElementById('codeBlock');
-
-    galleryItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        // نأخذ الشيفرة المخزنة في data-code
-        const codeText = item.getAttribute('data-code');
-        // نضعها في عنصر <pre>
-        codeBlock.textContent = codeText.trim();
-        // نظهر النافذة المنبثقة
-        modalOverlay.classList.add('show');
-      });
-    });
-
-    function closeModal() {
-      modalOverlay.classList.remove('show');
-    }
-
-    // إغلاق النافذة عند النقر خارج المحتوى
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
-        closeModal();
-      }
-    });
-
-    // 3. وظيفة نسخ الشيفرة إلى الحافظة
-    function copyCode() {
-      const codeText = codeBlock.textContent;
-      // استخدام Clipboard API لنسخ النص
-      navigator.clipboard.writeText(codeText).then(
-        () => {
-          alert('تم نسخ الشيفرة بنجاح!');
+-- تحكم أساسي بالحركة
+humanoid.WalkSpeed = 50
+humanoid.JumpPower = 100
+print("تم تفعيل كود التحكم بالحركة!")`
         },
-        (err) => {
-          alert('حدث خطأ أثناء النسخ.');
-          console.error('Clipboard error:', err);
+        {
+          title: "كود إنشاء جسم ثابت في المكان",
+          code: `-- سكربت الأول: كود إنشاء جسم ثابت
+local workspace = game:GetService("Workspace")
+
+local part = Instance.new("Part")
+part.Name = "StaticPart"
+part.Size = Vector3.new(5, 5, 5)
+part.Position = Vector3.new(0, 10, 0)
+part.Anchored = true
+part.BrickColor = BrickColor.new("Bright red")
+part.Parent = workspace
+
+print("تم إنشاء الجسم الثابت في المكان المطلوب!")`
+        },
+        {
+          title: "كود إرسال رسالة إلى جميع اللاعبين",
+          code: `-- سكربت الأول: كود إرسال رسالة
+local Players = game:GetService("Players")
+
+for _, player in pairs(Players:GetPlayers()) do
+    player:Kick("تم إرسال رسالة جماعية: مرحباً بالجميع!")
+end`
         }
-      );
+      ],
+      "سكربت الثاني": [
+        {
+          title: "كود قفز تلقائي",
+          code: `-- سكربت الثاني: قفز تلقائي
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+while true do
+    wait(2)
+    humanoid.Jump = true
+end`
+        },
+        {
+          title: "كود إنشاء دائرة ضوئية",
+          code: `-- سكربت الثاني: إنشاء دائرة ضوئية
+local Lighting = game:GetService("Lighting")
+
+Lighting.Blur.Enabled = true
+Lighting.Brightness = 2
+Lighting.FogEnd = 100
+
+print("تم تفعيل التأثيرات الضوئية!")`
+        }
+      ]
+      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
+    };
+
+    // ======= دالة عرض الأكواد بناءً على اسم السكربت =======
+    function showCodes() {
+      const input = document.getElementById("script-name-input");
+      const scriptName = input.value.trim();
+      const container = document.getElementById("codes-container");
+      container.innerHTML = ""; // تفريغ المحتوى السابق
+
+      if (scriptsData.hasOwnProperty(scriptName)) {
+        const codesArray = scriptsData[scriptName];
+
+        // إنشاء بطاقة لكل كود
+        codesArray.forEach((item) => {
+          const card = document.createElement("div");
+          card.classList.add("code-card");
+
+          const title = document.createElement("h3");
+          title.textContent = item.title;
+          card.appendChild(title);
+
+          const codeBlock = document.createElement("pre");
+          codeBlock.classList.add("code-block");
+          codeBlock.textContent = item.code;
+          card.appendChild(codeBlock);
+
+          container.appendChild(card);
+        });
+
+        // عرض إشعار نجاح
+        showNotification(`تم عرض أكواد "${scriptName}" بنجاح!`, false);
+      } else {
+        // إذا لم يوجد السكربت
+        showNotification(`لم يتم العثور على أكواد باسم "${scriptName}"!`, true);
+      }
+
+      // مسح حقل الإدخال بعد العرض
+      input.value = "";
     }
 
-    // 4. التحكم في إظهار/إخفاء القائمة عند الأجهزة الصغيرة
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    // ======= دالة عرض الإشعارات =======
+    function showNotification(message, isError) {
+      const notif = document.getElementById("notification");
+      notif.textContent = message;
+      notif.classList.remove("error");
+      if (isError) notif.classList.add("error");
+      notif.classList.add("show");
 
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      if (navLinks.style.display === 'flex') {
-        navLinks.style.display = 'none';
-      } else {
-        navLinks.style.display = 'flex';
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.backgroundColor = varGet('--dark-secondary');
-        navLinks.style.position = 'absolute';
-        navLinks.style.top = '60px';
-        navLinks.style.right = '30px';
-        navLinks.style.padding = '15px';
-        navLinks.style.borderRadius = '8px';
-        navLinks.style.boxShadow = '0 2px 10px var(--shadow-color)';
-      }
-    });
-
-    // دالة مساعدة للحصول على قيمة متغير CSS
-    function varGet(variableName) {
-      return getComputedStyle(document.documentElement).getPropertyValue(variableName);
+      // إخفاء الإشعار بعد 3 ثوانٍ
+      setTimeout(() => {
+        notif.classList.remove("show");
+      }, 3000);
     }
   </script>
 </body>
