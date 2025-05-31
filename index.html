@@ -15,11 +15,12 @@
       scroll-behavior: smooth;
     }
     body {
-      font-family: "Tajawal", sans-serif;
+      font-family: "Arial", sans-serif;
       background: #1b1b2f;
       color: #eaeaea;
       line-height: 1.6;
       direction: rtl;
+      min-height: 100vh;
     }
     a {
       color: inherit;
@@ -28,102 +29,107 @@
     ul {
       list-style: none;
     }
+    button {
+      font-family: inherit;
+    }
 
-    /* ======== رأس الصفحة (Hero Section) ======== */
-    header {
-      height: 100vh;
-      background: linear-gradient(135deg, #2b0061, #4b0d80);
+    /* ======== شريط التنقل ======== */
+    .nav-bar {
+      background: linear-gradient(90deg, #4b6cb7, #182848);
       display: flex;
-      align-items: center;
       justify-content: center;
-      position: relative;
+      align-items: center;
+      padding: 12px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-bar button {
+      background: linear-gradient(45deg, #f1c40f, #e67e22);
+      border: none;
+      color: #fff;
+      padding: 10px 22px;
+      margin: 0 12px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-size: 1rem;
+    }
+    .nav-bar button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ======== قسم المقدمة (Intro Section) ======== */
+    #section-intro {
+      background: linear-gradient(135deg, #2b0061, #4b0d80);
+      padding: 80px 20px;
       text-align: center;
-      padding: 0 20px;
+      min-height: calc(100vh - 56px); /* طرح ارتفاع الشريط */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    header::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #f39c12, #e67e22, #d35400);
-    }
-    .hero-content {
-      z-index: 1;
-      max-width: 800px;
-    }
-    .hero-content h1 {
+    #section-intro h1 {
       font-size: 3rem;
       margin-bottom: 20px;
       color: #f1c40f;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
     }
-    .hero-content p {
+    #section-intro p {
       font-size: 1.2rem;
-      margin-bottom: 30px;
-    }
-    .hero-content button {
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 50px;
-      background: linear-gradient(45deg, #f39c12, #e74c3c);
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .hero-content button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    }
-
-    /* ======== المقدمة بعد القفز (Section Intro) ======== */
-    #intro {
-      background: #2e2e48;
-      padding: 60px 20px;
-      text-align: center;
-    }
-    #intro h2 {
-      font-size: 2.2rem;
-      margin-bottom: 20px;
-      color: #f1c40f;
-      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
-    }
-    #intro p {
       max-width: 800px;
-      margin: 0 auto 30px auto;
-      font-size: 1.1rem;
-      line-height: 1.8;
+      margin-bottom: 30px;
       color: #dcdcdc;
     }
-
-    /* ======== زر الانتقال إلى البحث ======== */
-    #intro button {
-      padding: 12px 25px;
-      font-size: 1rem;
+    #section-intro button {
+      padding: 15px 30px;
+      font-size: 1.1rem;
       border: none;
       border-radius: 50px;
       background: linear-gradient(45deg, #16a085, #1abc9c);
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s, box-shadow 0.3s;
     }
-    #intro button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
+    #section-intro button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
     /* ======== قسم بحث الأكواد (Code Search Section) ======== */
-    #code-search {
+    #section-search {
+      display: none;
       padding: 60px 20px;
       background: linear-gradient(135deg, #3a3a5c, #1b1b3a);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      min-height: calc(100vh - 56px);
     }
+    /* إحصائيات السكربتات */
+    .script-stats {
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      background: rgba(52, 52, 75, 0.8);
+      border-left: 5px solid #f1c40f;
+      border-radius: 8px;
+      padding: 20px 25px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      color: #eaeaea;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .script-stats ul {
+      margin-top: 12px;
+      padding-right: 20px;
+    }
+    .script-stats li {
+      margin-bottom: 8px;
+    }
+
+    /* الإطار الخارجي المتداخل */
     .outer-box {
       width: 100%;
       max-width: 700px;
@@ -132,7 +138,7 @@
       border-radius: 12px;
       padding: 25px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      margin-bottom: 40px;
+      margin: 0 auto 40px auto;
     }
     .frame-box {
       background: rgba(75, 75, 104, 0.7);
@@ -151,7 +157,7 @@
       align-items: center;
     }
     .inner-box input[type="text"] {
-      width: 85%;
+      width: 90%;
       padding: 12px;
       border: none;
       border-radius: 8px;
@@ -180,11 +186,11 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
-    /* ======== عرض الأكواد ======== */
+    /* عرض الأكواد */
     #codes-container {
       width: 100%;
       max-width: 750px;
-      margin-bottom: 60px;
+      margin: 0 auto 60px auto;
     }
     .code-card {
       background: #1f1f3a;
@@ -213,11 +219,11 @@
       box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
     }
 
-    /* ======== الإشعارات ======== */
+    /* الإشعارات */
     .notification {
       position: fixed;
-      top: 25px;
-      right: 25px;
+      top: 20px;
+      right: 20px;
       background: #27ae60;
       color: #fff;
       padding: 18px 25px;
@@ -226,7 +232,7 @@
       opacity: 0;
       transform: translateY(-30px);
       transition: opacity 0.4s ease, transform 0.4s ease;
-      z-index: 1000;
+      z-index: 200;
       font-size: 1rem;
       max-width: 300px;
       text-align: center;
@@ -239,24 +245,43 @@
       background: #c0392b;
     }
 
-    /* ======== تذييل الصفحة (Footer) ======== */
-    footer {
+    /* ======== صفحة التواصل (Contact Section) ======== */
+    #section-contact {
+      display: none;
+      padding: 60px 20px;
       background: #2e2e48;
-      padding: 40px 20px;
+      min-height: calc(100vh - 56px);
       text-align: center;
     }
-    footer h4 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
+    #section-contact h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
       color: #f1c40f;
+      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
     }
-    footer p {
-      margin-bottom: 10px;
+    #section-contact p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 30px auto;
       color: #dcdcdc;
+      line-height: 1.8;
     }
-    footer a.contact-email {
+    .contact-info {
+      background: rgba(52, 52, 75, 0.8);
+      border-left: 5px solid #f39c12;
+      border-radius: 8px;
+      padding: 25px 30px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: right;
+      font-size: 1rem;
+      color: #eaeaea;
+      line-height: 1.6;
+    }
+    .contact-info a.email-link {
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 15px;
       background: linear-gradient(45deg, #e67e22, #f39c12);
       color: #fff;
       padding: 10px 20px;
@@ -265,51 +290,54 @@
       transition: transform 0.3s, box-shadow 0.3s;
       font-size: 1rem;
     }
-    footer a.contact-email:hover {
+    .contact-info a.email-link:hover {
       transform: translateY(-3px);
       box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
     }
-    footer .info-list {
-      margin-top: 20px;
-      display: inline-block;
+    .contact-info ul {
+      margin-top: 15px;
       text-align: right;
     }
-    footer .info-list li {
+    .contact-info li {
       margin-bottom: 8px;
       color: #dcdcdc;
-      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- ======== رأس الصفحة (Hero Section) ======== -->
-  <header>
-    <div class="hero-content">
-      <h1>مرحبا بك في موقع أكواد سكربتات روبلوكس</h1>
-      <p>
-        هذا الموقع يوفر لك واجهة أنيقة وفخمة لعرض أكواد سكربتات Roblox. انقر على الزر أدناه للانتقال إلى البحث عن الأكواد وعرضها بطريقة جميلة ومنسقة.
-      </p>
-      <button onclick="document.getElementById('intro').scrollIntoView({ behavior: 'smooth' });">
-        ابدأ الآن
-      </button>
-    </div>
-  </header>
+  <!-- ======== شريط التنقل ======== -->
+  <div class="nav-bar">
+    <button onclick="showSection('section-intro')">الرئيسية</button>
+    <button onclick="showSection('section-search')">بحث الأكواد</button>
+    <button onclick="showSection('section-contact')">تواصل معنا</button>
+  </div>
 
-  <!-- ======== مقدمة قصيرة مع زر انتقال ======== -->
-  <section id="intro">
-    <h2>مقدمة عن الموقع</h2>
+  <!-- ======== قسم المقدمة ======== -->
+  <section id="section-intro">
+    <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
     <p>
-      يهدف هذا الموقع إلى توفير بيئة جذابة واحترافية لعرض أكواد سكربتات Roblox. يمكنك البحث عن اسم السكربت في المربع المخصص، وسوف تظهر لك كافة الأكواد المتعلقة بهذا الاسم في واجهة شيفرة فخمة وأنيقة. كما يتيح لك الموقع التواصل معنا عبر البريد الإلكتروني لأي استفسارات أو اقتراحات.
+      في هذا الموقع، يمكنك عرض أكواد سكربتات Roblox بأناقة وفخامة.  
+      لدينا واجهة جميلة تشمل مقدمة جذابة، إمكانية البحث عن السكربتات وعرض أكوادها في واجهة شيفرة أنيقة، بالإضافة إلى صفحة تواصل مخصصة للاستفسارات أو الملاحظات.  
+      انقر على الزر أدناه للانتقال إلى صفحة البحث عن الأكواد.
     </p>
-    <button onclick="document.getElementById('code-search').scrollIntoView({ behavior: 'smooth' });">
-      ابحث عن الأكواد
-    </button>
+    <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
   </section>
 
-  <!-- ======== قسم بحث وعرض الأكواد ======== -->
-  <section id="code-search">
-    <!-- الإطار الخارجي المتداخل -->
+  <!-- ======== قسم بحث الأكواد ======== -->
+  <section id="section-search">
+    <!-- إحصائيات السكربتات المتوفرة -->
+    <div class="script-stats">
+      <div>
+        <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
+      </div>
+      <div>
+        <strong>أسماء السكربتات:</strong>
+        <ul id="script-list"></ul>
+      </div>
+    </div>
+
+    <!-- الإطار الخارجي المتداخل لبحث الأكواد -->
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
@@ -319,27 +347,31 @@
       </div>
     </div>
 
-    <!-- حاوية الأكواد -->
+    <!-- حاوية عرض الأكواد -->
     <div id="codes-container"></div>
   </section>
 
-  <!-- ======== إشعار للأخطاء والنجاح ======== -->
+  <!-- ======== الإشعار ======== -->
   <div id="notification" class="notification"></div>
 
-  <!-- ======== تذييل الصفحة ======== -->
-  <footer>
-    <h4>للتواصل والمزيد من المعلومات</h4>
-    <p>إذا كانت لديك أي أسئلة أو استفسارات، لا تتردد في مراسلتنا عبر البريد الإلكتروني:</p>
-    <a href="mailto:example@example.com" class="contact-email">example@example.com</a>
-    <ul class="info-list">
-      <li>© 2025 جميع الحقوق محفوظة.</li>
-      <li>تم تصميم الموقع بأحدث تقنيات HTML5 و CSS3 و JavaScript.</li>
-      <li>لمزيد من المشاريع تابعنا على GitHub: <a href="https://github.com/" target="_blank">GitHub</a></li>
-    </ul>
-  </footer>
+  <!-- ======== صفحة التواصل ======== -->
+  <section id="section-contact">
+    <h2>تواصل معنا</h2>
+    <p>
+      إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة سكربت جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!
+    </p>
+    <div class="contact-info">
+      <ul>
+        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+        <li><strong>معرف Discord:</strong> RobloxHelper#1234</li>
+        <li><strong>للاطلاع على مشاريعنا:</strong> تابعنا على <a href="https://github.com/" target="_blank">GitHub</a></li>
+        <li><strong>جميع الحقوق محفوظة © 2025</strong></li>
+      </ul>
+    </div>
+  </section>
 
   <script>
-    /* ======= قاعدة بيانات للأكواد تجريبية ======= */
+    /* ======= قاعدة بيانات السكربتات النموذجية ======= */
     const scriptsData = {
       "سكربت الأول": [
         {
@@ -403,9 +435,52 @@ Lighting.FogEnd = 100
 
 print("تم تفعيل التأثيرات الضوئية!")`
         }
+      ],
+      "سكربت الثالث": [
+        {
+          title: "كود رسالة ترحيبية",
+          code: `-- سكربت الثالث: رسالة ترحيبية
+game.Players.PlayerAdded:Connect(function(player)
+    player:SendNotification({
+        Title = "مرحباً!",
+        Text = "مرحبا بك في السيرفر، استمتع باللعب!"
+    })
+end)`
+        }
       ]
-      // بإمكانك إضافة سكربتات وأكواد أخرى هنا بنفس الصيغة
+      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
     };
+
+    /* ======= التعامل مع التنقل بين الأقسام ======= */
+    function showSection(sectionId) {
+      const sections = ["section-intro", "section-search", "section-contact"];
+      sections.forEach(id => {
+        document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
+      });
+      // إذا كانت صفحة البحث: حدّث إحصائيات السكربتات
+      if (sectionId === "section-search") {
+        updateScriptStats();
+      }
+    }
+
+    // عند تحميل الصفحة: عرض المقدمة
+    window.onload = () => {
+      showSection("section-intro");
+    };
+
+    /* ======= تحديث إحصائيات السكربتات ======= */
+    function updateScriptStats() {
+      const countElem = document.getElementById("script-count");
+      const listElem = document.getElementById("script-list");
+      const names = Object.keys(scriptsData);
+      countElem.textContent = names.length;
+      listElem.innerHTML = "";
+      names.forEach((name, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${name}`;
+        listElem.appendChild(li);
+      });
+    }
 
     /* ======= دالة عرض الأكواد ======= */
     function showCodes() {
