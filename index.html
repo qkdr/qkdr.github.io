@@ -5,137 +5,231 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <style>
-    /* ======= تصميم عام للصفحة ======= */
-    body {
+    /* ======== إعدادات عامة ======== */
+    * {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #2c3e50, #4ca1af);
-      font-family: "Arial", sans-serif;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: #1b1b2f;
+      color: #eaeaea;
+      line-height: 1.6;
+      direction: rtl;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    ul {
+      list-style: none;
+    }
+
+    /* ======== رأس الصفحة (Hero Section) ======== */
+    header {
+      height: 100vh;
+      background: linear-gradient(135deg, #2b0061, #4b0d80);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+      padding: 0 20px;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #f39c12, #e67e22, #d35400);
+    }
+    .hero-content {
+      z-index: 1;
+      max-width: 800px;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #f1c40f;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .hero-content button {
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #f39c12, #e74c3c);
       color: #fff;
-      min-height: 100vh;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hero-content button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ======== المقدمة بعد القفز (Section Intro) ======== */
+    #intro {
+      background: #2e2e48;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    #intro h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: #f1c40f;
+      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+    }
+    #intro p {
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #dcdcdc;
+    }
+
+    /* ======== زر الانتقال إلى البحث ======== */
+    #intro button {
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #16a085, #1abc9c);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    #intro button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ======== قسم بحث الأكواد (Code Search Section) ======== */
+    #code-search {
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #3a3a5c, #1b1b3a);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
-    /* ======= إطار المقدمة ======= */
-    .intro-container {
-      width: 90%;
-      max-width: 800px;
-      margin: 30px 0;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #fff;
-      border-radius: 12px;
-      padding: 20px 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-    }
-    .intro-container h1 {
-      margin-top: 0;
-      font-size: 2rem;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    .intro-container p {
-      line-height: 1.6;
-      text-align: justify;
-    }
-
-    /* ======= الإطارات المتداخلة (Nested Boxes) ======= */
     .outer-box {
-      width: 90%;
+      width: 100%;
       max-width: 700px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-      margin-bottom: 30px;
+      background: rgba(52, 52, 75, 0.8);
+      border: 2px solid #f39c12;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 40px;
     }
     .frame-box {
-      background: rgba(255, 255, 255, 0.07);
-      border: 2px dashed #fff;
-      border-radius: 8px;
+      background: rgba(75, 75, 104, 0.7);
+      border: 2px dashed #e67e22;
+      border-radius: 10px;
       padding: 20px;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3);
     }
     .inner-box {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #fff;
-      border-radius: 6px;
+      background: rgba(99, 99, 130, 0.7);
+      border: 2px solid #f1c40f;
+      border-radius: 8px;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     .inner-box input[type="text"] {
-      width: 80%;
-      padding: 10px;
+      width: 85%;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
-      margin-bottom: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
       font-size: 1rem;
+      background: #1b1b3a;
+      color: #eaeaea;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+    .inner-box input[type="text"]::placeholder {
+      color: #bbb;
     }
     .inner-box button {
-      padding: 10px 20px;
+      padding: 12px 28px;
       border: none;
-      border-radius: 5px;
-      background: #e67e22;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #f39c12, #d35400);
       color: #fff;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
     .inner-box button:hover {
-      background: #d35400;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
-    /* ======= عرض الأكواد ======= */
+    /* ======== عرض الأكواد ======== */
     #codes-container {
-      width: 90%;
-      max-width: 700px;
-      margin-bottom: 40px;
+      width: 100%;
+      max-width: 750px;
+      margin-bottom: 60px;
     }
     .code-card {
-      background: #1e272e;
-      border: 1px solid #fff;
+      background: #1f1f3a;
+      border-left: 5px solid #f1c40f;
       border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
     .code-card h3 {
-      margin: 0 0 10px 0;
-      font-size: 1.2rem;
-      color: #f39c12;
+      margin: 0 0 12px 0;
+      font-size: 1.3rem;
+      color: #e67e22;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     }
     .code-block {
-      background: #2f3640;
+      background: #2b2b4b;
       border: 1px solid #444;
-      border-radius: 5px;
-      padding: 10px;
+      border-radius: 6px;
+      padding: 15px;
       overflow-x: auto;
       color: #ecf0f1;
       font-family: "Courier New", monospace;
       font-size: 0.95rem;
-      line-height: 1.4;
+      line-height: 1.5;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
     }
 
-    /* ======= الإشعارات ======= */
+    /* ======== الإشعارات ======== */
     .notification {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 25px;
+      right: 25px;
       background: #27ae60;
       color: #fff;
-      padding: 15px 20px;
-      border-radius: 6px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+      padding: 18px 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-30px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       z-index: 1000;
       font-size: 1rem;
+      max-width: 300px;
+      text-align: center;
     }
     .notification.show {
       opacity: 1;
@@ -144,44 +238,108 @@
     .notification.error {
       background: #c0392b;
     }
+
+    /* ======== تذييل الصفحة (Footer) ======== */
+    footer {
+      background: #2e2e48;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    footer h4 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #f1c40f;
+    }
+    footer p {
+      margin-bottom: 10px;
+      color: #dcdcdc;
+    }
+    footer a.contact-email {
+      display: inline-block;
+      margin-top: 10px;
+      background: linear-gradient(45deg, #e67e22, #f39c12);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-size: 1rem;
+    }
+    footer a.contact-email:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
+    }
+    footer .info-list {
+      margin-top: 20px;
+      display: inline-block;
+      text-align: right;
+    }
+    footer .info-list li {
+      margin-bottom: 8px;
+      color: #dcdcdc;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
-  <!-- ======= مقدمة الموقع ======= -->
-  <div class="intro-container">
-    <h1>مرحباً بك في موقع عرض أكواد سكربتات روبلوكس</h1>
-    <p>
-      هذا الموقع يتيح لك إدخال اسم السكربت (مثل "سكربت الأول") في المربع أدناه، ثم عرض جميع الأكواد المتعلقة بهذا السكربت بشكل منسق وجميل داخل واجهة أنيقة. يمكنك إضافة أسماء سكربتات أخرى وتعديل الكود بسهولة ليتناسب مع احتياجاتك.
-    </p>
-    <p>
-      وظائف الموقع:
-      <ul>
-        <li>إطار فخم متداخل من ثلاثة مستويات لإدخال اسم السكربت.</li>
-        <li>عرض أكثر من كود لكل سكربت ضمن بطاقات مميزة.</li>
-        <li>إشعارات فخمة تظهر عند نجاح أو فشل عرض الأكواد.</li>
-        <li>تصميم جذاب باستخدام ألوان وظلال وإطارات أنيقة.</li>
-      </ul>
-    </p>
-  </div>
 
-  <!-- ======= الإطارات المتداخلة التي تحتوي على مربع الإدخال ======= -->
-  <div class="outer-box">
-    <div class="frame-box">
-      <div class="inner-box">
-        <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
-        <button onclick="showCodes()">عرض الأكواد</button>
+  <!-- ======== رأس الصفحة (Hero Section) ======== -->
+  <header>
+    <div class="hero-content">
+      <h1>مرحبا بك في موقع أكواد سكربتات روبلوكس</h1>
+      <p>
+        هذا الموقع يوفر لك واجهة أنيقة وفخمة لعرض أكواد سكربتات Roblox. انقر على الزر أدناه للانتقال إلى البحث عن الأكواد وعرضها بطريقة جميلة ومنسقة.
+      </p>
+      <button onclick="document.getElementById('intro').scrollIntoView({ behavior: 'smooth' });">
+        ابدأ الآن
+      </button>
+    </div>
+  </header>
+
+  <!-- ======== مقدمة قصيرة مع زر انتقال ======== -->
+  <section id="intro">
+    <h2>مقدمة عن الموقع</h2>
+    <p>
+      يهدف هذا الموقع إلى توفير بيئة جذابة واحترافية لعرض أكواد سكربتات Roblox. يمكنك البحث عن اسم السكربت في المربع المخصص، وسوف تظهر لك كافة الأكواد المتعلقة بهذا الاسم في واجهة شيفرة فخمة وأنيقة. كما يتيح لك الموقع التواصل معنا عبر البريد الإلكتروني لأي استفسارات أو اقتراحات.
+    </p>
+    <button onclick="document.getElementById('code-search').scrollIntoView({ behavior: 'smooth' });">
+      ابحث عن الأكواد
+    </button>
+  </section>
+
+  <!-- ======== قسم بحث وعرض الأكواد ======== -->
+  <section id="code-search">
+    <!-- الإطار الخارجي المتداخل -->
+    <div class="outer-box">
+      <div class="frame-box">
+        <div class="inner-box">
+          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <button onclick="showCodes()">عرض الأكواد</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ======= حاوية عرض الأكواد ======= -->
-  <div id="codes-container"></div>
+    <!-- حاوية الأكواد -->
+    <div id="codes-container"></div>
+  </section>
 
-  <!-- ======= عنصر الإشعار ======= -->
+  <!-- ======== إشعار للأخطاء والنجاح ======== -->
   <div id="notification" class="notification"></div>
 
+  <!-- ======== تذييل الصفحة ======== -->
+  <footer>
+    <h4>للتواصل والمزيد من المعلومات</h4>
+    <p>إذا كانت لديك أي أسئلة أو استفسارات، لا تتردد في مراسلتنا عبر البريد الإلكتروني:</p>
+    <a href="mailto:example@example.com" class="contact-email">example@example.com</a>
+    <ul class="info-list">
+      <li>© 2025 جميع الحقوق محفوظة.</li>
+      <li>تم تصميم الموقع بأحدث تقنيات HTML5 و CSS3 و JavaScript.</li>
+      <li>لمزيد من المشاريع تابعنا على GitHub: <a href="https://github.com/" target="_blank">GitHub</a></li>
+    </ul>
+  </footer>
+
   <script>
-    // ======= قاعدة بيانات بسيطة للأكواد كمثال =======
+    /* ======= قاعدة بيانات للأكواد تجريبية ======= */
     const scriptsData = {
       "سكربت الأول": [
         {
@@ -246,20 +404,19 @@ Lighting.FogEnd = 100
 print("تم تفعيل التأثيرات الضوئية!")`
         }
       ]
-      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
+      // بإمكانك إضافة سكربتات وأكواد أخرى هنا بنفس الصيغة
     };
 
-    // ======= دالة عرض الأكواد بناءً على اسم السكربت =======
+    /* ======= دالة عرض الأكواد ======= */
     function showCodes() {
       const input = document.getElementById("script-name-input");
       const scriptName = input.value.trim();
       const container = document.getElementById("codes-container");
-      container.innerHTML = ""; // تفريغ المحتوى السابق
+      container.innerHTML = ""; // تفريغ الأكواد السابقة
 
       if (scriptsData.hasOwnProperty(scriptName)) {
         const codesArray = scriptsData[scriptName];
 
-        // إنشاء بطاقة لكل كود
         codesArray.forEach((item) => {
           const card = document.createElement("div");
           card.classList.add("code-card");
@@ -279,7 +436,7 @@ print("تم تفعيل التأثيرات الضوئية!")`
         // عرض إشعار نجاح
         showNotification(`تم عرض أكواد "${scriptName}" بنجاح!`, false);
       } else {
-        // إذا لم يوجد السكربت
+        // في حال لم يوجد السكربت
         showNotification(`لم يتم العثور على أكواد باسم "${scriptName}"!`, true);
       }
 
@@ -287,7 +444,7 @@ print("تم تفعيل التأثيرات الضوئية!")`
       input.value = "";
     }
 
-    // ======= دالة عرض الإشعارات =======
+    /* ======= دالة عرض الإشعارات ======= */
     function showNotification(message, isError) {
       const notif = document.getElementById("notification");
       notif.textContent = message;
