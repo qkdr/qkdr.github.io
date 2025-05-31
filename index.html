@@ -1,582 +1,475 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقعي الفخم</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>موقع الأكواد الفخم</title>
+<style>
+  /* ========== Reset ========== */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 
-  <!-- ربط خطين من Google Fonts لأسلوب فاخر -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  /* ========== Root Variables for Light and Dark ========== */
+  :root {
+    --bg-color-light: #f9f9f9;
+    --text-color-light: #222;
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --accent-color: #ffc107;
+    --border-color: #ddd;
 
-  <style>
-    /* ===== استيراد الخطوط ===== */
-    /* الخط الافتراضي للنص العربي: Cairo */
-    /* الخط للعناوين الفخمة: Playfair Display */
+    --bg-color-dark: #121212;
+    --text-color-dark: #eee;
+    --border-color-dark: #444;
+  }
 
-    :root {
-      /* ألوان فخمة */
-      --gold: #d4af37;
-      --dark-bg: #111111;
-      --dark-secondary: #1e1e1e;
-      --light-text: #f5f5f5;
-      --gray-light: #bbbbbb;
-      --overlay-bg: rgba(0, 0, 0, 0.85);
-      --notification-bg: #222222;
-      --notification-text: #ffffff;
-      --btn-bg: #d4af37;
-      --btn-text: #111111;
-      --border-color: #333333;
-      --shadow-color: rgba(0, 0, 0, 0.7);
-      
-      /* انتقالات ناعمة */
-      --transition: 0.3s ease-in-out;
-    }
+  /* ========== Light Theme ========== */
+  body.light {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+  }
+  body.light header,
+  body.light nav,
+  body.light .codes-modal,
+  body.light .notification {
+    background-color: #fff;
+    color: var(--text-color-light);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
+  /* ========== Dark Theme ========== */
+  body.dark {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+  }
+  body.dark header,
+  body.dark nav,
+  body.dark .codes-modal,
+  body.dark .notification {
+    background-color: #222;
+    color: var(--text-color-dark);
+    border: 1px solid var(--border-color-dark);
+    box-shadow: 0 0 15px rgba(255,255,255,0.05);
+  }
 
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: var(--dark-bg);
-      color: var(--light-text);
-      line-height: 1.6;
-    }
+  /* ========== Header ========== */
+  header {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 1.2px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+  header .title {
+    color: var(--primary-color);
+  }
+  header button#theme-toggle {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  header button#theme-toggle:hover {
+    background-color: var(--accent-color);
+    color: #222;
+  }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  /* ========== Navigation (Sidebar) ========== */
+  nav {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 2rem 1rem;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+    font-weight: 600;
+  }
+  nav h2 {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+  }
+  nav ul {
+    list-style: none;
+  }
+  nav ul li {
+    margin-bottom: 1.3rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+  }
+  nav ul li:hover {
+    background: var(--accent-color);
+    color: #222;
+  }
 
-    ul {
-      list-style: none;
-    }
+  /* ========== Main Content ========== */
+  main {
+    margin-left: 270px;
+    padding: 2rem;
+  }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
+  /* ========== Intro Section ========== */
+  .intro {
+    max-width: 900px;
+    margin-bottom: 3rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 1rem;
+  }
 
-    /* ===== شريط التنقل ===== */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: var(--dark-secondary);
-      padding: 15px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 1000;
-      box-shadow: 0 2px 10px var(--shadow-color);
-    }
+  /* ========== Gallery of Images ========== */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  .gallery-item {
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+  }
+  .gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  body.dark .gallery-item {
+    background-color: #333;
+    border-color: var(--border-color-dark);
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-item .caption {
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    text-align: center;
+  }
 
-    .navbar .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--gold);
-    }
+  /* ========== Modal for Codes ========== */
+  .codes-modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    z-index: 10000;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  body.dark .codes-modal {
+    background: #222;
+  }
+  .codes-modal.active {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .codes-modal header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .codes-modal header button.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    font-weight: 900;
+  }
+  .codes-list {
+    padding: 1rem 1.5rem;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  .code-item {
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    font-family: monospace;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  }
+  body.dark .code-item {
+    background: #444;
+  }
+  .code-text {
+    user-select: text;
+  }
+  .copy-btn {
+    background: var(--accent-color);
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    color: #222;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+  .copy-btn:hover {
+    background: #ffdb4d;
+  }
 
-    .navbar ul {
-      display: flex;
-      gap: 20px;
-    }
+  /* ========== Notification Popup ========== */
+  .notification {
+    position: fixed;
+    top: 1rem; right: 1rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 11000;
+  }
+  .notification.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
 
-    .navbar li a {
-      font-size: 16px;
-      color: var(--light-text);
-      padding: 8px 12px;
-      border-radius: 5px;
-      transition: background-color var(--transition);
-    }
-
-    .navbar li a:hover {
-      background-color: var(--gold);
-      color: var(--dark-bg);
-    }
-
-    /* عند التصغير */
-    @media (max-width: 768px) {
-      .navbar ul {
-        display: none;
-      }
-      .navbar .menu-toggle {
-        display: block;
-        cursor: pointer;
-        font-size: 24px;
-        color: var(--light-text);
-      }
-    }
-
-    /* ===== إشعار عند التحميل ===== */
-    .notification {
-      position: fixed;
-      top: 80px;
-      right: 30px;
-      background-color: var(--notification-bg);
-      color: var(--notification-text);
-      padding: 15px 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px var(--shadow-color);
-      opacity: 0;
-      transform: translateY(-20px);
-      transition: opacity var(--transition), transform var(--transition);
-      z-index: 1000;
-    }
-
-    .notification.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ===== قسم المقدمة ===== */
-    #intro {
-      height: 100vh;
-      background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.6),
-          rgba(0, 0, 0, 0.6)
-        ),
-        url('https://images.unsplash.com/photo-1613298765429-59404cdd6b25?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')
-          no-repeat center center/cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    #intro .intro-text {
-      max-width: 800px;
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 40px 30px;
-      border: 2px solid var(--gold);
-      border-radius: 10px;
-      box-shadow: 0 0 20px var(--shadow-color);
-    }
-
-    #intro h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 48px;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    #intro p {
-      font-size: 20px;
-      color: var(--light-text);
-      margin-bottom: 30px;
-    }
-
-    #intro .btn-intro {
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      padding: 12px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color var(--transition);
-    }
-
-    #intro .btn-intro:hover {
-      background-color: #b8932d;
-    }
-
-    /* ===== قسم الغاليري ===== */
-    #gallery {
-      padding: 100px 30px 50px;
-      background-color: var(--dark-secondary);
-      min-height: 100vh;
-    }
-
-    #gallery h2 {
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      color: var(--gold);
-      margin-bottom: 40px;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .gallery-item {
+  /* ========== Responsive ========== */
+  @media (max-width: 768px) {
+    nav {
       position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      box-shadow: 0 0 15px var(--shadow-color);
-      transition: transform var(--transition);
-    }
-
-    .gallery-item img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform var(--transition);
-    }
-
-    .gallery-item:hover {
-      transform: scale(1.03);
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.1);
-    }
-
-    .gallery-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      color: var(--light-text);
-      text-align: center;
-      padding: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .gallery-item:hover .gallery-caption {
-      opacity: 1;
-    }
-
-    /* ===== نافذة الشيفرة المنبثقة (Modal) ===== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--overlay-bg);
+      height: auto;
+      box-shadow: none;
+      padding: 1rem;
       display: flex;
       justify-content: center;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity var(--transition), visibility var(--transition);
-      z-index: 2000;
+      font-size: 1rem;
     }
+    nav h2 {
+      display: none;
+    }
+    main {
+      margin-left: 0;
+      padding: 1rem;
+    }
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+  }
 
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-content {
-      background-color: var(--dark-secondary);
-      padding: 30px;
-      border: 2px solid var(--gold);
-      border-radius: 10px;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 0 25px var(--shadow-color);
-      position: relative;
-    }
-
-    .modal-content h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--gold);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .modal-content pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      border: 1px solid var(--border-color);
-      margin-bottom: 20px;
-    }
-
-    .btn-copy {
-      display: inline-block;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color var(--transition);
-      text-align: center;
-    }
-
-    .btn-copy:hover {
-      background-color: #b8932d;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 24px;
-      color: var(--light-text);
-      cursor: pointer;
-      transition: color var(--transition);
-    }
-
-    .modal-close:hover {
-      color: var(--gold);
-    }
-
-    /* ===== قسم الفوتر ===== */
-    footer {
-      background-color: var(--dark-secondary);
-      padding: 30px;
-      text-align: center;
-      border-top: 2px solid var(--border-color);
-      margin-top: 50px;
-    }
-
-    footer p {
-      color: var(--gray-light);
-      font-size: 14px;
-    }
-  </style>
+</style>
 </head>
-<body>
-  <!-- ======================================
-       شريط التنقل (Navbar)
-       ====================================== -->
-  <nav class="navbar">
-    <div class="logo">موقعي الفخم</div>
-    <div class="menu-toggle">&#9776;</div>
-    <ul class="nav-links">
-      <li><a href="#intro">الرئيسية</a></li>
-      <li><a href="#gallery">الصور</a></li>
-      <li><a href="#contact">تواصل معنا</a></li>
-      <li><a href="#about">من نحن</a></li>
-    </ul>
-  </nav>
+<body class="light">
 
-  <!-- ======================================
-       إشعار فخم عند تحميل الصفحة (Notification)
-       ====================================== -->
-  <div id="notification" class="notification">
-    مرحبًا بك في موقعي الفخم! تصفح واستمتع بأفضل تجربة.
+<header>
+  <div class="title">موقع الأكواد الفخم</div>
+  <button id="theme-toggle" aria-label="تبديل الوضع">الوضع الداكن</button>
+</header>
+
+<nav>
+  <h2>القائمة</h2>
+  <ul>
+    <li>الرئيسية</li>
+    <li>الأكواد</li>
+    <li>تواصل معنا</li>
+  </ul>
+</nav>
+
+<main>
+  <section class="intro" aria-label="مقدمة الموقع">
+    <p>مرحبًا بك في موقع الأكواد الفخم! اختر صورة أدناه لعرض الأكواد الخاصة بها. يمكنك نسخ الأكواد بسهولة والاستفادة منها في مشاريعك. استخدم زر الوضع الداكن لتغيير مظهر الموقع حسب رغبتك.</p>
+  </section>
+
+  <section class="gallery" aria-label="معرض الصور">
+    <!-- صور مع بيانات أكواد -->
+    <div class="gallery-item" tabindex="0" data-title="الصورة الأولى" data-codes='["CODE123", "ABC456", "XYZ789"]'>
+      <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=400&q=80" alt="صورة 1" />
+      <div class="caption">صورة 1</div>
+    </div>
+    <div class="gallery-item" tabindex="0" data-title="الصورة الثانية" data-codes='["HELLO2025", "WORLD2025"]'>
+      <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="صورة 2" />
+      <div class="caption">صورة 2</div>
+    </div>
+    <div class="gallery-item" tabindex="0" data-title="الصورة الثالثة" data-codes='["FOO123", "BAR456", "BAZ789", "QUX101"]'>
+      <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=400&q=80" alt="صورة 3" />
+      <div class="caption">صورة 3</div>
+    </div>
+  </section>
+</main>
+
+<!-- مودال الأكواد -->
+<div class="codes-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+  <header>
+    <span id="modal-title"></span>
+    <button class="close-btn" aria-label="إغلاق">×</button>
+  </header>
+  <div class="codes-list" tabindex="0">
+    <!-- الأكواد تظهر هنا -->
   </div>
+</div>
 
-  <!-- ======================================
-       قسم المقدمة (Intro Section)
-       ====================================== -->
-  <section id="intro">
-    <div class="intro-text">
-      <h1>مرحبًا بك في موقعنا الفاخر</h1>
-      <p>
-        هذا الموقع يقدم لك تجربة استثنائية من حيث التصميم والجودة. استمتع بمشاهدة الصور
-        الفخمة مع إمكانية عرض الشيفرات المصاحبة بكل سهولة.
-      </p>
-      <button class="btn-intro" onclick="document
-        .getElementById('gallery')
-        .scrollIntoView({ behavior: 'smooth' });">
-        تصفح الصور
-      </button>
-    </div>
-  </section>
+<!-- إشعار نسخ الأكواد -->
+<div class="notification" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
-  <!-- ======================================
-       قسم غاليري الصور (Gallery Section)
-       ====================================== -->
-  <section id="gallery">
-    <h2>مجموعة الصور</h2>
-    <div class="gallery-grid">
-      <!-- مثال على عنصر غاليري -->
-      <div class="gallery-item" data-code="// مثال على شيفرة 1:
-function sayHello() {
-  console.log('Hello, world!');
-}">
-        <img src="https://picsum.photos/400/300?random=1" alt="صورة 1" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
+<script>
+  (() => {
+    const body = document.body;
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const modal = document.querySelector('.codes-modal');
+    const modalTitle = modal.querySelector('#modal-title');
+    const codesList = modal.querySelector('.codes-list');
+    const closeBtn = modal.querySelector('.close-btn');
+    const notification = document.querySelector('.notification');
+    const galleryItems = document.querySelectorAll('.gallery-item');
 
-      <div class="gallery-item" data-code="/* مثال على شيفرة 2 */
-#include <iostream>
-using namespace std;
-int main() {
-  cout << &quot;Hello from C++!&quot; << endl;
-  return 0;
-}">
-        <img src="https://picsum.photos/400/300?random=2" alt="صورة 2" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
+    // تبديل الوضع بين داكن وفاتح
+    function toggleTheme() {
+      if (body.classList.contains('light')) {
+        body.classList.replace('light', 'dark');
+        themeToggleBtn.textContent = 'الوضع الفاتح';
+      } else {
+        body.classList.replace('dark', 'light');
+        themeToggleBtn.textContent = 'الوضع الداكن';
+      }
+    }
 
-      <div class="gallery-item" data-code="# Python مثال 3:
-def greet(name):
-    print(f'Hello, {name}!')
+    themeToggleBtn.addEventListener('click', toggleTheme);
 
-greet('User')">
-        <img src="https://picsum.photos/400/300?random=3" alt="صورة 3" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
+    // فتح نافذة الأكواد مع عرض الأكواد حسب الصورة
+    function openModal(e) {
+      const item = e.currentTarget;
+      const title = item.getAttribute('data-title');
+      const codes = JSON.parse(item.getAttribute('data-codes'));
 
-      <div class="gallery-item" data-code="/* مثال على شيفرة 4 */
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>مثال HTML</title>
-  </head>
-  <body>
-    <h1>مرحبا بالعالم</h1>
-  </body>
-</html>">
-        <img src="https://picsum.photos/400/300?random=4" alt="صورة 4" />
-        <div class="gallery-caption">اضغط لعرض الشفرة</div>
-      </div>
+      modalTitle.textContent = title;
+      codesList.innerHTML = ''; // تفريغ الأكواد القديمة
 
-      <!-- يمكنك إضافة المزيد من العناصر هنا بنفس النمط -->
-    </div>
-  </section>
+      codes.forEach(code => {
+        const codeDiv = document.createElement('div');
+        codeDiv.className = 'code-item';
 
-  <!-- ======================================
-       نافذة الشيفرة المنبثقة (Code Modal)
-       ====================================== -->
-  <div id="modalOverlay" class="modal-overlay">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">&times;</span>
-      <h3>الشيفرة المعروضة</h3>
-      <pre id="codeBlock">
-// هنا ستظهر الشيفرة عند الضغط على الصورة
-      </pre>
-      <button class="btn-copy" onclick="copyCode()">نسخ الشيفرة</button>
-    </div>
-  </div>
+        const codeText = document.createElement('span');
+        codeText.className = 'code-text';
+        codeText.textContent = code;
 
-  <!-- ======================================
-       قسم معلومات إضافية (About & Contact)
-       ====================================== -->
-  <section id="about" style="padding: 80px 30px; background-color: var(--dark-bg);">
-    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">من نحن</h2>
-    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--light-text); line-height: 1.8;">
-      هذا الموقع تم تصميمه ليكون واجهة فخمة لعرض الصور والشيفرات المميزة. يمكنك استخدام هذا الهيكل الأساسي
-      وتعديله بحسب احتياجاتك الخاصة. كما يمكنك ربطه بأي نظام خلفي (Back-end) في المستقبل لإضافة
-      وظائف متقدمة مثل تسجيل المستخدمين أو رفع الصور مباشرة.
-    </p>
-  </section>
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'نسخ';
+        copyBtn.title = 'نسخ الكود';
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(code).then(() => {
+            showNotification(`تم نسخ الكود: ${code}`);
+          });
+        });
 
-  <section id="contact" style="padding: 80px 30px; background-color: var(--dark-secondary);">
-    <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 30px;">تواصل معنا</h2>
-    <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--gray-light); line-height: 1.8; text-align: center;">
-      لأي استفسار أو تعاون، يمكنك مراسلتنا على:
-      <br /><a href="mailto:info@example.com" style="color: var(--gold); font-weight: 600;">info@example.com</a>
-    </p>
-  </section>
+        codeDiv.appendChild(codeText);
+        codeDiv.appendChild(copyBtn);
+        codesList.appendChild(codeDiv);
+      });
 
-  <!-- ======================================
-       الفوتر (Footer)
-       ====================================== -->
-  <footer>
-    <p>جميع الحقوق محفوظة &copy; 2025</p>
-  </footer>
+      modal.classList.add('active');
+      modal.focus();
+    }
 
-  <!-- ======================================
-       أكواد JavaScript للتحكم في السلوك
-       ====================================== -->
-  <script>
-    // 1. التحكم في إشعار التحميل
-    document.addEventListener('DOMContentLoaded', () => {
-      const notification = document.getElementById('notification');
-      // بعد نصف ثانية، نظهر الإشعار
-      setTimeout(() => {
-        notification.classList.add('show');
-      }, 500);
-      // بعد 4 ثواني، نخفيه
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 4500);
+    // إغلاق المودال
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal();
     });
 
-    // 2. فتح وإغلاق نافذة الشيفرة المنبثقة
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const codeBlock = document.getElementById('codeBlock');
-
-    galleryItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        // نأخذ الشيفرة المخزنة في data-code
-        const codeText = item.getAttribute('data-code');
-        // نضعها في عنصر <pre>
-        codeBlock.textContent = codeText.trim();
-        // نظهر النافذة المنبثقة
-        modalOverlay.classList.add('show');
+    // دعم فتح المودال بالضغط على Enter/Space عند تحديد الصورة (للوصولية)
+    galleryItems.forEach(item => {
+      item.addEventListener('click', openModal);
+      item.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal({currentTarget: item});
+        }
       });
     });
 
-    function closeModal() {
-      modalOverlay.classList.remove('show');
+    // إشعار يظهر لفترة قصيرة
+    let notifyTimeout;
+    function showNotification(msg) {
+      clearTimeout(notifyTimeout);
+      notification.textContent = msg;
+      notification.classList.add('show');
+      notifyTimeout = setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2500);
     }
 
-    // إغلاق النافذة عند النقر خارج المحتوى
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
+    // حفظ تفضيل الوضع (مظلم أو فاتح) في localStorage
+    function loadTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        body.className = savedTheme;
+        themeToggleBtn.textContent = savedTheme === 'dark' ? 'الوضع الفاتح' : 'الوضع الداكن';
+      } else {
+        body.className = 'light';
+        themeToggleBtn.textContent = 'الوضع الداكن';
+      }
+    }
+    function saveTheme() {
+      localStorage.setItem('theme', body.className);
+    }
+    themeToggleBtn.addEventListener('click', () => {
+      toggleTheme();
+      saveTheme();
+    });
+    loadTheme();
+
+    // إغلاق المودال بزر Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeModal();
       }
     });
 
-    // 3. وظيفة نسخ الشيفرة إلى الحافظة
-    function copyCode() {
-      const codeText = codeBlock.textContent;
-      // استخدام Clipboard API لنسخ النص
-      navigator.clipboard.writeText(codeText).then(
-        () => {
-          alert('تم نسخ الشيفرة بنجاح!');
-        },
-        (err) => {
-          alert('حدث خطأ أثناء النسخ.');
-          console.error('Clipboard error:', err);
-        }
-      );
-    }
+  })();
+</script>
 
-    // 4. التحكم في إظهار/إخفاء القائمة عند الأجهزة الصغيرة
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      if (navLinks.style.display === 'flex') {
-        navLinks.style.display = 'none';
-      } else {
-        navLinks.style.display = 'flex';
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.backgroundColor = varGet('--dark-secondary');
-        navLinks.style.position = 'absolute';
-        navLinks.style.top = '60px';
-        navLinks.style.right = '30px';
-        navLinks.style.padding = '15px';
-        navLinks.style.borderRadius = '8px';
-        navLinks.style.boxShadow = '0 2px 10px var(--shadow-color)';
-      }
-    });
-
-    // دالة مساعدة للحصول على قيمة متغير CSS
-    function varGet(variableName) {
-      return getComputedStyle(document.documentElement).getPropertyValue(variableName);
-    }
-  </script>
 </body>
 </html>
