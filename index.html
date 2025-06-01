@@ -16,11 +16,12 @@
     }
     body {
       font-family: "Arial", sans-serif;
-      background: #1b1b2f;
-      color: #eaeaea;
+      background: #121221;
+      color: #e0e0e0;
       line-height: 1.6;
       direction: rtl;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     a {
       color: inherit;
@@ -31,43 +32,65 @@
     }
     button {
       font-family: inherit;
+      cursor: pointer;
     }
 
-    /* ======== شريط التنقل ======== */
-    .nav-bar {
-      background: linear-gradient(90deg, #4b6cb7, #182848);
+    /* ======== أيقونة الهمبرغر (الهامبورجر) ======== */
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 24px;
       display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      z-index: 300;
+    }
+    .hamburger span {
+      display: block;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* ======== نافذة القائمة المنسدلة ======== */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 18, 33, 0.95);
+      display: none;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 12px 0;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      z-index: 250;
     }
-    .nav-bar button {
-      background: linear-gradient(45deg, #f1c40f, #e67e22);
-      border: none;
-      color: #fff;
-      padding: 10px 22px;
-      margin: 0 12px;
+    .menu-overlay button {
+      background: transparent;
+      border: 2px solid #e0e0e0;
+      color: #e0e0e0;
+      padding: 12px 30px;
+      margin: 12px 0;
       border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s, box-shadow 0.3s;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      transition: background 0.3s, color 0.3s;
     }
-    .nav-bar button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    .menu-overlay button:hover {
+      background: #e0e0e0;
+      color: #121221;
     }
 
     /* ======== قسم المقدمة (Intro Section) ======== */
     #section-intro {
-      background: linear-gradient(135deg, #2b0061, #4b0d80);
-      padding: 80px 20px;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 100px 20px;
       text-align: center;
-      min-height: calc(100vh - 56px); /* طرح ارتفاع الشريط */
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -76,23 +99,23 @@
     #section-intro h1 {
       font-size: 3rem;
       margin-bottom: 20px;
-      color: #f1c40f;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+      color: #f5a623;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     }
     #section-intro p {
       font-size: 1.2rem;
       max-width: 800px;
       margin-bottom: 30px;
-      color: #dcdcdc;
+      color: #d0d0d0;
+      line-height: 1.8;
     }
     #section-intro button {
       padding: 15px 30px;
       font-size: 1.1rem;
       border: none;
       border-radius: 50px;
-      background: linear-gradient(45deg, #16a085, #1abc9c);
+      background: linear-gradient(45deg, #43cea2, #185a9d);
       color: #fff;
-      cursor: pointer;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s, box-shadow 0.3s;
     }
@@ -104,20 +127,20 @@
     /* ======== قسم بحث الأكواد (Code Search Section) ======== */
     #section-search {
       display: none;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, #3a3a5c, #1b1b3a);
-      min-height: calc(100vh - 56px);
+      padding: 100px 20px;
+      background: linear-gradient(135deg, #0f0f1f, #121221);
+      min-height: 100vh;
     }
     /* إحصائيات السكربتات */
     .script-stats {
       max-width: 700px;
       margin: 0 auto 40px auto;
-      background: rgba(52, 52, 75, 0.8);
-      border-left: 5px solid #f1c40f;
+      background: rgba(26, 26, 46, 0.85);
+      border-left: 5px solid #f5a623;
       border-radius: 8px;
       padding: 20px 25px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      color: #eaeaea;
+      color: #e0e0e0;
       font-size: 1rem;
       line-height: 1.5;
     }
@@ -133,23 +156,23 @@
     .outer-box {
       width: 100%;
       max-width: 700px;
-      background: rgba(52, 52, 75, 0.8);
-      border: 2px solid #f39c12;
+      background: rgba(34, 34, 60, 0.85);
+      border: 2px solid #43cea2;
       border-radius: 12px;
       padding: 25px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       margin: 0 auto 40px auto;
     }
     .frame-box {
-      background: rgba(75, 75, 104, 0.7);
-      border: 2px dashed #e67e22;
+      background: rgba(54, 54, 90, 0.75);
+      border: 2px dashed #185a9d;
       border-radius: 10px;
       padding: 20px;
       box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3);
     }
     .inner-box {
-      background: rgba(99, 99, 130, 0.7);
-      border: 2px solid #f1c40f;
+      background: rgba(79, 79, 115, 0.75);
+      border: 2px solid #f5a623;
       border-radius: 8px;
       padding: 20px;
       display: flex;
@@ -163,8 +186,8 @@
       border-radius: 8px;
       margin-bottom: 18px;
       font-size: 1rem;
-      background: #1b1b3a;
-      color: #eaeaea;
+      background: #121221;
+      color: #e0e0e0;
       box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
     }
     .inner-box input[type="text"]::placeholder {
@@ -174,10 +197,9 @@
       padding: 12px 28px;
       border: none;
       border-radius: 50px;
-      background: linear-gradient(45deg, #f39c12, #d35400);
+      background: linear-gradient(45deg, #f5a623, #d35400);
       color: #fff;
       font-size: 1rem;
-      cursor: pointer;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s, box-shadow 0.3s;
     }
@@ -193,8 +215,8 @@
       margin: 0 auto 60px auto;
     }
     .code-card {
-      background: #1f1f3a;
-      border-left: 5px solid #f1c40f;
+      background: #1e1e38;
+      border-left: 5px solid #f5a623;
       border-radius: 8px;
       padding: 20px;
       margin-bottom: 30px;
@@ -203,16 +225,16 @@
     .code-card h3 {
       margin: 0 0 12px 0;
       font-size: 1.3rem;
-      color: #e67e22;
+      color: #d35400;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     }
     .code-block {
-      background: #2b2b4b;
+      background: #2a2a4a;
       border: 1px solid #444;
       border-radius: 6px;
       padding: 15px;
       overflow-x: auto;
-      color: #ecf0f1;
+      color: #e0e0e0;
       font-family: "Courier New", monospace;
       font-size: 0.95rem;
       line-height: 1.5;
@@ -248,27 +270,27 @@
     /* ======== صفحة التواصل (Contact Section) ======== */
     #section-contact {
       display: none;
-      padding: 60px 20px;
-      background: #2e2e48;
-      min-height: calc(100vh - 56px);
+      padding: 100px 20px;
+      background: #1a1a2e;
+      min-height: 100vh;
       text-align: center;
     }
     #section-contact h2 {
       font-size: 2.2rem;
       margin-bottom: 20px;
-      color: #f1c40f;
+      color: #f5a623;
       text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
     }
     #section-contact p {
       font-size: 1.1rem;
       max-width: 800px;
       margin: 0 auto 30px auto;
-      color: #dcdcdc;
+      color: #d0d0d0;
       line-height: 1.8;
     }
     .contact-info {
-      background: rgba(52, 52, 75, 0.8);
-      border-left: 5px solid #f39c12;
+      background: rgba(26, 26, 46, 0.85);
+      border-left: 5px solid #f5a623;
       border-radius: 8px;
       padding: 25px 30px;
       max-width: 700px;
@@ -276,19 +298,18 @@
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       text-align: right;
       font-size: 1rem;
-      color: #eaeaea;
+      color: #e0e0e0;
       line-height: 1.6;
     }
     .contact-info a.email-link {
       display: inline-block;
       margin-top: 15px;
-      background: linear-gradient(45deg, #e67e22, #f39c12);
+      background: linear-gradient(45deg, #d35400, #f5a623);
       color: #fff;
       padding: 10px 20px;
       border-radius: 50px;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s, box-shadow 0.3s;
-      font-size: 1rem;
     }
     .contact-info a.email-link:hover {
       transform: translateY(-3px);
@@ -300,17 +321,29 @@
     }
     .contact-info li {
       margin-bottom: 8px;
-      color: #dcdcdc;
+      color: #d0d0d0;
+    }
+
+    /* ======== انتقال سلس بين الأقسام ======== */
+    section {
+      transition: opacity 0.4s ease;
     }
   </style>
 </head>
 <body>
 
-  <!-- ======== شريط التنقل ======== -->
-  <div class="nav-bar">
-    <button onclick="showSection('section-intro')">الرئيسية</button>
-    <button onclick="showSection('section-search')">بحث الأكواد</button>
-    <button onclick="showSection('section-contact')">تواصل معنا</button>
+  <!-- ======== أيقونة الهمبرغر ======== -->
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- ======== نافذة القائمة المنسدلة ======== -->
+  <div id="menu-overlay" class="menu-overlay">
+    <button onclick="navigateTo('section-intro')">الرئيسية</button>
+    <button onclick="navigateTo('section-search')">بحث الأكواد</button>
+    <button onclick="navigateTo('section-contact')">تواصل معنا</button>
   </div>
 
   <!-- ======== قسم المقدمة ======== -->
@@ -318,10 +351,11 @@
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
     <p>
       في هذا الموقع، يمكنك عرض أكواد سكربتات Roblox بأناقة وفخامة.  
-      لدينا واجهة جميلة تشمل مقدمة جذابة، إمكانية البحث عن السكربتات وعرض أكوادها في واجهة شيفرة أنيقة، بالإضافة إلى صفحة تواصل مخصصة للاستفسارات أو الملاحظات.  
-      انقر على الزر أدناه للانتقال إلى صفحة البحث عن الأكواد.
+      لدينا واجهة جميلة تشمل مقدمة جذابة، إمكانية البحث عن السكربتات وعرض أكوادها في واجهة شيفرة أنيقة،  
+      بالإضافة إلى صفحة تواصل مخصصة للاستفسارات أو الملاحظات.  
+      اضغط على أيقونة القائمة في الأعلى للتنقل بين أقسام الموقع.
     </p>
-    <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
+    <button onclick="navigateTo('section-search')">اذهب إلى البحث عن الأكواد</button>
   </section>
 
   <!-- ======== قسم بحث الأكواد ======== -->
@@ -351,7 +385,7 @@
     <div id="codes-container"></div>
   </section>
 
-  <!-- ======== الإشعار ======== -->
+  <!-- ======== الإشعارات ======== -->
   <div id="notification" class="notification"></div>
 
   <!-- ======== صفحة التواصل ======== -->
@@ -455,12 +489,37 @@ end)`
     function showSection(sectionId) {
       const sections = ["section-intro", "section-search", "section-contact"];
       sections.forEach(id => {
-        document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
+        const elem = document.getElementById(id);
+        if (id === sectionId) {
+          elem.style.display = "flex";
+          elem.style.opacity = "1";
+        } else {
+          elem.style.opacity = "0";
+          setTimeout(() => {
+            elem.style.display = "none";
+          }, 400);
+        }
       });
       // إذا كانت صفحة البحث: حدّث إحصائيات السكربتات
       if (sectionId === "section-search") {
         updateScriptStats();
       }
+    }
+
+    /* ======= عرض النافذة المنسدلة ======= */
+    function toggleMenu() {
+      const overlay = document.getElementById("menu-overlay");
+      if (overlay.style.display === "flex") {
+        overlay.style.display = "none";
+      } else {
+        overlay.style.display = "flex";
+      }
+    }
+
+    /* ======= الانتقال من القائمة المنسدلة إلى قسم معيّن ======= */
+    function navigateTo(sectionId) {
+      toggleMenu();         // إخفاء القائمة
+      showSection(sectionId);
     }
 
     // عند تحميل الصفحة: عرض المقدمة
