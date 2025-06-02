@@ -487,79 +487,50 @@
   <script>
     /* ======= قاعدة بيانات السكربتات النموذجية ======= */
     const scriptsData = {
-      "سكربت الأول": [
+      "بلو لوك": [
         {
-          title: "كود التحكم بالحركة",
-          code: `-- سكربت الأول: كود التحكم بالحركة
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
--- تحكم أساسي بالحركة
-humanoid.WalkSpeed = 50
-humanoid.JumpPower = 100
-print("تم تفعيل كود التحكم بالحركة!")`
-        },
-        {
-          title: "كود إنشاء جسم ثابت في المكان",
-          code: `-- سكربت الأول: كود إنشاء جسم ثابت
-local workspace = game:GetService("Workspace")
-
-local part = Instance.new("Part")
-part.Name = "StaticPart"
-part.Size = Vector3.new(5, 5, 5)
-part.Position = Vector3.new(0, 10, 0)
-part.Anchored = true
-part.BrickColor = BrickColor.new("Bright red")
-part.Parent = workspace
-
-print("تم إنشاء الجسم الثابت في المكان المطلوب!")`
-        },
-        {
-          title: "كود إرسال رسالة إلى جميع اللاعبين",
-          code: `-- سكربت الأول: كود إرسال رسالة
-local Players = game:GetService("Players")
-
-for _, player in pairs(Players:GetPlayers()) do
-    player:Kick("تم إرسال رسالة جماعية: مرحباً بالجميع!")
-end`
+          title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
+          code: `AIKUREWORK!`
+           },
+           {
+             title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
+          code: `SNAKEDEFENCE!`
+           },
+           {
+             title: "لفة حظ للأسلوب و10 لفات حظ لتدفق 15",
+          code: `AIKU1.15M!`
         }
       ],
-      "سكربت الثاني": [
+      "بلوكس فورت": [
         {
-          title: "كود قفز تلقائي",
-          code: `-- سكربت الثاني: قفز تلقائي
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-while true do
-    wait(2)
-    humanoid.Jump = true
-end`
-        },
-        {
-          title: "كود إنشاء دائرة ضوئية",
-          code: `-- سكربت الثاني: إنشاء دائرة ضوئية
-local Lighting = game:GetService("Lighting")
-
-Lighting.Blur.Enabled = true
-Lighting.Brightness = 2
-Lighting.FogEnd = 100
-
-print("تم تفعيل التأثيرات الضوئية!")`
+          title: "20 دقيقة من مضاعفة الخبرة(تأكد من وجود فراغ في نهايةالكود",
+          code: `1LOSTADMIN`
         }
       ],
-      "سكربت الثالث": [
+      "بناء جزيرة": [
         {
-          title: "كود رسالة ترحيبية",
-          code: `-- سكربت الثالث: رسالة ترحيبية
-game.Players.PlayerAdded:Connect(function(player)
-    player:SendNotification({
-        Title = "مرحباً!",
-        Text = "مرحبا بك في السيرفر، استمتع باللعب!"
-    })
-end)`
+          title: "500 ذهب",
+          code: `ANIMALS`
+           },
+           {
+             title: "ذهب مجاني",
+          code: `VOLCANO`
+           },
+           {
+             title: "500 ذهب",
+          code: `2000Follows`
+           },
+           {
+             title: "250 ذهب",
+          code: `FreeGold`
+           },
+           {
+             title: "5 آلات تقطيع آلية",
+          code: `Autochoppers`
+           },
+           {
+             title: "500 ذهب",
+          code: `Hype`
         }
       ]
       // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
