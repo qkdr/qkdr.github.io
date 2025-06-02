@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقع اكوادي للروبلكس</title>
+  <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <style>
     /* ======== إعدادات عامة ======== */
     * {
@@ -105,7 +105,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
     }
     #section-intro h1 {
@@ -129,10 +129,54 @@
       color: #fff;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 40px;
     }
     #section-intro button:hover {
       transform: translateY(-3px);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ======== معرض الصور (Gallery) ======== */
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 60px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .gallery-item {
+      background: #272737;
+      border: 3px solid #f39c12;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      width: 200px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover {
+      transform: translateY(-8px);
+    }
+    .item-frame {
+      padding: 12px;
+      background: #3a3a5c;
+      border-bottom: 2px solid #e67e22;
+    }
+    .item-frame img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    }
+    .item-name {
+      background: #1f1f2f;
+      padding: 10px;
+      font-size: 1rem;
+      color: #f1c40f;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #e67e22;
     }
 
     /* ======== قسم بحث الأكواد (Code Search Section) ======== */
@@ -358,10 +402,40 @@
   <section id="section-intro">
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
     <p>
-      في هذا الموقع لديناً اكواد لجميع المابات
-      نحدثه يومياً.
+      في هذا الموقع، يمكنك عرض أكواد سكربتات Roblox بأناقة وفخامة.  
+      لدينا واجهة جذابة تشمل مقدمة مميزة، إمكانية البحث عن السكربتات وعرض أكوادها في واجهة شيفرة أنيقة، بالإضافة إلى صفحة تواصل مخصصة للاستفسارات أو الملاحظات.
     </p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
+
+    <!-- ===== معرض الصور ===== -->
+    <div class="gallery">
+      <!-- عنصر معرض واحد -->
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://via.placeholder.com/200x150.png?text=صورة+1" alt="صورة 1" />
+        </div>
+        <div class="item-name">اسم السكربت 1</div>
+      </div>
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://via.placeholder.com/200x150.png?text=صورة+2" alt="صورة 2" />
+        </div>
+        <div class="item-name">اسم السكربت 2</div>
+      </div>
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://via.placeholder.com/200x150.png?text=صورة+3" alt="صورة 3" />
+        </div>
+        <div class="item-name">اسم السكربت 3</div>
+      </div>
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://via.placeholder.com/200x150.png?text=صورة+4" alt="صورة 4" />
+        </div>
+        <div class="item-name">اسم السكربت 4</div>
+      </div>
+      <!-- يمكنك إضافة المزيد من العناصر بنفس الصياغة -->
+    </div>
   </section>
 
   <!-- ======== قسم بحث الأكواد ======== -->
@@ -369,10 +443,10 @@
     <!-- إحصائيات السكربتات المتوفرة -->
     <div class="script-stats">
       <div>
-        <strong>عدد المابات المتوفرة حالياً:</strong> <span id="script-count">0</span>
+        <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
       </div>
       <div>
-        <strong>أسماء المابات:</strong>
+        <strong>أسماء السكربتات:</strong>
         <ul id="script-list"></ul>
       </div>
     </div>
@@ -402,9 +476,9 @@
     </p>
     <div class="contact-info">
       <ul>
-        <li><strong>حسابي تليجرام:</strong> <a href="https://t.me/F_HFP" class="email-link">حسابي التليجرام</a></li>
-        <li><strong>اصدار الموقع:</strong> 1.0</li>
-        <li><strong>للاطلاع الاكواد او سكربتات:</strong> تابعنا على <a href="https://t.me/MK7CH" target="_blank">قناة التليجرام</a></li>
+        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+        <li><strong>معرف Discord:</strong> RobloxHelper#1234</li>
+        <li><strong>للاطلاع على مشاريعنا:</strong> تابعنا على <a href="https://github.com/" target="_blank">GitHub</a></li>
         <li><strong>جميع الحقوق محفوظة © 2025</strong></li>
       </ul>
     </div>
@@ -413,50 +487,79 @@
   <script>
     /* ======= قاعدة بيانات السكربتات النموذجية ======= */
     const scriptsData = {
-      "بلو لوك": [
+      "سكربت الأول": [
         {
-          title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
-          code: `AIKUREWORK!`
-           },
-           {
-             title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
-          code: `SNAKEDEFENCE!`
-           },
-           {
-             title: "لفة حظ للأسلوب و10 لفات حظ لتدفق 15",
-          code: `AIKU1.15M!`
+          title: "كود التحكم بالحركة",
+          code: `-- سكربت الأول: كود التحكم بالحركة
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- تحكم أساسي بالحركة
+humanoid.WalkSpeed = 50
+humanoid.JumpPower = 100
+print("تم تفعيل كود التحكم بالحركة!")`
+        },
+        {
+          title: "كود إنشاء جسم ثابت في المكان",
+          code: `-- سكربت الأول: كود إنشاء جسم ثابت
+local workspace = game:GetService("Workspace")
+
+local part = Instance.new("Part")
+part.Name = "StaticPart"
+part.Size = Vector3.new(5, 5, 5)
+part.Position = Vector3.new(0, 10, 0)
+part.Anchored = true
+part.BrickColor = BrickColor.new("Bright red")
+part.Parent = workspace
+
+print("تم إنشاء الجسم الثابت في المكان المطلوب!")`
+        },
+        {
+          title: "كود إرسال رسالة إلى جميع اللاعبين",
+          code: `-- سكربت الأول: كود إرسال رسالة
+local Players = game:GetService("Players")
+
+for _, player in pairs(Players:GetPlayers()) do
+    player:Kick("تم إرسال رسالة جماعية: مرحباً بالجميع!")
+end`
         }
       ],
-      "بلوكس فورت": [
+      "سكربت الثاني": [
         {
-          title: "20 دقيقة من مضاعفة الخبرة(تأكد من وجود فراغ في نهايةالكود",
-          code: `1LOSTADMIN`
+          title: "كود قفز تلقائي",
+          code: `-- سكربت الثاني: قفز تلقائي
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+while true do
+    wait(2)
+    humanoid.Jump = true
+end`
+        },
+        {
+          title: "كود إنشاء دائرة ضوئية",
+          code: `-- سكربت الثاني: إنشاء دائرة ضوئية
+local Lighting = game:GetService("Lighting")
+
+Lighting.Blur.Enabled = true
+Lighting.Brightness = 2
+Lighting.FogEnd = 100
+
+print("تم تفعيل التأثيرات الضوئية!")`
         }
       ],
-      "بناء جزيرة": [
+      "سكربت الثالث": [
         {
-          title: "500 ذهب",
-          code: `ANIMALS`
-           },
-           {
-             title: "ذهب مجاني",
-          code: `VOLCANO`
-           },
-           {
-             title: "500 ذهب",
-          code: `2000Follows`
-           },
-           {
-             title: "250 ذهب",
-          code: `FreeGold`
-           },
-           {
-             title: "5 آلات تقطيع آلية",
-          code: `Autochoppers`
-           },
-           {
-             title: "500 ذهب",
-          code: `Hype`
+          title: "كود رسالة ترحيبية",
+          code: `-- سكربت الثالث: رسالة ترحيبية
+game.Players.PlayerAdded:Connect(function(player)
+    player:SendNotification({
+        Title = "مرحباً!",
+        Text = "مرحبا بك في السيرفر، استمتع باللعب!"
+    })
+end)`
         }
       ]
       // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
