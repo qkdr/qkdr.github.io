@@ -322,6 +322,61 @@
       background: #c0392b;
     }
 
+    /* ======== صفحة التواصل (Contact Section) ======== */
+    #section-contact {
+      display: none;
+      padding: 60px 20px;
+      background: #1d1d3f;
+      min-height: 100vh;
+      text-align: center;
+    }
+    #section-contact h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: #f1c40f;
+      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+    }
+    .contact-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #272737;
+      border-left: 5px solid #f39c12;
+      border-radius: 8px;
+      padding: 25px 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      color: #e0e0e0;
+    }
+    .contact-container p {
+      margin-bottom: 15px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    .contact-container a.email-link {
+      display: inline-block;
+      background: linear-gradient(45deg, #e67e22, #f39c12);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+    .contact-container a.email-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
+    }
+    .contact-container ul.info-list {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .contact-container li {
+      margin-bottom: 8px;
+      color: #dcdcdc;
+      font-size: 0.95rem;
+    }
+
     /* ======== صفحة إدارة المابات المحمية بكلمة السر ======== */
     #section-map-admin {
       display: none;
@@ -507,9 +562,24 @@
       font-family: "Courier New", monospace;
       font-size: 0.95rem;
       line-height: 1.5;
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
       display: none;
       margin-top: 10px;
+    }
+    .map-admin-content .export-btn {
+      margin-top: 15px;
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #f1c40f, #e67e22);
+      color: #121212;
+      border-radius: 50px;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+    }
+    .map-admin-content .export-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
   </style>
 </head>
@@ -576,11 +646,11 @@
     <!-- إحصائيات السكربتات المتوفرة -->
     <div class="script-stats">
       <div>
-        <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
+        <strong>عدد المابات المتوفرة حالياً:</strong> <span id="map-count">0</span>
       </div>
       <div>
-        <strong>أسماء السكربتات:</strong>
-        <ul id="script-list"></ul>
+        <strong>أسماء المابات:</strong>
+        <ul id="map-list-display"></ul>
       </div>
     </div>
 
@@ -588,13 +658,13 @@
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
-          <button onclick="showCodes()">عرض الأكواد</button>
+          <input type="text" id="search-map-name" placeholder="اكتب اسم الخريطة للبحث..." />
+          <button onclick="showMapCodes()">عرض أكواد الخريطة</button>
         </div>
       </div>
     </div>
 
-    <!-- حاوية عرض الأكواد -->
+    <!-- حاوية عرض أكواد الخريطة -->
     <div id="codes-container"></div>
   </section>
 
@@ -604,12 +674,10 @@
   <!-- ======== صفحة التواصل ======== -->
   <section id="section-contact">
     <h2>تواصل معنا</h2>
-    <p>
-      إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة سكربت جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!
-    </p>
-    <div class="contact-info">
-      <ul>
-        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+    <div class="contact-container">
+      <p>إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة سكربت جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!</p>
+      <a href="mailto:example@example.com" class="email-link">example@example.com</a>
+      <ul class="info-list">
         <li><strong>معرف Discord:</strong> RobloxHelper#1234</li>
         <li><strong>للاطلاع على مشاريعنا:</strong> تابعنا على <a href="https://github.com/" target="_blank">GitHub</a></li>
         <li><strong>جميع الحقوق محفوظة © 2025</strong></li>
@@ -626,6 +694,9 @@
     </div>
 
     <div class="map-admin-content" id="map-admin-content">
+      <!-- زر تنزيل البيانات -->
+      <a href="#" id="export-btn" class="export-btn" onclick="exportMapData()">تنزيل بيانات المابات</a>
+
       <!-- قائمة المابات الحالية -->
       <div class="map-list">
         <h3>قائمة المابات المتوفرة:</h3>
@@ -641,99 +712,12 @@
         <button onclick="addMapCode()">إضافة الكود</button>
       </div>
 
-      <!-- البحث في أكواد خريطة معينة -->
-      <div class="search-frame">
-        <h3>البحث في أكواد خريطة</h3>
-        <input type="text" id="search-map-name" placeholder="اكتب اسم الخريطة للبحث" />
-        <button onclick="showMapCodes()">عرض أكواد الخريطة</button>
-      </div>
-
       <!-- عرض نتائج البحث (أكواد خريطة) -->
       <div class="codes-list" id="map-codes-list"></div>
     </div>
   </section>
 
   <script>
-    /* ======= قاعدة بيانات السكربتات النموذجية ======= */
-    const scriptsData = {
-      "سكربت الأول": [
-        {
-          title: "كود التحكم بالحركة",
-          code: `-- سكربت الأول: كود التحكم بالحركة
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
--- تحكم أساسي بالحركة
-humanoid.WalkSpeed = 50
-humanoid.JumpPower = 100
-print("تم تفعيل كود التحكم بالحركة!")`
-        },
-        {
-          title: "كود إنشاء جسم ثابت في المكان",
-          code: `-- سكربت الأول: كود إنشاء جسم ثابت
-local workspace = game:GetService("Workspace")
-
-local part = Instance.new("Part")
-part.Name = "StaticPart"
-part.Size = Vector3.new(5, 5, 5)
-part.Position = Vector3.new(0, 10, 0)
-part.Anchored = true
-part.BrickColor = BrickColor.new("Bright red")
-part.Parent = workspace
-
-print("تم إنشاء الجسم الثابت في المكان المطلوب!")`
-        },
-        {
-          title: "كود إرسال رسالة إلى جميع اللاعبين",
-          code: `-- سكربت الأول: كود إرسال رسالة
-local Players = game:GetService("Players")
-
-for _, player in pairs(Players:GetPlayers()) do
-    player:Kick("تم إرسال رسالة جماعية: مرحباً بالجميع!")
-end`
-        }
-      ],
-      "سكربت الثاني": [
-        {
-          title: "كود قفز تلقائي",
-          code: `-- سكربت الثاني: قفز تلقائي
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-while true do
-    wait(2)
-    humanoid.Jump = true
-end`
-        },
-        {
-          title: "كود إنشاء دائرة ضوئية",
-          code: `-- سكربت الثاني: إنشاء دائرة ضوئية
-local Lighting = game:GetService("Lighting")
-
-Lighting.Blur.Enabled = true
-Lighting.Brightness = 2
-Lighting.FogEnd = 100
-
-print("تم تفعيل التأثيرات الضوئية!")`
-        }
-      ],
-      "سكربت الثالث": [
-        {
-          title: "كود رسالة ترحيبية",
-          code: `-- سكربت الثالث: رسالة ترحيبية
-game.Players.PlayerAdded:Connect(function(player)
-    player:SendNotification({
-        Title = "مرحباً!",
-        Text = "مرحبا بك في السيرفر، استمتع باللعب!"
-    })
-end)`
-        }
-      ]
-      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصياغة
-    };
-
     /* ======= تعريف مفتاح التخزين المحلي للمابات ======= */
     const MAP_CODES_KEY = "mapCodesData";
     const ADMIN_PASSWORD = "admin123"; // كلمة السر المطلوبة
@@ -745,7 +729,10 @@ end)`
         document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
       });
       if (sectionId === "section-search") {
-        updateScriptStats();
+        updateMapDisplay();
+      }
+      if (sectionId === "section-map-admin") {
+        document.getElementById("admin-password-input").value = "";
       }
     }
 
@@ -754,52 +741,7 @@ end)`
       showSection("section-intro");
     };
 
-    /* ======= تحديث إحصائيات السكربتات ======= */
-    function updateScriptStats() {
-      const countElem = document.getElementById("script-count");
-      const listElem = document.getElementById("script-list");
-      const names = Object.keys(scriptsData);
-      countElem.textContent = names.length;
-      listElem.innerHTML = "";
-      names.forEach((name, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${index + 1}. ${name}`;
-        listElem.appendChild(li);
-      });
-    }
-
-    /* ======= دالة عرض الأكواد ======= */
-    function showCodes() {
-      const input = document.getElementById("script-name-input");
-      const scriptName = input.value.trim();
-      const container = document.getElementById("codes-container");
-      container.innerHTML = ""; // تفريغ الأكواد السابقة
-
-      if (scriptsData.hasOwnProperty(scriptName)) {
-        const codesArray = scriptsData[scriptName];
-        codesArray.forEach((item) => {
-          const card = document.createElement("div");
-          card.classList.add("code-card");
-
-          const title = document.createElement("h3");
-          title.textContent = item.title;
-          card.appendChild(title);
-
-          const codeBlock = document.createElement("pre");
-          codeBlock.classList.add("code-block");
-          codeBlock.textContent = item.code;
-          card.appendChild(codeBlock);
-
-          container.appendChild(card);
-        });
-        showNotification(`تم عرض أكواد "${scriptName}" بنجاح!`, false);
-      } else {
-        showNotification(`لم يتم العثور على أكواد باسم "${scriptName}"!`, true);
-      }
-      input.value = "";
-    }
-
-    /* ======= دالة عرض الإشعارات ======= */
+    /* ======= دالة عرض رسالة إشعار ======= */
     function showNotification(message, isError = false) {
       const notif = document.getElementById("notification");
       notif.textContent = message;
@@ -811,34 +753,90 @@ end)`
       }, 3000);
     }
 
-    /* ======= دوال إدارة المابات ======= */
-
-    // الحصول على بيانات المابات من localStorage أو إنشاءها إذا لم توجد
+    /* ======= الحصول على بيانات المابات من localStorage أو إنشاءها إذا لم توجد ======= */
     function getMapCodesData() {
       const raw = localStorage.getItem(MAP_CODES_KEY);
       return raw ? JSON.parse(raw) : {};
     }
 
-    // حفظ بيانات المابات في localStorage
+    /* ======= حفظ بيانات المابات في localStorage ======= */
     function saveMapCodesData(data) {
       localStorage.setItem(MAP_CODES_KEY, JSON.stringify(data));
     }
 
-    // التحقق من كلمة السر وعرض محتوى الإدارة
+    /* ======= تحديث عرض قائمة المابات في صفحة البحث ======= */
+    function updateMapDisplay() {
+      const data = getMapCodesData();
+      const names = Object.keys(data);
+      const countElem = document.getElementById("map-count");
+      const listElem = document.getElementById("map-list-display");
+      countElem.textContent = names.length;
+      listElem.innerHTML = "";
+      if (names.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "لا توجد مابات حالياً.";
+        listElem.appendChild(li);
+      } else {
+        names.forEach((name, index) => {
+          const li = document.createElement("li");
+          li.textContent = `${index + 1}. ${name} (عدد الأكواد: ${data[name].length})`;
+          listElem.appendChild(li);
+        });
+      }
+      // تفريغ حقل البحث ونتائج الأكواد
+      document.getElementById("search-map-name").value = "";
+      document.getElementById("codes-container").innerHTML = "";
+    }
+
+    /* ======= دالة عرض أكواد خريطة معينة ======= */
+    function showMapCodes() {
+      const mapName = document.getElementById("search-map-name").value.trim();
+      const container = document.getElementById("codes-container");
+      container.innerHTML = ""; // تفريغ النتائج السابقة
+      if (!mapName) {
+        showNotification("الرجاء إدخال اسم الخريطة للبحث!", true);
+        return;
+      }
+      const data = getMapCodesData();
+      if (!data[mapName] || data[mapName].length === 0) {
+        container.innerHTML = `<p style="color:#e0e0e0; font-size:1rem;">لا توجد أكواد للخريطة "${mapName}".</p>`;
+        showNotification(`لا توجد أكواد للخريطة "${mapName}"!`, true);
+      } else {
+        data[mapName].forEach((item, idx) => {
+          const card = document.createElement("div");
+          card.classList.add("code-card");
+
+          const title = document.createElement("h3");
+          title.textContent = `${idx + 1}. ${item.name}`;
+          card.appendChild(title);
+
+          const codeBlock = document.createElement("pre");
+          codeBlock.classList.add("code-block");
+          codeBlock.textContent = item.code;
+          card.appendChild(codeBlock);
+
+          container.appendChild(card);
+        });
+        showNotification(`تم عرض أكواد الخريطة "${mapName}" بنجاح!`, false);
+      }
+      document.getElementById("search-map-name").value = "";
+    }
+
+    /* ======= التحقق من كلمة السر وعرض محتوى الإدارة ======= */
     function checkPassword() {
       const pwdInput = document.getElementById("admin-password-input").value;
       if (pwdInput === ADMIN_PASSWORD) {
         document.getElementById("password-frame").style.display = "none";
         document.getElementById("map-admin-content").style.display = "block";
-        updateMapList();
+        updateMapListAdmin();
       } else {
         showNotification("كلمة السر خاطئة!", true);
       }
       document.getElementById("admin-password-input").value = "";
     }
 
-    // تحديث قائمة المابات المعروضة في الإدارة
-    function updateMapList() {
+    /* ======= تحديث قائمة المابات المعروضة في الإدارة ======= */
+    function updateMapListAdmin() {
       const data = getMapCodesData();
       const ul = document.getElementById("map-list-ul");
       ul.innerHTML = "";
@@ -856,7 +854,7 @@ end)`
       }
     }
 
-    // إضافة كود جديد لخريطة
+    /* ======= إضافة كود جديد لخريطة ======= */
     function addMapCode() {
       const mapName = document.getElementById("new-map-name").value.trim();
       const codeName = document.getElementById("new-code-name").value.trim();
@@ -875,49 +873,19 @@ end)`
       document.getElementById("new-map-name").value = "";
       document.getElementById("new-code-name").value = "";
       document.getElementById("new-code-content").value = "";
-      updateMapList();
+      updateMapListAdmin();
     }
 
-    // عرض أكواد خريطة معينة مع أزرار عرض الاسم والشيفرة
-    function showMapCodes() {
-      const mapName = document.getElementById("search-map-name").value.trim();
-      const container = document.getElementById("map-codes-list");
-      container.innerHTML = ""; // تفريغ النتائج السابقة
-      if (!mapName) {
-        showNotification("الرجاء إدخال اسم الخريطة للبحث!", true);
-        return;
-      }
+    /* ======= تصدير بيانات المابات كملف JSON ======= */
+    function exportMapData() {
       const data = getMapCodesData();
-      if (!data[mapName] || data[mapName].length === 0) {
-        container.innerHTML = `<p style="color:#e0e0e0; font-size:1rem;">لا توجد أكواد للخريطة "${mapName}".</p>`;
-        showNotification(`لا توجد أكواد للخريطة "${mapName}"!`, true);
-      } else {
-        data[mapName].forEach((item, idx) => {
-          const codeDiv = document.createElement("div");
-          codeDiv.classList.add("code-item");
-
-          // عرض اسم الكود
-          const nameElem = document.createElement("div");
-          nameElem.classList.add("code-name");
-          nameElem.textContent = `${idx + 1}. ${item.name}`;
-          codeDiv.appendChild(nameElem);
-
-          // زر عرض الكود
-          const btn = document.createElement("button");
-          btn.textContent = "عرض الشيفرة";
-          const codeBlock = document.createElement("pre");
-          codeBlock.textContent = item.code;
-          btn.onclick = () => {
-            codeBlock.style.display = codeBlock.style.display === "block" ? "none" : "block";
-          };
-          codeDiv.appendChild(btn);
-          codeDiv.appendChild(codeBlock);
-
-          container.appendChild(codeDiv);
-        });
-        showNotification(`تم عرض أكواد الخريطة "${mapName}" بنجاح!`, false);
-      }
-      document.getElementById("search-map-name").value = "";
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.getElementById("export-btn");
+      a.href = url;
+      a.download = "mapCodesData.json";
+      showNotification("جاهز لتنزيل ملف بيانات المابات.", false);
     }
 
     /* ======= دالة فتح وإغلاق القائمة ======= */
