@@ -16,7 +16,7 @@
     }
     body {
       font-family: "Arial", sans-serif;
-      background: #121212; /* خلفية داكنة موحدة */
+      background: #121212;
       color: #e0e0e0;
       line-height: 1.6;
       direction: rtl;
@@ -187,7 +187,7 @@
       background: #1f1f2f;
       min-height: 100vh;
     }
-    /* إحصائيات السكربتات */
+    /* إحصائيات المابات */
     .script-stats {
       max-width: 700px;
       margin: 0 auto 40px auto;
@@ -263,7 +263,7 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
-    /* عرض الأكواد */
+    /* عرض أكواد المستخدم */
     #codes-container {
       width: 100%;
       max-width: 750px;
@@ -544,7 +544,7 @@
       background: linear-gradient(45deg, #2980b9, #3498db);
       color: #fff;
       font-size: 0.95rem;
-      margin-bottom: 10px;
+      margin: 5px 10px 10px 0;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s, box-shadow 0.3s;
     }
@@ -643,7 +643,7 @@
 
   <!-- ======== قسم بحث الأكواد ======== -->
   <section id="section-search">
-    <!-- إحصائيات السكربتات المتوفرة -->
+    <!-- إحصائيات المابات المتوفرة -->
     <div class="script-stats">
       <div>
         <strong>عدد المابات المتوفرة حالياً:</strong> <span id="map-count">0</span>
@@ -712,7 +712,14 @@
         <button onclick="addMapCode()">إضافة الكود</button>
       </div>
 
-      <!-- عرض نتائج البحث (أكواد خريطة) -->
+      <!-- البحث في أكواد خريطة معينة وعرض أزرار (عرض ومسح) -->
+      <div class="search-frame">
+        <h3>البحث في أكواد خريطة</h3>
+        <input type="text" id="search-map-name-admin" placeholder="اكتب اسم الخريطة للبحث" />
+        <button onclick="showMapCodesAdmin()">عرض أكواد الخريطة</button>
+      </div>
+
+      <!-- عرض نتائج البحث (أكواد خريطة) مع أزرار عرض ومسح -->
       <div class="codes-list" id="map-codes-list"></div>
     </div>
   </section>
@@ -733,6 +740,7 @@
       }
       if (sectionId === "section-map-admin") {
         document.getElementById("admin-password-input").value = "";
+        document.getElementById("map-codes-list").innerHTML = "";
       }
     }
 
@@ -783,16 +791,15 @@
           listElem.appendChild(li);
         });
       }
-      // تفريغ حقل البحث ونتائج الأكواد
       document.getElementById("search-map-name").value = "";
       document.getElementById("codes-container").innerHTML = "";
     }
 
-    /* ======= دالة عرض أكواد خريطة معينة ======= */
+    /* ======= دالة عرض أكواد خريطة معينة للمستخدم ======= */
     function showMapCodes() {
       const mapName = document.getElementById("search-map-name").value.trim();
       const container = document.getElementById("codes-container");
-      container.innerHTML = ""; // تفريغ النتائج السابقة
+      container.innerHTML = "";
       if (!mapName) {
         showNotification("الرجاء إدخال اسم الخريطة للبحث!", true);
         return;
@@ -876,6 +883,67 @@
       updateMapListAdmin();
     }
 
+    /* ======= دالة عرض أكواد خريطة معينة في الإدارة مع أزرار عرض ومسح ======= */
+    function showMapCodesAdmin() {
+      const mapName = document.getElementById("search-map-name-admin").value.trim();
+      const container = document.getElementById("map-codes-list");
+      container.innerHTML = "";
+      if (!mapName) {
+        showNotification("الرجاء إدخال اسم الخريطة للبحث!", true);
+        return;
+      }
+      const data = getMapCodesData();
+      if (!data[mapName] || data[mapName].length === 0) {
+        container.innerHTML = `<p style="color:#e0e0e0; font-size:1rem;">لا توجد أكواد للخريطة "${mapName}".</p>`;
+        showNotification(`لا توجد أكواد للخريطة "${mapName}"!`, true);
+      } else {
+        data[mapName].forEach((item, idx) => {
+          const codeDiv = document.createElement("div");
+          codeDiv.classList.add("code-item");
+
+          // اسم الكود
+          const nameElem = document.createElement("div");
+          nameElem.classList.add("code-name");
+          nameElem.textContent = `${idx + 1}. ${item.name}`;
+          codeDiv.appendChild(nameElem);
+
+          // زر عرض الشيفرة
+          const showBtn = document.createElement("button");
+          showBtn.textContent = "عرض الشيفرة";
+          const codeBlock = document.createElement("pre");
+          codeBlock.textContent = item.code;
+          codeBlock.style.display = "none";
+          showBtn.onclick = () => {
+            codeBlock.style.display = codeBlock.style.display === "block" ? "none" : "block";
+          };
+          codeDiv.appendChild(showBtn);
+
+          // زر مسح الكود
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "مسح الكود";
+          delBtn.style.background = "linear-gradient(45deg, #c0392b, #e74c3c)";
+          delBtn.onclick = () => {
+            if (confirm(`هل أنت متأكد من مسح الكود "${item.name}" من الخريطة "${mapName}"؟`)) {
+              data[mapName].splice(idx, 1);
+              if (data[mapName].length === 0) {
+                delete data[mapName];
+              }
+              saveMapCodesData(data);
+              showNotification(`تم مسح الكود "${item.name}" من الخريطة "${mapName}"!`, false);
+              updateMapListAdmin();
+              showMapCodesAdmin(); // إعادة عرض القائمة بعد المسح
+            }
+          };
+          codeDiv.appendChild(delBtn);
+
+          codeDiv.appendChild(codeBlock);
+          container.appendChild(codeDiv);
+        });
+        showNotification(`تم عرض أكواد الخريطة "${mapName}" بنجاح!`, false);
+      }
+      document.getElementById("search-map-name-admin").value = "";
+    }
+
     /* ======= تصدير بيانات المابات كملف JSON ======= */
     function exportMapData() {
       const data = getMapCodesData();
@@ -894,12 +962,10 @@
       overlay.classList.toggle("show");
       const spans = document.querySelectorAll(".menu-btn span");
       if (overlay.classList.contains("show")) {
-        // تحريك خطوط الهامبرجر لتحويلها إلى شكل إغلاق
         spans[0].style.transform = "rotate(45deg) translate(5px, 5px)";
         spans[1].style.opacity = "0";
         spans[2].style.transform = "rotate(-45deg) translate(6px, -6px)";
       } else {
-        // إعادة الهامبرجر إلى الوضع العادي
         spans[0].style.transform = "rotate(0) translate(0, 0)";
         spans[1].style.opacity = "1";
         spans[2].style.transform = "rotate(0) translate(0, 0)";
