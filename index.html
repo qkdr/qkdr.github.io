@@ -186,7 +186,7 @@
       background: #1f1f2f;
       min-height: 100vh;
     }
-    /* إحصائيات السكربتات */
+    /* توضيح المستخدم */
     .script-stats {
       max-width: 700px;
       margin: 0 auto 40px auto;
@@ -199,12 +199,14 @@
       font-size: 1rem;
       line-height: 1.5;
     }
-    .script-stats ul {
-      margin-top: 12px;
-      padding-right: 20px;
-    }
-    .script-stats li {
-      margin-bottom: 8px;
+    .script-stats code {
+      display: block;
+      margin-top: 10px;
+      background: #1b1b2f;
+      padding: 8px;
+      border-radius: 4px;
+      color: #f1c40f;
+      font-family: monospace;
     }
 
     /* الإطار الخارجي المتداخل */
@@ -426,15 +428,17 @@
 
   <!-- ======== قسم بحث الأكواد ======== -->
   <section id="section-search">
-    <!-- توضیح للمستخدم حول مصدر الأكواد -->
+    <!-- توضيح للمستخدم -->
     <div class="script-stats">
       <div>
-        <strong>قاعدة الأكواد مخزنة في ملف خارجي</strong>
+        <strong>قاعدة الأكواد مخزنة في ملف خارجي بصيغة JSON</strong>
       </div>
       <div>
-        <strong>عند الضغط على عرض الأكواد، سيتم جلب الأكواد من الملف:</strong>
-        <br />
-        <code>https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.json</code>
+        <strong>عند الضغط على "عرض الأكواد"، سيتم جلب JSON من:</strong>
+      </div>
+      <code>https://qkdr.github.io/ksns.json</code>
+      <div style="margin-top: 10px; color: #bbb; font-size: 0.9rem;">
+        * تأكد من رفع ملف ksns.json في مجلد الجذر لمستودع GitHub Pages الخاص بك
       </div>
     </div>
 
@@ -471,99 +475,97 @@
   </section>
 
   <script>
-    /* ======= جلب البيانات من ملف خارجي (JSON) =======
-       - الملف الخارجي يجب أن يكون بصيغة JSON، مثل ksns.json ويحتوي على هيكلية مطابق لما كان في scriptsData سابقًا.
-       - مثال لملف ksns.json:
+    /* ======= رابط ملف JSON خارجي (GitHub Pages) ========
+       - احفظ ملف ksns.json في مجلد الجذر لمستودع GitHub Pages الخاص بك (qkdr/qkdr.github.io).
+       - مثال لمحتوى ksns.json:
          {
            "سكربت الأول": [
              {
                "title": "كود التحكم بالحركة",
-               "code": "... شفرة هنا ..."
+               "code": "-- سكربت الأول: كود التحكم بالحركة\nlocal player = game.Players.LocalPlayer\n..."
              },
              {
                "title": "كود إنشاء جسم ثابت في المكان",
-               "code": "... شفرة هنا ..."
+               "code": "-- سكربت الأول: كود إنشاء جسم ثابت...\n"
              }
            ],
            "سكربت الثاني": [
              {
                "title": "كود قفز تلقائي",
-               "code": "... شفرة هنا ..."
+               "code": "-- سكربت الثاني: قفز تلقائي...\n"
              }
            ]
          }
+       - بعد رفع ksns.json، يصبح رابط الـ RAW من خلال GitHub Pages:
+         https://qkdr.github.io/ksns.json
     */
-    const EXTERNAL_JSON_URL = "https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.json";
+    const EXTERNAL_JSON_URL = "https://qkdr.github.io/ksns.json";
 
     /* ======= دالة عرض الأكواد ======= */
-    function showCodes() {
+    async function showCodes() {
       const container = document.getElementById("codes-container");
       container.innerHTML = ""; // تفريغ المحتوى القديم
 
-      // جلب ملف ksns.json من GitHub (أو أي مستودع آخر)
-      fetch(EXTERNAL_JSON_URL)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("فشل في جلب الملف الخارجي.");
+      try {
+        const response = await fetch(EXTERNAL_JSON_URL);
+        if (!response.ok) {
+          throw new Error("فشل في جلب الملف الخارجي. رمز الخطأ: " + response.status);
+        }
+        const data = await response.json();
+
+        // data هنا عبارة عن كائن JSON يحتوي على أسماء السكربتات كمفاتيح
+        const scriptNames = Object.keys(data);
+        if (scriptNames.length === 0) {
+          showNotification("لم يتم العثور على سكربتات في الملف الخارجي.", true);
+          return;
+        }
+
+        // نمرّ على كل سكربت
+        scriptNames.forEach((scriptName) => {
+          const codesArray = data[scriptName];
+
+          // عنوان عام للسكربت
+          const sectionTitle = document.createElement("h2");
+          sectionTitle.textContent = `سكربت: ${scriptName}`;
+          sectionTitle.style.color = "#f1c40f";
+          sectionTitle.style.margin = "30px 0 15px 0";
+          sectionTitle.style.textShadow = "1px 1px 4px rgba(0, 0, 0, 0.5)";
+          container.appendChild(sectionTitle);
+
+          // إذا كان مصفوفة الأكواد تحتوي عناصر
+          if (Array.isArray(codesArray) && codesArray.length > 0) {
+            codesArray.forEach((item) => {
+              // إنشاء بطاقة لكل كود
+              const card = document.createElement("div");
+              card.classList.add("code-card");
+
+              // عنوان الكود
+              const title = document.createElement("h3");
+              title.textContent = item.title || "بدون عنوان";
+              card.appendChild(title);
+
+              // حقل الشيفرة
+              const codeBlock = document.createElement("pre");
+              codeBlock.classList.add("code-block");
+              codeBlock.textContent = item.code || "";
+              card.appendChild(codeBlock);
+
+              container.appendChild(card);
+            });
+          } else {
+            // رسالة في حال عدم وجود أكواد داخل هذا السكربت
+            const noCodesMsg = document.createElement("p");
+            noCodesMsg.textContent = `لا توجد أكواد مخزنة لسكربت "${scriptName}".`;
+            noCodesMsg.style.margin = "10px 0 30px 0";
+            noCodesMsg.style.color = "#e74c3c";
+            container.appendChild(noCodesMsg);
           }
-          return response.json();
-        })
-        .then(data => {
-          // data هنا عبارة عن كائن JSON يحتوي على أسماء السكربتات كمفاتيح
-          // نصنع عدداً من بطاقات الأكواد (code-card) لكل سكربت ولكل كود داخله
-          const scriptNames = Object.keys(data);
-          if (scriptNames.length === 0) {
-            showNotification("لم يتم العثور على سكربتات في الملف الخارجي.", true);
-            return;
-          }
-
-          // نمرّ على كل سكربت
-          scriptNames.forEach(scriptName => {
-            const codesArray = data[scriptName];
-            // عنوان عام للسكربت
-            const sectionTitle = document.createElement("h2");
-            sectionTitle.textContent = `سكربت: ${scriptName}`;
-            sectionTitle.style.color = "#f1c40f";
-            sectionTitle.style.margin = "30px 0 15px 0";
-            sectionTitle.style.textShadow = "1px 1px 4px rgba(0, 0, 0, 0.5)";
-            container.appendChild(sectionTitle);
-
-            // إذا كان مصفوفة الأكواد تحتوي عناصر
-            if (Array.isArray(codesArray) && codesArray.length > 0) {
-              codesArray.forEach(item => {
-                // إنشاء بطاقة لكل كود
-                const card = document.createElement("div");
-                card.classList.add("code-card");
-
-                // عنوان الكود
-                const title = document.createElement("h3");
-                title.textContent = item.title || "بدون عنوان";
-                card.appendChild(title);
-
-                // حقل الشيفرة
-                const codeBlock = document.createElement("pre");
-                codeBlock.classList.add("code-block");
-                codeBlock.textContent = item.code || "";
-                card.appendChild(codeBlock);
-
-                container.appendChild(card);
-              });
-            } else {
-              // رسالة في حال عدم وجود أكواد داخل هذا السكربت
-              const noCodesMsg = document.createElement("p");
-              noCodesMsg.textContent = `لا توجد أكواد مخزنة لسكربت "${scriptName}".`;
-              noCodesMsg.style.margin = "10px 0 30px 0";
-              noCodesMsg.style.color = "#e74c3c";
-              container.appendChild(noCodesMsg);
-            }
-          });
-
-          // عرض إشعار نجاح عام
-          showNotification("تم جلب الأكواد من الملف الخارجي وعرضها بنجاح!", false);
-        })
-        .catch(error => {
-          showNotification("حدث خطأ أثناء جلب الأكواد: " + error.message, true);
         });
+
+        showNotification("تم جلب الأكواد من الملف الخارجي وعرضها بنجاح!", false);
+      } catch (error) {
+        showNotification("حدث خطأ أثناء جلب الأكواد: " + error.message, true);
+      }
     }
 
     /* ======= دالة عرض الإشعارات ======= */
@@ -581,8 +583,8 @@
     /* ======= التعامل مع التنقل بين الأقسام ======= */
     function showSection(sectionId) {
       const sections = ["section-intro", "section-search", "section-contact"];
-      sections.forEach(id => {
-        document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
+      sections.forEach((id) => {
+        document.getElementById(id).style.display = id === sectionId ? "block" : "none";
       });
     }
 
