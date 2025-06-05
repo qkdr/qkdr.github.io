@@ -186,7 +186,7 @@
       background: #1f1f2f;
       min-height: 100vh;
     }
-    /* توضيح المستخدم */
+    /* إحصائيات السكربتات */
     .script-stats {
       max-width: 700px;
       margin: 0 auto 40px auto;
@@ -199,14 +199,12 @@
       font-size: 1rem;
       line-height: 1.5;
     }
-    .script-stats code {
-      display: block;
-      margin-top: 10px;
-      background: #1b1b2f;
-      padding: 8px;
-      border-radius: 4px;
-      color: #f1c40f;
-      font-family: monospace;
+    .script-stats ul {
+      margin-top: 12px;
+      padding-right: 20px;
+    }
+    .script-stats li {
+      margin-bottom: 8px;
     }
 
     /* الإطار الخارجي المتداخل */
@@ -235,6 +233,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+    .inner-box input[type="text"] {
+      width: 90%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 1rem;
+      background: #1f1f2f;
+      color: #e0e0e0;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+    .inner-box input[type="text"]::placeholder {
+      color: #bbb;
     }
     .inner-box button {
       padding: 12px 28px;
@@ -281,7 +293,6 @@
       font-size: 0.95rem;
       line-height: 1.5;
       box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
-      white-space: pre-wrap;
     }
 
     /* الإشعارات */
@@ -398,6 +409,7 @@
 
     <!-- ===== معرض الصور ===== -->
     <div class="gallery">
+      <!-- مثال على عنصر معرض واحد -->
       <div class="gallery-item">
         <div class="item-frame">
           <img src="https://via.placeholder.com/200x150.png?text=صورة+1" alt="صورة 1" />
@@ -428,25 +440,23 @@
 
   <!-- ======== قسم بحث الأكواد ======== -->
   <section id="section-search">
-    <!-- توضيح للمستخدم -->
+    <!-- إحصائيات السكربتات المتوفرة -->
     <div class="script-stats">
       <div>
-        <strong>قاعدة الأكواد مخزنة في ملف خارجي بصيغة JSON</strong>
+        <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
       </div>
       <div>
-        <strong>عند الضغط على "عرض الأكواد"، سيتم جلب JSON من:</strong>
-      </div>
-      <code>https://qkdr.github.io/ksns.json</code>
-      <div style="margin-top: 10px; color: #bbb; font-size: 0.9rem;">
-        * تأكد من رفع ملف ksns.json في مجلد الجذر لمستودع GitHub Pages الخاص بك
+        <strong>أسماء السكربتات:</strong>
+        <ul id="script-list"></ul>
       </div>
     </div>
 
-    <!-- الإطار الخارجي المتداخل لزر جلب الأكواد -->
+    <!-- الإطار الخارجي المتداخل لبحث الأكواد -->
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <button onclick="showCodes()">عرض الأكواد من الملف الخارجي</button>
+          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
     </div>
@@ -475,97 +485,83 @@
   </section>
 
   <script>
-    /* ======= رابط ملف JSON خارجي (GitHub Pages) ========
-       - احفظ ملف ksns.json في مجلد الجذر لمستودع GitHub Pages الخاص بك (qkdr/qkdr.github.io).
-       - مثال لمحتوى ksns.json:
-         {
-           "سكربت الأول": [
-             {
-               "title": "كود التحكم بالحركة",
-               "code": "-- سكربت الأول: كود التحكم بالحركة\nlocal player = game.Players.LocalPlayer\n..."
-             },
-             {
-               "title": "كود إنشاء جسم ثابت في المكان",
-               "code": "-- سكربت الأول: كود إنشاء جسم ثابت...\n"
-             }
-           ],
-           "سكربت الثاني": [
-             {
-               "title": "كود قفز تلقائي",
-               "code": "-- سكربت الثاني: قفز تلقائي...\n"
-             }
-           ]
-         }
-       - بعد رفع ksns.json، يصبح رابط الـ RAW من خلال GitHub Pages:
-         https://qkdr.github.io/ksns.json
-    */
-    const EXTERNAL_JSON_URL = "https://qkdr.github.io/ksns.json";
+    /* ======= متغير لحفظ بيانات السكربتات بعد جلبها ======= */
+    let scriptsData = {};
+
+    /* ======= التعامل مع التنقل بين الأقسام ======= */
+    function showSection(sectionId) {
+      const sections = ["section-intro", "section-search", "section-contact"];
+      sections.forEach(id => {
+        document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
+      });
+      if (sectionId === "section-search") {
+        updateScriptStats();
+      }
+    }
+
+    /* ======= جلب البيانات من ملف JSON خارجي ======= */
+    async function fetchScriptsData() {
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.json");
+        if (!response.ok) {
+          throw new Error("فشل في جلب ملف الأكواد");
+        }
+        scriptsData = await response.json();
+      } catch (error) {
+        console.error("حدث خطأ أثناء جلب بيانات السكربتات:", error);
+        scriptsData = {}; // ضمان أن تكون مصفوفة فارغة في حال الفشل
+      }
+    }
+
+    /* ======= عند تحميل الصفحة: جلب البيانات ثم عرض المقدمة ======= */
+    window.onload = async () => {
+      await fetchScriptsData();
+      showSection("section-intro");
+    };
+
+    /* ======= تحديث إحصائيات السكربتات ======= */
+    function updateScriptStats() {
+      const countElem = document.getElementById("script-count");
+      const listElem = document.getElementById("script-list");
+      const names = Object.keys(scriptsData);
+      countElem.textContent = names.length;
+      listElem.innerHTML = "";
+      names.forEach((name, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${name}`;
+        listElem.appendChild(li);
+      });
+    }
 
     /* ======= دالة عرض الأكواد ======= */
-    async function showCodes() {
+    function showCodes() {
+      const input = document.getElementById("script-name-input");
+      const scriptName = input.value.trim();
       const container = document.getElementById("codes-container");
-      container.innerHTML = ""; // تفريغ المحتوى القديم
+      container.innerHTML = ""; // تفريغ الأكواد السابقة
 
-      try {
-        const response = await fetch(EXTERNAL_JSON_URL);
-        if (!response.ok) {
-          throw new Error("فشل في جلب الملف الخارجي. رمز الخطأ: " + response.status);
-        }
-        const data = await response.json();
+      if (scriptsData.hasOwnProperty(scriptName)) {
+        const codesArray = scriptsData[scriptName];
+        codesArray.forEach((item) => {
+          const card = document.createElement("div");
+          card.classList.add("code-card");
 
-        // data هنا عبارة عن كائن JSON يحتوي على أسماء السكربتات كمفاتيح
-        const scriptNames = Object.keys(data);
-        if (scriptNames.length === 0) {
-          showNotification("لم يتم العثور على سكربتات في الملف الخارجي.", true);
-          return;
-        }
+          const title = document.createElement("h3");
+          title.textContent = item.title;
+          card.appendChild(title);
 
-        // نمرّ على كل سكربت
-        scriptNames.forEach((scriptName) => {
-          const codesArray = data[scriptName];
+          const codeBlock = document.createElement("pre");
+          codeBlock.classList.add("code-block");
+          codeBlock.textContent = item.code;
+          card.appendChild(codeBlock);
 
-          // عنوان عام للسكربت
-          const sectionTitle = document.createElement("h2");
-          sectionTitle.textContent = `سكربت: ${scriptName}`;
-          sectionTitle.style.color = "#f1c40f";
-          sectionTitle.style.margin = "30px 0 15px 0";
-          sectionTitle.style.textShadow = "1px 1px 4px rgba(0, 0, 0, 0.5)";
-          container.appendChild(sectionTitle);
-
-          // إذا كان مصفوفة الأكواد تحتوي عناصر
-          if (Array.isArray(codesArray) && codesArray.length > 0) {
-            codesArray.forEach((item) => {
-              // إنشاء بطاقة لكل كود
-              const card = document.createElement("div");
-              card.classList.add("code-card");
-
-              // عنوان الكود
-              const title = document.createElement("h3");
-              title.textContent = item.title || "بدون عنوان";
-              card.appendChild(title);
-
-              // حقل الشيفرة
-              const codeBlock = document.createElement("pre");
-              codeBlock.classList.add("code-block");
-              codeBlock.textContent = item.code || "";
-              card.appendChild(codeBlock);
-
-              container.appendChild(card);
-            });
-          } else {
-            // رسالة في حال عدم وجود أكواد داخل هذا السكربت
-            const noCodesMsg = document.createElement("p");
-            noCodesMsg.textContent = `لا توجد أكواد مخزنة لسكربت "${scriptName}".`;
-            noCodesMsg.style.margin = "10px 0 30px 0";
-            noCodesMsg.style.color = "#e74c3c";
-            container.appendChild(noCodesMsg);
-          }
+          container.appendChild(card);
         });
-
-        showNotification("تم جلب الأكواد من الملف الخارجي وعرضها بنجاح!", false);
-      } catch (error) {
-        showNotification("حدث خطأ أثناء جلب الأكواد: " + error.message, true);
+        showNotification(`تم عرض أكواد "${scriptName}" بنجاح!`, false);
+      } else {
+        showNotification(`لم يتم العثور على أكواد باسم "${scriptName}"!`, true);
       }
+      input.value = "";
     }
 
     /* ======= دالة عرض الإشعارات ======= */
@@ -579,19 +575,6 @@
         notif.classList.remove("show");
       }, 3000);
     }
-
-    /* ======= التعامل مع التنقل بين الأقسام ======= */
-    function showSection(sectionId) {
-      const sections = ["section-intro", "section-search", "section-contact"];
-      sections.forEach((id) => {
-        document.getElementById(id).style.display = id === sectionId ? "block" : "none";
-      });
-    }
-
-    // عند تحميل الصفحة: عرض المقدمة
-    window.onload = () => {
-      showSection("section-intro");
-    };
 
     /* ======= دالة فتح وإغلاق القائمة ======= */
     function toggleMenu() {
