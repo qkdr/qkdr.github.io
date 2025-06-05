@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقع عرض أكواد سكربتات روبلوكس</title>
+  <title>موقع اكواد مابات روبلكس</title>
   <style>
     /* ======== إعدادات عامة ======== */
     * {
@@ -402,40 +402,56 @@
   <section id="section-intro">
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
     <p>
-      في هذا الموقع، يمكنك عرض أكواد سكربتات Roblox بأناقة وفخامة.  
-      لدينا واجهة جذابة تشمل مقدمة مميزة، إمكانية البحث عن السكربتات وعرض أكوادها في واجهة شيفرة أنيقة، بالإضافة إلى صفحة تواصل مخصصة للاستفسارات أو الملاحظات.
+      في هذا الموقع لديناً اكواد لجميع المابات
+      نحدثه يومياً.
     </p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
 
     <!-- ===== معرض الصور ===== -->
     <div class="gallery">
-      <!-- مثال على عنصر معرض واحد -->
+      <!-- عنصر معرض واحد -->
       <div class="gallery-item">
         <div class="item-frame">
-          <img src="https://via.placeholder.com/200x150.png?text=صورة+1" alt="صورة 1" />
+          <img src="https://tr.rbxcdn.com/180DAY-12a91dbf7c10dd97af7bc53db983f171/256/256/Image/Webp/noFilter" alt="صورة 1" />
         </div>
-        <div class="item-name">اسم السكربت 1</div>
+        <div class="item-name">بلو لوك</div>
       </div>
       <div class="gallery-item">
         <div class="item-frame">
-          <img src="https://via.placeholder.com/200x150.png?text=صورة+2" alt="صورة 2" />
+          <img src="https://tr.rbxcdn.com/180DAY-f8fdc404783fdc636cd3d362febc864e/256/256/Image/Webp/noFilter" alt="صورة 2" />
         </div>
-        <div class="item-name">اسم السكربت 2</div>
+        <div class="item-name">بلوكس فورت</div>
       </div>
       <div class="gallery-item">
         <div class="item-frame">
-          <img src="https://via.placeholder.com/200x150.png?text=صورة+3" alt="صورة 3" />
+          <img src="https://tr.rbxcdn.com/180DAY-c6c30619e453a800d3e8231e41727e5f/256/256/Image/Webp/noFilter" alt="صورة 3" />
         </div>
-        <div class="item-name">اسم السكربت 3</div>
+        <div class="item-name">بناء جزيرة</div>
       </div>
       <div class="gallery-item">
         <div class="item-frame">
-          <img src="https://via.placeholder.com/200x150.png?text=صورة+4" alt="صورة 4" />
+          <img src="https://tr.rbxcdn.com/180DAY-040b9d3690119a357f7821f78883ce69/256/256/Image/Webp/noFilter" alt="صورة 4" />
         </div>
-        <div class="item-name">اسم السكربت 4</div>
+        <div class="item-name">حياة اللجوء</div>
       </div>
-      <!-- يمكنك إضافة المزيد من العناصر بنفس الصياغة -->
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://tr.rbxcdn.com/180DAY-2a4c48dce5b0e82b0fbfc61acc0c053f/512/512/Image/Webp/noFilter" alt="صورة 5" />
+        </div>
+        <div class="item-name">بلوكسبين</div>
     </div>
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://tr.rbxcdn.com/180DAY-888bd069248ef4f4d3cbe5c4269c9773/512/512/Image/Webp/noFilter" alt="صورة 6" />
+        </div>
+        <div class="item-name">ارايز كروس اوفر</div>
+        </div>
+      <div class="gallery-item">
+        <div class="item-frame">
+          <img src="https://tr.rbxcdn.com/180DAY-f0de2fab5a1885dcb6bce1def97bd295/256/256/Image/Webp/noFilter" alt="صورة 7" />
+        </div>
+        <div class="item-name">رواد أنيمي</div>
+        </div>
   </section>
 
   <!-- ======== قسم بحث الأكواد ======== -->
@@ -443,10 +459,10 @@
     <!-- إحصائيات السكربتات المتوفرة -->
     <div class="script-stats">
       <div>
-        <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
+        <strong>عدد المابات المتوفرة حالياً:</strong> <span id="script-count">0</span>
       </div>
       <div>
-        <strong>أسماء السكربتات:</strong>
+        <strong>أسماء المابات:</strong>
         <ul id="script-list"></ul>
       </div>
     </div>
@@ -455,7 +471,7 @@
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم الماب هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
@@ -476,17 +492,245 @@
     </p>
     <div class="contact-info">
       <ul>
-        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
-        <li><strong>معرف Discord:</strong> RobloxHelper#1234</li>
-        <li><strong>للاطلاع على مشاريعنا:</strong> تابعنا على <a href="https://github.com/" target="_blank">GitHub</a></li>
+        <li><strong>حسابي تليجرام:</strong> <a href="https://t.me/F_HFP" class="email-link">حسابي تليجرام</a></li>
+        <li><strong>اصدار الموقع:</strong>اصدار 1.0</li>
+        <li><strong>للاطلاع على الاكواد او سكربتات:</strong> تابعنا على <a href="https://t.me/MK7CH" target="_blank">تليجرام</a></li>
         <li><strong>جميع الحقوق محفوظة © 2025</strong></li>
       </ul>
     </div>
   </section>
 
   <script>
-    /* ======= متغير لحفظ بيانات السكربتات بعد جلبها ======= */
-    let scriptsData = {};
+    /* ======= قاعدة بيانات السكربتات النموذجية ======= */
+    const scriptsData = {
+      "بلو لوك": [
+        {
+          title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
+          code: `AIKUREWORK!`
+           },
+           {
+             title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
+          code: `SNAKEDEFENCE!`
+           },
+           {
+             title: "لفة حظ للأسلوب و10 لفات حظ لتدفق 15",
+          code: `AIKU1.15M!`
+        }
+      ],
+      "بلوكس فورت": [
+        {
+          title: "20 دقيقة من مضاعفة الخبرة(تأكد من وجود فراغ في نهايةالكود",
+          code: `1LOSTADMIN`
+        }
+      ],
+      "بناء جزيرة": [
+        {
+          title: "500 ذهب",
+          code: `ANIMALS`
+           },
+           {
+             title: "ذهب مجاني",
+          code: `VOLCANO`
+           },
+           {
+             title: "500 ذهب",
+          code: `2000Follows`
+           },
+           {
+             title: "250 ذهب",
+          code: `FreeGold`
+           },
+           {
+             title: "5 آلات تقطيع آلية",
+          code: `Autochoppers`
+           },
+           {
+             title: "500 ذهب",
+          code: `Hype`
+        }
+      ],
+       "حياة اللجوء": [
+         {
+           title: "استبدلها بمعزز الخبرة 3x",
+          code: `BEEZLEBUB`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ZOMBIES`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ESCAPE`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ZUDARAN`
+           }
+          ],
+          "بلوكسبين": [
+           {
+             title: "500 نقدًا",
+          code: `BJZ9C1`
+           },
+           {
+             title: "500 نقدًا",
+          code: `C5026Q`
+           },
+           {
+             title: "500 نقدًا",
+          code: `I70IIH`
+           },
+           {
+             title: "500 نقدًا",
+          code: `H268YH`
+           },
+           {
+             title: "500 نقدًا",
+          code: `03TCW4`
+           },
+           {
+             title: "500 نقدًا",
+          code: `19OC9L`
+           },
+           {
+             title: "500 نقدًا",
+          code: `EJ48MA`
+           },
+           {
+             title: "500 نقدًا",
+          code: `4B5D16`
+           },
+           {
+             title: "500 نقدًا",
+          code: `WY5895`
+           },
+           {
+             title: "500 نقدًا",
+          code: `AUS7P3`
+           },
+           {
+             title: "500 نقدًا",
+          code: `3XQ47A`
+           },
+           {
+             title: "500 نقدًا",
+          code: `1XCK66`
+           },
+           {
+             title: "500 نقدًا",
+          code: `2L874Q`
+           },
+           {
+             title: "500 نقدًا",
+          code: `21LMZ1`
+           },
+           {
+             title: "500 نقدًا",
+          code: `11U893`
+           },
+           {
+             title: "500 نقدًا",
+          code: `FP320V`
+           },
+           {
+             title: "500 نقدًا",
+          code: `KPZ50U`
+           },
+           {
+             title: "500 نقدًا",
+          code: `5POI5N`
+           },
+           {
+             title: "500 نقدًا",
+          code: `VOOL44`
+           },
+           {
+             title: "500 نقدًا",
+          code: `3Y0DB5`
+           },
+           {
+             title: "500 نقدًا",
+          code: `M08SQF`
+           },
+           {
+             title: "500 نقدًا",
+          code: `I6VO85`
+           },
+           {
+             title: "500 نقدًا",
+          code: `138QW7`
+           },
+           {
+             title: "500 نقدًا",
+          code: `922J3J`
+           },
+           {
+             title: "500 نقدًا",
+          code: `OB8725`
+           },
+           {
+             title: "500 نقدًا",
+          code: `9ER2Q6`
+           },
+           {
+             title: "500 نقدًا",
+          code: `R39484`
+           },
+           {
+             title: "500 نقدًا",
+          code: `Y92AEP`
+           },
+           {
+             title: "500 نقدًا",
+          code: `339R55`
+           },
+           {
+             title: "500 نقدًا وصندوق واحد لكل شيء (جديد)",
+          code: `MZL229`
+           },
+           {
+             title: "500 نقدًا (جديد)",
+          code: `7ST8X6`
+           }
+          ],
+            "ارايز كروس اوفر": [
+              {
+                title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
+          code: `Begeta+n`
+           },
+           {
+             title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
+          code: `WORLD2`
+           },
+           {
+             title: "مجموعة الجرعات الثلاث (جديدة)",
+          code: `Delay`
+           },
+           {
+             title: "100 تذكرة، 600 غبار عادي، 400 غبار نادر، 350 غبار أسطوري، حزمة جرعة واحدة، جبل هجين حصري (مائي وأرضي)، وقطعة أثرية حصرية من SS (جديدة)",
+          code: `1.1MLIKES`
+           }
+          ],
+           "رواد أنيمي": [
+             {
+               title: "1000 جوهرة، و2.5 ألف قطعة نقدية، وخمس عمليات إعادة رمي للسمات (جديد!)",
+          code: `LordShadow`
+           },
+           {
+             title: "عشر عمليات إعادة رمي للسمات وبلورتين للفساد (المستوى 30 مطلوب)",
+          code: `ODYSSEYFIX`
+           },
+           {
+             title: "10 آلاف عملة، وعشر عمليات إعادة رمي للسمات، وبلورة فساد واحدة، وحجر جوهر واحد، وعشر شرائح إحصائية",
+          code: `1MILLION`
+           },
+           {
+             title: "بلورة فساد (المستوى 40 مطلوب)",
+          code: `CORRUPTION`
+           }
+          ]
+      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
+    };
 
     /* ======= التعامل مع التنقل بين الأقسام ======= */
     function showSection(sectionId) {
@@ -499,24 +743,8 @@
       }
     }
 
-    /* ======= جلب البيانات من ملف JSON خارجي ======= */
-    async function fetchScriptsData() {
-      try {
-        // تم تصحيح مسار الـ URL ليطابق صيغة الروابط الخام في GitHub
-        const response = await fetch("https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.js");
-        if (!response.ok) {
-          throw new Error("فشل في جلب ملف الأكواد");
-        }
-        scriptsData = await response.json();
-      } catch (error) {
-        console.error("حدث خطأ أثناء جلب بيانات السكربتات:", error);
-        scriptsData = {}; // ضمان أن تكون مصفوفة فارغة في حال الفشل
-      }
-    }
-
-    /* ======= عند تحميل الصفحة: جلب البيانات ثم عرض المقدمة ======= */
-    window.onload = async () => {
-      await fetchScriptsData();
+    // عند تحميل الصفحة: عرض المقدمة
+    window.onload = () => {
       showSection("section-intro");
     };
 
