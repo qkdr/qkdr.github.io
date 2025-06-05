@@ -502,7 +502,7 @@
     /* ======= جلب البيانات من ملف JSON خارجي ======= */
     async function fetchScriptsData() {
       try {
-        const response = await fetch("https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.json");
+        const response = await fetch("https://raw.githubusercontent.com/qkdr/qkdr.github.io/refs/heads/main/ksns.js");
         if (!response.ok) {
           throw new Error("فشل في جلب ملف الأكواد");
         }
