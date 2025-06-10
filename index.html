@@ -627,7 +627,7 @@
       const container = document.getElementById("codes-container");
       container.innerHTML = "";
       if (!scriptsData[name]) {
-        showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
+        showNotification(`لا يوجد اكواد باسم "${name}"!`, true);
         return;
       }
       scriptsData[name].forEach(item => {
@@ -681,7 +681,7 @@
       const today = new Date();
       const dateStr = `${today.getDate()} ${months[today.getMonth()]}`;
       document.querySelectorAll(".item-date").forEach(div => {
-        div.textContent = `تاريخ اليوم: ${dateStr}`;
+        div.textContent = `اخر تحديث: ${dateStr}`;
       });
     }
 
