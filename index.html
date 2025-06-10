@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقع عرض أكواد سكربتات روبلوكس</title>
+  <title>موقع اكوادي</title>
   <style>
     /* ======== إعدادات عامة ======== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -252,7 +252,7 @@
 
   <!-- المقدمة مع معرض الصور -->
   <section id="section-intro">
-    <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
+    <h1>مرحباً بك في موقع أكواد روبلوكس</h1>
     <p>استعرض أحدث الاكواد و كل سبوع نحدث الاكواد.</p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
     <div class="gallery">
@@ -301,13 +301,13 @@
   <!-- صفحة البحث عن الأكواد -->
   <section id="section-search">
     <div class="script-stats">
-      <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
-      <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
+      <div><strong>عدد المابات المتوفرة:</strong> <span id="script-count">0</span></div>
+      <div><strong>أسماء المابات:</strong><ul id="script-list"></ul></div>
     </div>
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم الماب هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
@@ -633,7 +633,7 @@
       const name = document.getElementById("script-name-input").value.trim();
       const container = document.getElementById("codes-container");
       container.innerHTML = "";
-      if (!scriptsData[name]) { showNotification(`لا يوجد سكربت باسم "${name}"!`, true); return; }
+      if (!scriptsData[name]) { showNotification(`لا يوجد اكواد باسم "${name}"!`, true); return; }
       scriptsData[name].forEach(item => {
         const card = document.createElement("div");
         card.className = "code-card";
