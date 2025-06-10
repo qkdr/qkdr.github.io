@@ -45,8 +45,7 @@
     .menu-overlay li button {
       background: #272727; color: #f1c40f; padding: 10px 18px;
       border-radius: 25px; width: 100%; text-align: right; font-size: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      transition: background 0.3s, transform 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5); transition: background 0.3s, transform 0.3s;
     }
     .menu-overlay li button:hover {
       background: #f1c40f; color: #1f1f1f; transform: translateX(-5px);
@@ -73,8 +72,7 @@
       transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 40px;
     }
     #section-intro button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
 
     /* ======== معرض الصور ======== */
@@ -151,16 +149,26 @@
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .inner-box button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
 
     #codes-container { width: 100%; max-width: 750px; margin: 0 auto; }
     .code-card {
-      position: relative;
-      background: #2f2f4f; border-left: 5px solid #f1c40f;
+      position: relative; background: #2f2f4f; border-left: 5px solid #f1c40f;
       border-radius: 8px; padding: 20px; margin-bottom: 30px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+    .code-card.blur {
+      filter: blur(4px); position: relative;
+    }
+    .code-card.expired::after {
+      content: "🔒 تم انتهاء الصلاحية";
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7); color: #fff;
+      padding: 8px 12px; border-radius: 6px;
+      font-size: 1rem;
     }
     .code-card h3 {
       display: inline-block; margin: 0 10px 12px 0;
@@ -170,6 +178,7 @@
     .countdown {
       display: inline-block; background: #c0392b; color: #fff;
       padding: 2px 8px; border-radius: 4px; font-size: 0.9rem;
+      margin-left: 10px;
     }
     .code-block {
       background: #3b3b5b; border: 1px solid #444;
@@ -217,8 +226,7 @@
       background: linear-gradient(45deg, #e67e22,#f39c12);
       color: #fff; padding: 10px 20px; border-radius: 50px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.3);
-      transition: transform 0.3s, box-shadow 0.3s;
-      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s; font-size: 1rem;
     }
     .contact-info a.email-link:hover {
       transform: translateY(-3px); box-shadow: 0 5px 18px rgba(0,0,0,0.5);
@@ -245,61 +253,37 @@
   <!-- المقدمة مع معرض الصور -->
   <section id="section-intro">
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
-    <p>استعرض أحدث الاكواد و كل سبوع نحدث الاكواد.</p>
+    <p>استعرض أحدث السكربتات وصورها مع تاريخ اليوم أسفل كل صورة.</p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
     <div class="gallery">
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-12a91dbf7c10dd97af7bc53db983f171/256/256/Image/Webp/noFilter" alt="صورة 1" /></div>
-        <div class="item-name">بلو لوك</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+1" alt="سكربت 1" /></div>
+        <div class="item-name">سكربت 1</div>
         <div class="item-date"></div>
       </div>
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-f8fdc404783fdc636cd3d362febc864e/256/256/Image/Webp/noFilter" alt="صورة 2" /></div>
-        <div class="item-name">بلوكس فورت</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+2" alt="سكربت 2" /></div>
+        <div class="item-name">سكربت 2</div>
         <div class="item-date"></div>
       </div>
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-c6c30619e453a800d3e8231e41727e5f/256/256/Image/Webp/noFilter" alt="صورة 3" /></div>
-        <div class="item-name">بناء جزيرة</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+3" alt="سكربت 3" /></div>
+        <div class="item-name">سكربت 3</div>
         <div class="item-date"></div>
       </div>
-    <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-040b9d3690119a357f7821f78883ce69/256/256/Image/Webp/noFilter" alt="صورة 4" /></div>
-        <div class="item-name">حياة اللجوء</div>
-        <div class="item-date"></div>
-      </div>
-      <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-2a4c48dce5b0e82b0fbfc61acc0c053f/512/512/Image/Webp/noFilter" alt="صورة 5" /></div>
-        <div class="item-name">بلوكسبين</div>
-        <div class="item-date"></div>
-      </div>
-      <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-888bd069248ef4f4d3cbe5c4269c9773/512/512/Image/Webp/noFilter" alt="صورة 6" /></div>
-        <div class="item-name">ارايز كروس اوفر</div>
-        <div class="item-date"></div>
-      </div>
-      <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-f0de2fab5a1885dcb6bce1def97bd295/256/256/Image/Webp/noFilter" alt="صورة 7" /></div>
-        <div class="item-name">رواد أنيمي</div>
-        <div class="item-date"></div>
-      </div>
-      <div class="gallery-item">
-        <div class="item-frame"><img src="https://tr.rbxcdn.com/180DAY-16f1dc3de953339b5d58094875b520b1/512/512/Image/Webp/noFilter" alt="صورة 8" /></div>
-        <div class="item-name">منافسين</div>
-        <div class="item-date"></div>
-      </div>
+    </div>
   </section>
 
   <!-- صفحة البحث عن الأكواد -->
   <section id="section-search">
     <div class="script-stats">
-      <div><strong>عدد المابات المتوفرة:</strong> <span id="script-count">0</span></div>
-      <div><strong>أسماء المابات:</strong><ul id="script-list"></ul></div>
+      <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
+      <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
     </div>
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم المابات هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
@@ -313,366 +297,118 @@
   <!-- صفحة التواصل -->
   <section id="section-contact">
     <h2>تواصل معنا</h2>
-    <p>
-      إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة سكربت جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!
-    </p>
+    <p>للاستفسار أو إضافة سكربت مؤقت أو دائم، تواصل عبر البريد أو ديسكورد.</p>
     <div class="contact-info">
       <ul>
-        <li><strong>حسابي تليجرام:</strong> <a href="https://t.me/F_HFP" class="email-link">حسابي تليجرام</a></li>
-        <li><strong>اصدار الموقع:</strong>اصدار 1.0</li>
-        <li><strong>للاطلاع على الاكواد او سكربتات:</strong> تابعنا على <a href="https://t.me/MK7CH" target="_blank">تليجرام</a></li>
-        <li><strong>جميع الحقوق محفوظة © 2025</strong></li>
+        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+        <li><strong>Discord:</strong> RobloxHelper#1234</li>
+        <li><strong>© 2025 جميع الحقوق محفوظة.</strong></li>
       </ul>
     </div>
   </section>
 
   <script>
-    // بيانات السكربتات: بعضها دائم وبعضها مؤقت مع مفتاح expires (timestamp)
-      const scriptsData = {
-      "بلو لوك": [
-        {
-          title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
-          code: `RANKED!`
-           },
-           {
-             title: "لفات حظ لتدفق و5 لفات حظ للأسلوب 5",
-          code: `LOKISOON!`
-        }
+    const scriptsData = {
+      "سكربت الأول": [
+        { title: "كود دائم", code: "-- هذا كود دائم" }
       ],
-      "بلوكس فورت": [
+      "سكربت الرابع": [
         {
-          title: "20 دقيقة من مضاعفة الخبرة(تأكد من وجود فراغ في نهايةالكود",
-          code: `1LOSTADMIN`
+          title: "كود مؤقت",
+          code: "-- هذا كود مؤقت سيختفي بعد انتهاء المؤقت",
+          expires: Date.now() + 3600*1000*24*2 + 3600*1000*1 + 60000*5 + 10000 // مثال: 2 أيام 1 ساعة 5 دقائق 10 ثواني
         }
-      ],
-      "بناء جزيرة": [
-        {
-          title: "500 ذهب",
-          code: `ANIMALS`
-           },
-           {
-             title: "ذهب مجاني",
-          code: `VOLCANO`
-           },
-           {
-             title: "500 ذهب",
-          code: `2000Follows`
-           },
-           {
-             title: "250 ذهب",
-          code: `FreeGold`
-           },
-           {
-             title: "5 آلات تقطيع آلية",
-          code: `Autochoppers`
-           },
-           {
-             title: "500 ذهب",
-          code: `Hype`
-        }
-      ],
-       "حياة اللجوء": [
-         {
-           title: "استبدلها بمعزز الخبرة 3x",
-          code: `BEEZLEBUB`
-           },
-           {
-             title: "استبدلها بمعزز الخبرة 3x",
-          code: `ZOMBIES`
-           },
-           {
-             title: "استبدلها بمعزز الخبرة 3x",
-          code: `ESCAPE`
-           },
-           {
-             title: "استبدلها بمعزز الخبرة 3x",
-          code: `ZUDARAN`
-           }
-          ],
-          "بلوكسبين": [
-           {
-             title: "500 نقدًا",
-          code: `BJZ9C1`
-           },
-           {
-             title: "500 نقدًا",
-          code: `C5026Q`
-           },
-           {
-             title: "500 نقدًا",
-          code: `I70IIH`
-           },
-           {
-             title: "500 نقدًا",
-          code: `H268YH`
-           },
-           {
-             title: "500 نقدًا",
-          code: `03TCW4`
-           },
-           {
-             title: "500 نقدًا",
-          code: `19OC9L`
-           },
-           {
-             title: "500 نقدًا",
-          code: `EJ48MA`
-           },
-           {
-             title: "500 نقدًا",
-          code: `4B5D16`
-           },
-           {
-             title: "500 نقدًا",
-          code: `WY5895`
-           },
-           {
-             title: "500 نقدًا",
-          code: `AUS7P3`
-           },
-           {
-             title: "500 نقدًا",
-          code: `3XQ47A`
-           },
-           {
-             title: "500 نقدًا",
-          code: `1XCK66`
-           },
-           {
-             title: "500 نقدًا",
-          code: `2L874Q`
-           },
-           {
-             title: "500 نقدًا",
-          code: `21LMZ1`
-           },
-           {
-             title: "500 نقدًا",
-          code: `11U893`
-           },
-           {
-             title: "500 نقدًا",
-          code: `FP320V`
-           },
-           {
-             title: "500 نقدًا",
-          code: `KPZ50U`
-           },
-           {
-             title: "500 نقدًا",
-          code: `5POI5N`
-           },
-           {
-             title: "500 نقدًا",
-          code: `VOOL44`
-           },
-           {
-             title: "500 نقدًا",
-          code: `3Y0DB5`
-           },
-           {
-             title: "500 نقدًا",
-          code: `M08SQF`
-           },
-           {
-             title: "500 نقدًا",
-          code: `I6VO85`
-           },
-           {
-             title: "500 نقدًا",
-          code: `138QW7`
-           },
-           {
-             title: "500 نقدًا",
-          code: `922J3J`
-           },
-           {
-             title: "500 نقدًا",
-          code: `OB8725`
-           },
-           {
-             title: "500 نقدًا",
-          code: `9ER2Q6`
-           },
-           {
-             title: "500 نقدًا",
-          code: `R39484`
-           },
-           {
-             title: "500 نقدًا",
-          code: `Y92AEP`
-           },
-           {
-             title: "500 نقدًا",
-          code: `339R55`
-           },
-           {
-             title: "500 نقدًا وصندوق واحد لكل شيء (جديد)",
-          code: `MZL229`
-           },
-           {
-             title: "500 نقدًا (جديد)",
-          code: `7ST8X6`
-           }
-          ],
-            "ارايز كروس اوفر": [
-              {
-                title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
-          code: `Begeta+n`
-           },
-           {
-             title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
-          code: `WORLD2`
-           },
-           {
-             title: "مجموعة الجرعات الثلاث (جديدة)",
-          code: `Delay`
-           },
-           {
-             title: "100 تذكرة، 600 غبار عادي، 400 غبار نادر، 350 غبار أسطوري، حزمة جرعة واحدة، جبل هجين حصري (مائي وأرضي)، وقطعة أثرية حصرية من SS (جديدة)",
-          code: `1.1MLIKES`
-           }
-          ],
-           "رواد أنيمي": [
-             {
-               title: "1000 جوهرة، و2.5 ألف قطعة نقدية، وخمس عمليات إعادة رمي للسمات (جديد!)",
-          code: `LordShadow`
-           },
-           {
-             title: "عشر عمليات إعادة رمي للسمات وبلورتين للفساد (المستوى 30 مطلوب)",
-          code: `ODYSSEYFIX`
-           },
-           {
-             title: "10 آلاف عملة، وعشر عمليات إعادة رمي للسمات، وبلورة فساد واحدة، وحجر جوهر واحد، وعشر شرائح إحصائية",
-          code: `1MILLION`
-           },
-           {
-             title: "بلورة فساد (المستوى 40 مطلوب)",
-          code: `CORRUPTION`
-           }
-          ],
-           "منافسين": [
-             {
-             title: "x1 التفاف المجتمع",
-          code: "COMMUNITY15",
-          },
-          {
-            title: "x1 التفاف المجتمع",
-          code: "COMMUNITY14",
-          },
-           {
-             title: "5B زيارات الانتهاء",
-          code: "5B_VISITS_WHATTTTTT",
-           }
-         ]
-      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
+      ]
     };
+    const LS_KEY = "tempScriptsExpires";
 
-    // مفتاح localStorage للسكربتات المؤقتة
-    const LS_KEY = "temporaryScriptsExpires";
-
-    // حمل/أنشئ خريطة الانتهاء من localStorage
-    function loadExpiresMap() {
-      let map = {};
-      try {
-        map = JSON.parse(localStorage.getItem(LS_KEY)) || {};
-      } catch { map = {}; }
-      return map;
+    function loadMap() {
+      try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }
+      catch { return {}; }
     }
-    function saveExpiresMap(map) {
-      localStorage.setItem(LS_KEY, JSON.stringify(map));
-    }
+    function saveMap(m) { localStorage.setItem(LS_KEY, JSON.stringify(m)); }
 
-    // تنظيف الأكواد المؤقتة عند التحميل
-    function cleanupTemporaryCodes() {
-      const map = loadExpiresMap();
+    function cleanupTemporary() {
+      const map = loadMap();
       const now = Date.now();
-      for (const [scriptName, items] of Object.entries(scriptsData)) {
-        scriptsData[scriptName] = items.filter(item => {
-          if (!item.expires) return true;   // دائم
-          const key = `${scriptName}||${item.title}`;
-          // إذا مخزن في الخريطة استخدم القيمة المخزنة
+      for (const [name, items] of Object.entries(scriptsData)) {
+        scriptsData[name] = items.filter(item => {
+          if (!item.expires) return true;
+          const key = `${name}||${item.title}`;
           if (map[key]) item.expires = map[key];
-          else map[key] = item.expires;     // أول مرة، خزّن
-          // إذا منتهٍ: احذف البند من الخريطة أيضاً
+          else map[key] = item.expires;
           if (item.expires <= now) {
             delete map[key];
-            return false;
+            return true; // keep to show expired state
           }
           return true;
         });
       }
-      saveExpiresMap(map);
+      saveMap(map);
     }
 
-    // عرض القسم المطلوب
     function showSection(id) {
       ["section-intro","section-search","section-contact"].forEach(sec=>{
-        document.getElementById(sec).style.display = sec===id ? "block":"none";
+        document.getElementById(sec).style.display = sec===id?"block":"none";
       });
-      if (id === "section-search") updateScriptStats();
+      if (id==="section-search") updateScriptStats();
     }
-
-    // تهيئة الهامبرجر
     function toggleMenu() {
       const nav = document.getElementById("menu-overlay");
       nav.classList.toggle("show");
       const spans = document.querySelectorAll(".menu-btn span");
       if (nav.classList.contains("show")) {
-        spans[0].style.transform = "rotate(45deg) translate(5px,5px)";
-        spans[1].style.opacity = "0";
-        spans[2].style.transform = "rotate(-45deg) translate(6px,-6px)";
-      } else {
-        spans.forEach(s=> { s.style.transform = ""; s.style.opacity = "1"; });
-      }
+        spans[0].style.transform="rotate(45deg) translate(5px,5px)";
+        spans[1].style.opacity="0";
+        spans[2].style.transform="rotate(-45deg) translate(6px,-6px)";
+      } else spans.forEach(s=>{s.style.transform="";s.style.opacity="1";});
     }
 
-    // تحديث عداد السكربتات وأسمائها
     function updateScriptStats() {
       const names = Object.keys(scriptsData);
       document.getElementById("script-count").textContent = names.length;
-      const list = document.getElementById("script-list");
-      list.innerHTML = "";
-      names.forEach((n,i)=> {
+      const list = document.getElementById("script-list"); list.innerHTML="";
+      names.forEach((n,i)=>{
         const li = document.createElement("li");
         li.textContent = `${i+1}. ${n}`;
         list.appendChild(li);
       });
     }
 
-    // عرض الأكواد مع العد التنازلي لمؤقتة
     function showCodes() {
       const name = document.getElementById("script-name-input").value.trim();
       const container = document.getElementById("codes-container");
       container.innerHTML = "";
-      if (!scriptsData[name]) {
-        showNotification(`لا يوجد اكواد باسم "${name}"!`, true);
-        return;
-      }
+      if (!scriptsData[name]) { showNotification(`لا يوجد سكربت باسم "${name}"!`, true); return; }
       scriptsData[name].forEach(item => {
         const card = document.createElement("div");
         card.className = "code-card";
-        const h3 = document.createElement("h3");
-        h3.textContent = item.title;
+        const h3 = document.createElement("h3"); h3.textContent = item.title;
         card.appendChild(h3);
 
-        // إذا مؤقت، أضف عنصر عدّ تنازلي
         if (item.expires) {
-          const cd = document.createElement("span");
-          cd.className = "countdown";
+          const cd = document.createElement("span"); cd.className="countdown";
           card.appendChild(cd);
-          const timer = setInterval(() => {
-            const diff = item.expires - Date.now();
-            if (diff <= 0) {
-              clearInterval(timer);
-              card.remove();
-              updateScriptStats();
-              return;
-            }
-            const m = Math.floor(diff/60000);
-            const s = Math.floor((diff%60000)/1000);
-            cd.textContent = `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
-          }, 500);
+          const key = `${name}||${item.title}`;
+          const map = loadMap();
+          if (map[key] <= Date.now()) {
+            card.classList.add("blur","expired");
+          } else {
+            const timer = setInterval(()=>{
+              const diff = map[key] - Date.now();
+              if (diff <= 0) {
+                clearInterval(timer);
+                cd.remove();
+                card.classList.add("blur","expired");
+                return;
+              }
+              const days = Math.floor(diff/86400000);
+              const hrs  = Math.floor((diff%86400000)/3600000);
+              const mins = Math.floor((diff%3600000)/60000);
+              const secs = Math.floor((diff%60000)/1000);
+              cd.textContent = `${days}ي ${hrs}س ${mins}د ${secs}ث`;
+            }, 500);
+          }
         }
 
         const pre = document.createElement("pre");
@@ -685,28 +421,22 @@
       document.getElementById("script-name-input").value = "";
     }
 
-    // إشعار نجاح/خطأ
-    function showNotification(msg, isErr) {
+    function showNotification(msg,isErr) {
       const n = document.getElementById("notification");
       n.textContent = msg;
-      n.classList.toggle("error", isErr);
+      n.classList.toggle("error",!!isErr);
       n.classList.add("show");
-      setTimeout(() => n.classList.remove("show"), 3000);
+      setTimeout(()=>n.classList.remove("show"),3000);
     }
 
-    // تهيئة تواريخ المعرض أسفل الصور
     function initGalleryDates() {
       const months = ["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"];
-      const today = new Date();
-      const dateStr = `${today.getDate()} ${months[today.getMonth()]}`;
-      document.querySelectorAll(".item-date").forEach(div => {
-        div.textContent = `اخر تحديث: ${dateStr}`;
-      });
+      const today = new Date(); const ds = `${today.getDate()} ${months[today.getMonth()]}`;
+      document.querySelectorAll(".item-date").forEach(d=>d.textContent=`تاريخ اليوم: ${ds}`);
     }
 
-    // نقطة البداية
     window.onload = () => {
-      cleanupTemporaryCodes();
+      cleanupTemporary();
       showSection("section-intro");
       initGalleryDates();
     };
