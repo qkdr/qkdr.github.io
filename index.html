@@ -6,21 +6,27 @@
   <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <style>
     /* ======== إعدادات عامة ======== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       font-family: "Arial", sans-serif;
       background: #121212;
       color: #e0e0e0;
       direction: rtl;
-      min-height: 100vh;
       overflow-x: hidden;
+      min-height: 100vh;
     }
     a { color: inherit; text-decoration: none; }
     ul { list-style: none; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-    /* ======== زر القائمة (هامبرجر) ======== */
+    /* ======== زر القائمة ======== */
     .menu-btn {
       position: fixed; top: 15px; left: 15px;
       width: 35px; height: 28px;
@@ -28,98 +34,84 @@
       z-index: 200;
     }
     .menu-btn span {
-      display: block; height: 4px;
-      background: #e0e0e0; border-radius: 2px;
+      display: block; height: 4px; background: #e0e0e0; border-radius: 2px;
       transition: transform 0.3s, opacity 0.3s;
     }
 
-    /* ======== قائمة التنقل المنبثقة ======== */
+    /* ======== قائمة منبثقة ======== */
     .menu-overlay {
       position: fixed; top: 0; left: -100%;
       width: 250px; height: 100%;
-      background: #1f1f1f;
-      box-shadow: 2px 0 12px rgba(0,0,0,0.7);
-      transition: left 0.4s ease; z-index: 150;
-      padding-top: 60px;
+      background: #1f1f1f; box-shadow: 2px 0 12px rgba(0,0,0,0.7);
+      transition: left 0.4s ease; padding-top: 60px; z-index: 150;
     }
     .menu-overlay.show { left: 0; }
-    .menu-overlay ul {
-      display: flex; flex-direction: column; align-items: flex-end;
-    }
+    .menu-overlay ul { display: flex; flex-direction: column; align-items: flex-end; }
     .menu-overlay li { margin: 15px 20px; }
-    .menu-overlay button {
-      background: #272727; color: #f1c40f;
-      padding: 10px 18px; border-radius: 25px;
-      width: 100%; text-align: right; font-size: 1rem;
+    .menu-overlay li button {
+      background: #272727; color: #f1c40f; padding: 10px 18px;
+      border-radius: 25px; width: 100%; text-align: right; font-size: 1rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
       transition: background 0.3s, transform 0.3s;
     }
-    .menu-overlay button:hover {
-      background: #f1c40f; color: #1f1f1f;
-      transform: translateX(-5px);
+    .menu-overlay li button:hover {
+      background: #f1c40f; color: #1f1f1f; transform: translateX(-5px);
     }
 
-    /* ======== مقدمة (Intro) ======== */
+    /* ======== قسم المقدمة ======== */
     #section-intro {
-      background: linear-gradient(135deg,#1b1b2f,#2b2b3f);
-      padding: 80px 20px; text-align: center;
+      background: linear-gradient(135deg, #1b1b2f, #2b2b3f);
+      padding: 80px 20px;
+      text-align: center;
       min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
     }
     #section-intro h1 {
-      font-size: 3rem; margin-bottom: 20px;
-      color: #f1c40f;
+      font-size: 3rem; margin-bottom: 20px; color: #f1c40f;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
     }
     #section-intro p {
-      font-size: 1.2rem; max-width: 800px;
-      margin-bottom: 30px; line-height: 1.8;
-      color: #dcdcdc;
+      font-size: 1.2rem; max-width: 800px; margin-bottom: 30px;
+      color: #dcdcdc; line-height: 1.8;
     }
     #section-intro button {
-      padding: 15px 30px; font-size: 1.1rem;
-      border-radius: 50px;
-      background: linear-gradient(45deg,#16a085,#1abc9c);
+      padding: 15px 30px; font-size: 1.1rem; border-radius: 50px;
+      background: linear-gradient(45deg, #16a085,#1abc9c);
       color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: transform .3s, box-shadow .3s;
+      transition: transform 0.3s, box-shadow 0.3s;
       margin-bottom: 40px;
     }
     #section-intro button:hover {
-      transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
 
-    /* ======== معرض الصور (Gallery) ======== */
+    /* ======== معرض الصور ======== */
     .gallery {
-      display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 25px;
-      width: 100%; max-width: 1000px;
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 25px; margin-bottom: 60px; width: 100%; max-width: 1000px;
     }
     .gallery-item {
-      background: #272737;
-      border: 3px solid #f39c12;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      overflow: hidden; width: 200px; text-align: center;
-      transition: transform .3s;
+      background: #272737; border: 3px solid #f39c12;
+      border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 200px; overflow: hidden; transition: transform 0.3s;
     }
     .gallery-item:hover { transform: translateY(-8px); }
     .item-frame {
-      padding: 12px; background: #3a3a5c;
-      border-bottom: 2px solid #e67e22;
+      padding: 12px; background: #3a3a5c; border-bottom: 2px solid #e67e22;
     }
     .item-frame img {
       width: 100%; height: auto; border-radius: 8px;
       box-shadow: 0 0 12px rgba(0,0,0,0.5);
     }
     .item-name {
-      background: #1f1f2f; padding: 10px;
-      font-size: 1rem; color: #f1c40f;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+      background: #1f1f2f; padding: 10px; font-size: 1rem;
+      color: #f1c40f; text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+      border-top: 2px solid #e67e22;
     }
     .item-date {
-      font-size: 0.85rem; color: #dcdcdc;
-      margin-bottom: 10px;
+      background: #12122f; padding: 6px; font-size: 0.9rem;
+      color: #dcdcdc; border-top: 1px solid #444; text-align: center;
     }
 
     /* ======== قسم بحث الأكواد ======== */
@@ -128,11 +120,11 @@
       background: #1f1f2f; min-height: 100vh;
     }
     .script-stats {
-      max-width: 700px; margin: 0 auto 20px;
+      max-width: 700px; margin: 0 auto 40px;
       background: #272737; border-left: 5px solid #f1c40f;
       border-radius: 8px; padding: 20px 25px;
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      color: #e0e0e0; line-height: 1.5;
+      color: #e0e0e0; font-size: 1rem; line-height: 1.5;
     }
     .script-stats ul { margin-top: 12px; padding-right: 20px; }
     .script-stats li { margin-bottom: 8px; }
@@ -142,7 +134,7 @@
       background: #272737; border: 2px solid #f39c12;
       border-radius: 12px; padding: 25px;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      margin: 0 auto 20px auto;
+      margin: 0 auto 40px;
     }
     .frame-box {
       background: #3a3a5c; border: 2px dashed #e67e22;
@@ -152,118 +144,99 @@
     .inner-box {
       background: #4b4b7c; border: 2px solid #f1c40f;
       border-radius: 8px; padding: 20px;
-      display: flex; flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
     }
     .inner-box input {
-      width: 90%; padding: 12px; border: none;
-      border-radius: 8px; margin-bottom: 18px;
+      width: 90%; padding: 12px; border: none; border-radius: 8px;
+      margin-bottom: 18px; font-size: 1rem;
       background: #1f1f2f; color: #e0e0e0;
       box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
-      font-size: 1rem;
     }
-    .inner-box input::placeholder { color: #bbb; }
     .inner-box button {
       padding: 12px 28px; border-radius: 50px;
-      background: linear-gradient(45deg,#f39c12,#d35400);
+      background: linear-gradient(45deg, #f39c12,#d35400);
       color: #fff; font-size: 1rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: transform .3s, box-shadow .3s;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
     .inner-box button:hover {
-      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
 
-    /* زر إضافة كود مؤقت */
-    #add-temp-btn {
-      display: block; margin: 0 auto 20px;
-      padding: 12px 30px; border-radius: 50px;
-      background: linear-gradient(45deg,#8e44ad,#9b59b6);
-      color: #fff; font-size: 1rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: transform .3s, box-shadow .3s;
-    }
-    #add-temp-btn:hover {
-      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-    }
-
-    #codes-container { max-width: 750px; margin: 0 auto 60px; }
+    #codes-container { width: 100%; max-width: 750px; margin: 0 auto; }
     .code-card {
       position: relative;
       background: #2f2f4f; border-left: 5px solid #f1c40f;
-      border-radius: 8px; padding: 20px;
-      margin-bottom: 30px;
+      border-radius: 8px; padding: 20px; margin-bottom: 30px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
     .code-card h3 {
-      margin: 0 0 12px 0; font-size: 1.3rem;
-      color: #e67e22;
+      margin: 0 0 12px; font-size: 1.3rem; color: #e67e22;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+      display: inline-block;
+    }
+    .countdown {
+      display: inline-block; margin-left: 10px;
+      background: #c0392b; color: #fff;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 0.9rem;
     }
     .code-block {
       background: #3b3b5b; border: 1px solid #444;
       border-radius: 6px; padding: 15px;
-      overflow-x: auto; font-family: "Courier New", monospace;
-      font-size: 0.95rem; line-height: 1.5;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
-      color: #ecf0f1;
-    }
-    .countdown {
-      position: absolute; top: 10px; left: 15px;
-      background: rgba(0,0,0,0.6); padding: 4px 8px;
-      border-radius: 4px; font-size: 0.9rem;
-      color: #fff;
+      overflow-x: auto; color: #ecf0f1;
+      font-family: "Courier New", monospace; font-size: 0.95rem;
+      line-height: 1.5; box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+      margin-top: 10px;
     }
 
-    /* الإشعارات */
+    /* ======== الإشعارات ======== */
     .notification {
       position: fixed; top: 20px; right: 20px;
       background: #27ae60; color: #fff;
       padding: 18px 25px; border-radius: 8px;
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
       opacity: 0; transform: translateY(-30px);
-      transition: opacity .4s, transform .4s;
-      z-index: 250; max-width: 300px; text-align: center;
+      transition: opacity 0.4s, transform 0.4s;
+      z-index: 250; font-size: 1rem; max-width: 300px;
+      text-align: center;
     }
     .notification.show { opacity: 1; transform: translateY(0); }
     .notification.error { background: #c0392b; }
 
-    /* صفحة التواصل */
+    /* ======== صفحة التواصل ======== */
     #section-contact {
       display: none; padding: 60px 20px;
       background: #1d1d3f; min-height: 100vh; text-align: center;
     }
     #section-contact h2 {
-      font-size: 2.2rem; margin-bottom: 20px;
-      color: #f1c40f;
+      font-size: 2.2rem; margin-bottom: 20px; color: #f1c40f;
       text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
     }
     #section-contact p {
       font-size: 1.1rem; max-width: 800px;
-      margin: 0 auto 30px auto; line-height: 1.8;
-      color: #dcdcdc;
+      margin: 0 auto 30px; color: #dcdcdc; line-height: 1.8;
     }
     .contact-info {
       background: #272737; border-left: 5px solid #f39c12;
-      border-radius: 8px; padding: 25px 30px;
-      max-width: 700px; margin: 0 auto;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      text-align: right; line-height: 1.6;
+      border-radius: 8px; padding: 25px 30px; max-width: 700px;
+      margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      text-align: right; font-size: 1rem; color: #e0e0e0;
+      line-height: 1.6;
     }
     .contact-info a.email-link {
       display: inline-block; margin-top: 15px;
-      background: linear-gradient(45deg,#e67e22,#f39c12);
-      color: #fff; padding: 10px 20px;
-      border-radius: 50px;
+      background: linear-gradient(45deg, #e67e22,#f39c12);
+      color: #fff; padding: 10px 20px; border-radius: 50px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.3);
-      transition: transform .3s, box-shadow .3s;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
     .contact-info a.email-link:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 18px rgba(0,0,0,0.5);
+      transform: translateY(-3px); box-shadow: 0 5px 18px rgba(0,0,0,0.5);
     }
-    .contact-info ul { text-align: right; margin-top: 15px; }
-    .contact-info li { margin-bottom: 8px; }
+    .contact-info ul { margin-top: 15px; text-align: right; }
+    .contact-info li { margin-bottom: 8px; color: #dcdcdc; }
   </style>
 </head>
 <body>
@@ -272,209 +245,190 @@
   <div class="menu-btn" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
-  <!-- قائمة التنقل -->
+  <!-- القائمة -->
   <nav class="menu-overlay" id="menu-overlay">
     <ul>
-      <li><button onclick="showSection('section-intro'); toggleMenu();">الرئيسية</button></li>
-      <li><button onclick="showSection('section-search'); toggleMenu();">بحث الأكواد</button></li>
-      <li><button onclick="showSection('section-contact'); toggleMenu();">تواصل معنا</button></li>
+      <li><button onclick="showSection('section-intro'); toggleMenu()">الرئيسية</button></li>
+      <li><button onclick="showSection('section-search'); toggleMenu()">بحث الأكواد</button></li>
+      <li><button onclick="showSection('section-contact'); toggleMenu()">تواصل معنا</button></li>
     </ul>
   </nav>
 
-  <!-- المقدمة + معرض الصور -->
+  <!-- المقدمة مع معرض الصور -->
   <section id="section-intro">
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
-    <p>
-      في هذا الموقع يمكنك عرض أكواد سكربتات Roblox بأناقة وفخامة، وإضافة أكواد مؤقتة تختفي بعد وقت محدد.
-      اضغط على زر القائمة أعلى اليسار للتنقل بين الصفحات.
-    </p>
+    <p>استعرض أحدث السكربتات وصورها مع تاريخ اليوم أسفل كل صورة.</p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
-    <!-- معرض الصور -->
     <div class="gallery">
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=صورة+1" alt="1"/></div>
-        <div class="item-name">سكربت عرض</div>
-        <div class="item-date" data-item>--</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+1" alt="سكربت 1" /></div>
+        <div class="item-name">سكربت 1</div>
+        <div class="item-date"></div>
       </div>
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=صورة+2" alt="2"/></div>
-        <div class="item-name">سكربت تحكم</div>
-        <div class="item-date" data-item>--</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+2" alt="سكربت 2" /></div>
+        <div class="item-name">سكربت 2</div>
+        <div class="item-date"></div>
       </div>
       <div class="gallery-item">
-        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=صورة+3" alt="3"/></div>
-        <div class="item-name">سكربت حركة</div>
-        <div class="item-date" data-item>--</div>
-      </div>
-      <div class="gallery-item">
-        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=صورة+4" alt="4"/></div>
-        <div class="item-name">سكربت ضوء</div>
-        <div class="item-date" data-item>--</div>
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=سكربت+3" alt="سكربت 3" /></div>
+        <div class="item-name">سكربت 3</div>
+        <div class="item-date"></div>
       </div>
     </div>
   </section>
 
-  <!-- قسم بحث الأكواد -->
+  <!-- صفحة البحث عن الأكواد -->
   <section id="section-search">
     <div class="script-stats">
-      <strong>عدد السكربتات المتوفرة حالياً:</strong> <span id="script-count">0</span>
-      <br/><strong>أسماء السكربتات:</strong>
-      <ul id="script-list"></ul>
+      <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
+      <div><strong>أسماء السكربتات:</strong>
+        <ul id="script-list"></ul>
+      </div>
     </div>
-    <!-- بحث -->
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
     </div>
-    <!-- إضافة كود مؤقت -->
-    <button id="add-temp-btn" onclick="addTempCode()">إضافة كود مؤقت</button>
-    <!-- عرض الأكواد -->
     <div id="codes-container"></div>
   </section>
 
-  <!-- الإشعار -->
+  <!-- إشعار -->
   <div id="notification" class="notification"></div>
 
   <!-- صفحة التواصل -->
   <section id="section-contact">
     <h2>تواصل معنا</h2>
-    <p>لأي استفسار أو اقتراح، تواصل معنا عبر:</p>
+    <p>للاستفسار أو إضافة سكربت مؤقت أو دائم، تواصل عبر البريد أو ديسكورد.</p>
     <div class="contact-info">
       <ul>
-        <li>البريد: <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
-        <li>Discord: RobloxHelper#1234</li>
-        <li>GitHub: <a href="https://github.com/" target="_blank">اضغط هنا</a></li>
-        <li>© 2025 جميع الحقوق محفوظة</li>
+        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+        <li><strong>Discord:</strong> RobloxHelper#1234</li>
+        <li><strong>© 2025 جميع الحقوق محفوظة.</strong></li>
       </ul>
     </div>
   </section>
 
   <script>
-    // بيانات السكربتات الدائمة
+    // بيانات السكربتات، بعضها دائم وبعضها مؤقت
     const scriptsData = {
-      "سكربت الأول": [ /* ... كما في الأمثلة السابقة ... */ ],
-      "سكربت الثاني": [ /* ... */ ],
-      "سكربت الثالث": [ /* ... */ ]
+      "سكربت الأول": [
+        { title: "كود دائم", code: "-- هذا كود دائم" }
+      ],
+      "سكربت الرابع": [
+        {
+          title: "كود مؤقت",
+          code: "-- هذا كود مؤقت سيختفي بعد انتهاء المؤقت",
+          expires: Date.now() + 60000  // ينتهي بعد 60 ثانية
+        }
+      ]
     };
-    // أكواد مؤقتة
-    const tempCodes = [];
 
-    // عرض الأقسام
+    // عرض القسم المناسب
     function showSection(id) {
-      ["section-intro","section-search","section-contact"].forEach(s=>{
-        document.getElementById(s).style.display = s===id ? "block":"none";
+      ["section-intro","section-search","section-contact"].forEach(sec=>{
+        document.getElementById(sec).style.display = sec===id ? "block":"none";
       });
       if (id==="section-search") updateScriptStats();
     }
-    window.onload = ()=>{
+    window.onload = () => {
       showSection("section-intro");
-      updateDates();
+      initGalleryDates();
     };
 
-    // تحديث تاريخ كل عنصر في المعرض
-    function updateDates(){
-      const monthNames = ["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"];
-      const now = new Date();
-      const day = now.getDate();
-      const month = monthNames[now.getMonth()];
-      document.querySelectorAll("[data-item]").forEach(el=>{
-        el.textContent = `${day} ${month}`;
-      });
+    // تفعيل الهامبرجر
+    function toggleMenu() {
+      const nav = document.getElementById("menu-overlay");
+      nav.classList.toggle("show");
+      const spans = document.querySelectorAll(".menu-btn span");
+      if (nav.classList.contains("show")) {
+        spans[0].style.transform = "rotate(45deg) translate(5px,5px)";
+        spans[1].style.opacity = "0";
+        spans[2].style.transform = "rotate(-45deg) translate(6px,-6px)";
+      } else {
+        spans[0].style.transform = spans[2].style.transform = "";
+        spans[1].style.opacity = "1";
+      }
     }
 
-    // إحصائيات السكربتات
-    function updateScriptStats(){
+    // تحديث إحصائيات السكربتات
+    function updateScriptStats() {
       const names = Object.keys(scriptsData);
       document.getElementById("script-count").textContent = names.length;
       const list = document.getElementById("script-list");
       list.innerHTML = "";
-      names.forEach((n,i)=>{
+      names.forEach((n,i)=> {
         const li = document.createElement("li");
         li.textContent = `${i+1}. ${n}`;
         list.appendChild(li);
       });
     }
 
-    // عرض الأكواد الدائمة
-    function showCodes(){
+    // عرض الأكواد مع المؤقت
+    function showCodes() {
       const name = document.getElementById("script-name-input").value.trim();
       const container = document.getElementById("codes-container");
       container.innerHTML = "";
-      const all = scriptsData[name]||[];
-      all.forEach(item=> createCodeCard(item.title,item.code,false,0) );
-      if (all.length) showNotification(`تم عرض أكواد "${name}"!`,false);
-      else showNotification(`لم نجد سكربت باسم "${name}"!`,true);
-      document.getElementById("script-name-input").value="";
-    }
-
-    // إضافة كود مؤقت
-    function addTempCode(){
-      const title = prompt("أدخل عنوان الكود المؤقت:");
-      if (!title) return;
-      const code = prompt("أدخل محتوى الكود:");
-      if (!code) return;
-      const seconds = parseInt(prompt("مدة الكود بالثواني:"),10);
-      if (isNaN(seconds)||seconds<=0) return alert("المدة غير صالحة.");
-      createCodeCard(title,code,true,seconds);
-    }
-
-    // إنشاء بطاقة الكود
-    function createCodeCard(title,code,isTemp,duration){
-      const container = document.getElementById("codes-container");
-      const card = document.createElement("div");
-      card.className = "code-card";
-      const h3 = document.createElement("h3");
-      h3.textContent = title;
-      card.appendChild(h3);
-      if (isTemp){
-        const cd = document.createElement("div");
-        cd.className = "countdown";
-        card.appendChild(cd);
-        let remaining = duration;
-        const timer = setInterval(()=>{
-          const m = String(Math.floor(remaining/60)).padStart(2,"0");
-          const s = String(remaining%60).padStart(2,"0");
-          cd.textContent = `${m}:${s}`;
-          if (remaining-- <= 0){
-            clearInterval(timer);
-            card.remove();
-          }
-        },1000);
+      if (!scriptsData[name]) {
+        showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
+        return;
       }
-      const pre = document.createElement("pre");
-      pre.className = "code-block";
-      pre.textContent = code;
-      card.appendChild(pre);
-      container.appendChild(card);
+      scriptsData[name].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "code-card";
+        const h3 = document.createElement("h3");
+        h3.textContent = item.title;
+        card.appendChild(h3);
+
+        // إذا كان مؤقت
+        if (item.expires) {
+          const cd = document.createElement("span");
+          cd.className = "countdown";
+          card.appendChild(cd);
+          const timer = setInterval(()=>{
+            const diff = item.expires - Date.now();
+            if (diff <= 0) {
+              clearInterval(timer);
+              card.remove();
+              return;
+            }
+            const s = Math.floor(diff/1000)%60;
+            const m = Math.floor(diff/60000)%60;
+            cd.textContent = `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+          }, 500);
+        }
+
+        const pre = document.createElement("pre");
+        pre.className = "code-block";
+        pre.textContent = item.code;
+        card.appendChild(pre);
+        container.appendChild(card);
+      });
+      showNotification(`تم عرض أكواد "${name}"!`, false);
+      document.getElementById("script-name-input").value = "";
     }
 
-    // إشعار
-    function showNotification(msg,isError){
-      const n=document.getElementById("notification");
-      n.textContent=msg;
-      n.classList.toggle("error",isError);
+    // رسالة إشعار
+    function showNotification(msg,isErr) {
+      const n = document.getElementById("notification");
+      n.textContent = msg;
+      n.classList.toggle("error", !!isErr);
       n.classList.add("show");
-      setTimeout(()=>n.classList.remove("show"),3000);
+      setTimeout(()=> n.classList.remove("show"),3000);
     }
 
-    // فتح/إغلاق القائمة
-    function toggleMenu(){
-      const ov=document.getElementById("menu-overlay");
-      ov.classList.toggle("show");
-      const sp=document.querySelectorAll(".menu-btn span");
-      if(ov.classList.contains("show")){
-        sp[0].style.transform="rotate(45deg) translate(5px,5px)";
-        sp[1].style.opacity="0";
-        sp[2].style.transform="rotate(-45deg) translate(6px,-6px)";
-      } else {
-        sp.forEach((s,i)=>{
-          s.style.transform=""; s.style.opacity="1";
-        });
-      }
+    // تهيئة تواريخ المعرض
+    function initGalleryDates() {
+      const months = ["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"];
+      const today = new Date();
+      const dateStr = `${today.getDate()} ${months[today.getMonth()]}`;
+      document.querySelectorAll(".item-date").forEach(div=>{
+        div.textContent = `تاريخ اليوم: ${dateStr}`;
+      });
     }
   </script>
 </body>
