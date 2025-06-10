@@ -245,7 +245,7 @@
   <!-- المقدمة مع معرض الصور -->
   <section id="section-intro">
     <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
-    <p>استعرض أحدث السكربتات وصورها مع تاريخ اليوم أسفل كل صورة.</p>
+    <p>استعرض أحدث الاكواد و كل سبوع نحدث الاكواد.</p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
     <div class="gallery">
       <div class="gallery-item">
@@ -269,13 +269,13 @@
   <!-- صفحة البحث عن الأكواد -->
   <section id="section-search">
     <div class="script-stats">
-      <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
-      <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
+      <div><strong>عدد المابات المتوفرة:</strong> <span id="script-count">0</span></div>
+      <div><strong>أسماء المابات:</strong><ul id="script-list"></ul></div>
     </div>
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم المابات هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
@@ -305,16 +305,230 @@
   <script>
     // بيانات السكربتات: بعضها دائم وبعضها مؤقت مع مفتاح expires (timestamp)
     const scriptsData = {
-      "سكربت الأول": [
-        { title: "كود دائم", code: "-- هذا كود دائم" }
-      ],
-      "سكربت الرابع": [
+      const scriptsData = {
+      "بلو لوك": [
         {
-          title: "كود مؤقت",
-          code: "-- هذا كود مؤقت سيختفي بعد انتهاء المؤقت",
-          expires: Date.now() + 60000  // 60 ثانية مؤقتاً
+          title: "لفات حظ لتدفق و10 لفات حظ للأسلوب 10",
+          code: `RANKED!`
+           },
+           {
+             title: "لفات حظ لتدفق و5 لفات حظ للأسلوب 5",
+          code: `LOKISOON!`
         }
-      ]
+      ],
+      "بلوكس فورت": [
+        {
+          title: "20 دقيقة من مضاعفة الخبرة(تأكد من وجود فراغ في نهايةالكود",
+          code: `1LOSTADMIN`
+        }
+      ],
+      "بناء جزيرة": [
+        {
+          title: "500 ذهب",
+          code: `ANIMALS`
+           },
+           {
+             title: "ذهب مجاني",
+          code: `VOLCANO`
+           },
+           {
+             title: "500 ذهب",
+          code: `2000Follows`
+           },
+           {
+             title: "250 ذهب",
+          code: `FreeGold`
+           },
+           {
+             title: "5 آلات تقطيع آلية",
+          code: `Autochoppers`
+           },
+           {
+             title: "500 ذهب",
+          code: `Hype`
+        }
+      ],
+       "حياة اللجوء": [
+         {
+           title: "استبدلها بمعزز الخبرة 3x",
+          code: `BEEZLEBUB`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ZOMBIES`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ESCAPE`
+           },
+           {
+             title: "استبدلها بمعزز الخبرة 3x",
+          code: `ZUDARAN`
+           }
+          ],
+          "بلوكسبين": [
+           {
+             title: "500 نقدًا",
+          code: `BJZ9C1`
+           },
+           {
+             title: "500 نقدًا",
+          code: `C5026Q`
+           },
+           {
+             title: "500 نقدًا",
+          code: `I70IIH`
+           },
+           {
+             title: "500 نقدًا",
+          code: `H268YH`
+           },
+           {
+             title: "500 نقدًا",
+          code: `03TCW4`
+           },
+           {
+             title: "500 نقدًا",
+          code: `19OC9L`
+           },
+           {
+             title: "500 نقدًا",
+          code: `EJ48MA`
+           },
+           {
+             title: "500 نقدًا",
+          code: `4B5D16`
+           },
+           {
+             title: "500 نقدًا",
+          code: `WY5895`
+           },
+           {
+             title: "500 نقدًا",
+          code: `AUS7P3`
+           },
+           {
+             title: "500 نقدًا",
+          code: `3XQ47A`
+           },
+           {
+             title: "500 نقدًا",
+          code: `1XCK66`
+           },
+           {
+             title: "500 نقدًا",
+          code: `2L874Q`
+           },
+           {
+             title: "500 نقدًا",
+          code: `21LMZ1`
+           },
+           {
+             title: "500 نقدًا",
+          code: `11U893`
+           },
+           {
+             title: "500 نقدًا",
+          code: `FP320V`
+           },
+           {
+             title: "500 نقدًا",
+          code: `KPZ50U`
+           },
+           {
+             title: "500 نقدًا",
+          code: `5POI5N`
+           },
+           {
+             title: "500 نقدًا",
+          code: `VOOL44`
+           },
+           {
+             title: "500 نقدًا",
+          code: `3Y0DB5`
+           },
+           {
+             title: "500 نقدًا",
+          code: `M08SQF`
+           },
+           {
+             title: "500 نقدًا",
+          code: `I6VO85`
+           },
+           {
+             title: "500 نقدًا",
+          code: `138QW7`
+           },
+           {
+             title: "500 نقدًا",
+          code: `922J3J`
+           },
+           {
+             title: "500 نقدًا",
+          code: `OB8725`
+           },
+           {
+             title: "500 نقدًا",
+          code: `9ER2Q6`
+           },
+           {
+             title: "500 نقدًا",
+          code: `R39484`
+           },
+           {
+             title: "500 نقدًا",
+          code: `Y92AEP`
+           },
+           {
+             title: "500 نقدًا",
+          code: `339R55`
+           },
+           {
+             title: "500 نقدًا وصندوق واحد لكل شيء (جديد)",
+          code: `MZL229`
+           },
+           {
+             title: "500 نقدًا (جديد)",
+          code: `7ST8X6`
+           }
+          ],
+            "ارايز كروس اوفر": [
+              {
+                title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
+          code: `Begeta+n`
+           },
+           {
+             title: "مجموعة جرعة واحدة، وتذاكر، وغبار (جديد)",
+          code: `WORLD2`
+           },
+           {
+             title: "مجموعة الجرعات الثلاث (جديدة)",
+          code: `Delay`
+           },
+           {
+             title: "100 تذكرة، 600 غبار عادي، 400 غبار نادر، 350 غبار أسطوري، حزمة جرعة واحدة، جبل هجين حصري (مائي وأرضي)، وقطعة أثرية حصرية من SS (جديدة)",
+          code: `1.1MLIKES`
+           }
+          ],
+           "رواد أنيمي": [
+             {
+               title: "1000 جوهرة، و2.5 ألف قطعة نقدية، وخمس عمليات إعادة رمي للسمات (جديد!)",
+          code: `LordShadow`
+           },
+           {
+             title: "عشر عمليات إعادة رمي للسمات وبلورتين للفساد (المستوى 30 مطلوب)",
+          code: `ODYSSEYFIX`
+           },
+           {
+             title: "10 آلاف عملة، وعشر عمليات إعادة رمي للسمات، وبلورة فساد واحدة، وحجر جوهر واحد، وعشر شرائح إحصائية",
+          code: `1MILLION`
+           },
+           {
+             title: "بلورة فساد (المستوى 40 مطلوب)",
+          code: `CORRUPTION`
+           }
+          ]
+      // يمكنك إضافة المزيد من السكربتات هنا بنفس الصيغة
     };
 
     // مفتاح localStorage للسكربتات المؤقتة
