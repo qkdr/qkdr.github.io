@@ -6,14 +6,8 @@
   <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <style>
     /* ======== إعدادات عامة ======== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: "Arial", sans-serif;
       background: #121212;
@@ -26,7 +20,7 @@
     ul { list-style: none; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-    /* ======== زر القائمة ======== */
+    /* ======== زر الهامبرجر ======== */
     .menu-btn {
       position: fixed; top: 15px; left: 15px;
       width: 35px; height: 28px;
@@ -38,7 +32,7 @@
       transition: transform 0.3s, opacity 0.3s;
     }
 
-    /* ======== قائمة منبثقة ======== */
+    /* ======== قائمة التنقل المنبثقة ======== */
     .menu-overlay {
       position: fixed; top: 0; left: -100%;
       width: 250px; height: 100%;
@@ -61,9 +55,7 @@
     /* ======== قسم المقدمة ======== */
     #section-intro {
       background: linear-gradient(135deg, #1b1b2f, #2b2b3f);
-      padding: 80px 20px;
-      text-align: center;
-      min-height: 100vh;
+      padding: 80px 20px; text-align: center; min-height: 100vh;
       display: flex; flex-direction: column; align-items: center;
     }
     #section-intro h1 {
@@ -78,8 +70,7 @@
       padding: 15px 30px; font-size: 1.1rem; border-radius: 50px;
       background: linear-gradient(45deg, #16a085,#1abc9c);
       color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: transform 0.3s, box-shadow 0.3s;
-      margin-bottom: 40px;
+      transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 40px;
     }
     #section-intro button:hover {
       transform: translateY(-3px);
@@ -114,7 +105,7 @@
       color: #dcdcdc; border-top: 1px solid #444; text-align: center;
     }
 
-    /* ======== قسم بحث الأكواد ======== */
+    /* ======== قسم البحث عن الأكواد ======== */
     #section-search {
       display: none; padding: 60px 20px;
       background: #1f1f2f; min-height: 100vh;
@@ -172,15 +163,13 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
     .code-card h3 {
-      margin: 0 0 12px; font-size: 1.3rem; color: #e67e22;
+      display: inline-block; margin: 0 10px 12px 0;
+      font-size: 1.3rem; color: #e67e22;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-      display: inline-block;
     }
     .countdown {
-      display: inline-block; margin-left: 10px;
-      background: #c0392b; color: #fff;
-      padding: 2px 8px; border-radius: 4px;
-      font-size: 0.9rem;
+      display: inline-block; background: #c0392b; color: #fff;
+      padding: 2px 8px; border-radius: 4px; font-size: 0.9rem;
     }
     .code-block {
       background: #3b3b5b; border: 1px solid #444;
@@ -199,13 +188,12 @@
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
       opacity: 0; transform: translateY(-30px);
       transition: opacity 0.4s, transform 0.4s;
-      z-index: 250; font-size: 1rem; max-width: 300px;
-      text-align: center;
+      z-index: 250; font-size: 1rem; max-width: 300px; text-align: center;
     }
     .notification.show { opacity: 1; transform: translateY(0); }
     .notification.error { background: #c0392b; }
 
-    /* ======== صفحة التواصل ======== */
+    /* ======== قسم التواصل ======== */
     #section-contact {
       display: none; padding: 60px 20px;
       background: #1d1d3f; min-height: 100vh; text-align: center;
@@ -215,15 +203,14 @@
       text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
     }
     #section-contact p {
-      font-size: 1.1rem; max-width: 800px;
-      margin: 0 auto 30px; color: #dcdcdc; line-height: 1.8;
+      font-size: 1.1rem; max-width: 800px; margin: 0 auto 30px;
+      color: #dcdcdc; line-height: 1.8;
     }
     .contact-info {
       background: #272737; border-left: 5px solid #f39c12;
       border-radius: 8px; padding: 25px 30px; max-width: 700px;
       margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      text-align: right; font-size: 1rem; color: #e0e0e0;
-      line-height: 1.6;
+      text-align: right; font-size: 1rem; color: #e0e0e0; line-height: 1.6;
     }
     .contact-info a.email-link {
       display: inline-block; margin-top: 15px;
@@ -231,6 +218,7 @@
       color: #fff; padding: 10px 20px; border-radius: 50px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.3);
       transition: transform 0.3s, box-shadow 0.3s;
+      font-size: 1rem;
     }
     .contact-info a.email-link:hover {
       transform: translateY(-3px); box-shadow: 0 5px 18px rgba(0,0,0,0.5);
@@ -245,7 +233,7 @@
   <div class="menu-btn" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
-  <!-- القائمة -->
+  <!-- القائمة المنبثقة -->
   <nav class="menu-overlay" id="menu-overlay">
     <ul>
       <li><button onclick="showSection('section-intro'); toggleMenu()">الرئيسية</button></li>
@@ -282,9 +270,7 @@
   <section id="section-search">
     <div class="script-stats">
       <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
-      <div><strong>أسماء السكربتات:</strong>
-        <ul id="script-list"></ul>
-      </div>
+      <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
     </div>
     <div class="outer-box">
       <div class="frame-box">
@@ -297,7 +283,7 @@
     <div id="codes-container"></div>
   </section>
 
-  <!-- إشعار -->
+  <!-- إشعار النجاح/الخطأ -->
   <div id="notification" class="notification"></div>
 
   <!-- صفحة التواصل -->
@@ -314,7 +300,7 @@
   </section>
 
   <script>
-    // بيانات السكربتات، بعضها دائم وبعضها مؤقت
+    // بيانات السكربتات: بعضها دائم وبعضها مؤقت مع مفتاح expires (timestamp)
     const scriptsData = {
       "سكربت الأول": [
         { title: "كود دائم", code: "-- هذا كود دائم" }
@@ -323,24 +309,57 @@
         {
           title: "كود مؤقت",
           code: "-- هذا كود مؤقت سيختفي بعد انتهاء المؤقت",
-          expires: Date.now() + 60000  // ينتهي بعد 60 ثانية
+          expires: Date.now() + 60000  // 60 ثانية مؤقتاً
         }
       ]
     };
 
-    // عرض القسم المناسب
+    // مفتاح localStorage للسكربتات المؤقتة
+    const LS_KEY = "temporaryScriptsExpires";
+
+    // حمل/أنشئ خريطة الانتهاء من localStorage
+    function loadExpiresMap() {
+      let map = {};
+      try {
+        map = JSON.parse(localStorage.getItem(LS_KEY)) || {};
+      } catch { map = {}; }
+      return map;
+    }
+    function saveExpiresMap(map) {
+      localStorage.setItem(LS_KEY, JSON.stringify(map));
+    }
+
+    // تنظيف الأكواد المؤقتة عند التحميل
+    function cleanupTemporaryCodes() {
+      const map = loadExpiresMap();
+      const now = Date.now();
+      for (const [scriptName, items] of Object.entries(scriptsData)) {
+        scriptsData[scriptName] = items.filter(item => {
+          if (!item.expires) return true;   // دائم
+          const key = `${scriptName}||${item.title}`;
+          // إذا مخزن في الخريطة استخدم القيمة المخزنة
+          if (map[key]) item.expires = map[key];
+          else map[key] = item.expires;     // أول مرة، خزّن
+          // إذا منتهٍ: احذف البند من الخريطة أيضاً
+          if (item.expires <= now) {
+            delete map[key];
+            return false;
+          }
+          return true;
+        });
+      }
+      saveExpiresMap(map);
+    }
+
+    // عرض القسم المطلوب
     function showSection(id) {
       ["section-intro","section-search","section-contact"].forEach(sec=>{
         document.getElementById(sec).style.display = sec===id ? "block":"none";
       });
-      if (id==="section-search") updateScriptStats();
+      if (id === "section-search") updateScriptStats();
     }
-    window.onload = () => {
-      showSection("section-intro");
-      initGalleryDates();
-    };
 
-    // تفعيل الهامبرجر
+    // تهيئة الهامبرجر
     function toggleMenu() {
       const nav = document.getElementById("menu-overlay");
       nav.classList.toggle("show");
@@ -350,12 +369,11 @@
         spans[1].style.opacity = "0";
         spans[2].style.transform = "rotate(-45deg) translate(6px,-6px)";
       } else {
-        spans[0].style.transform = spans[2].style.transform = "";
-        spans[1].style.opacity = "1";
+        spans.forEach(s=> { s.style.transform = ""; s.style.opacity = "1"; });
       }
     }
 
-    // تحديث إحصائيات السكربتات
+    // تحديث عداد السكربتات وأسمائها
     function updateScriptStats() {
       const names = Object.keys(scriptsData);
       document.getElementById("script-count").textContent = names.length;
@@ -368,7 +386,7 @@
       });
     }
 
-    // عرض الأكواد مع المؤقت
+    // عرض الأكواد مع العد التنازلي لمؤقتة
     function showCodes() {
       const name = document.getElementById("script-name-input").value.trim();
       const container = document.getElementById("codes-container");
@@ -384,20 +402,21 @@
         h3.textContent = item.title;
         card.appendChild(h3);
 
-        // إذا كان مؤقت
+        // إذا مؤقت، أضف عنصر عدّ تنازلي
         if (item.expires) {
           const cd = document.createElement("span");
           cd.className = "countdown";
           card.appendChild(cd);
-          const timer = setInterval(()=>{
+          const timer = setInterval(() => {
             const diff = item.expires - Date.now();
             if (diff <= 0) {
               clearInterval(timer);
               card.remove();
+              updateScriptStats();
               return;
             }
-            const s = Math.floor(diff/1000)%60;
-            const m = Math.floor(diff/60000)%60;
+            const m = Math.floor(diff/60000);
+            const s = Math.floor((diff%60000)/1000);
             cd.textContent = `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
           }, 500);
         }
@@ -412,24 +431,31 @@
       document.getElementById("script-name-input").value = "";
     }
 
-    // رسالة إشعار
-    function showNotification(msg,isErr) {
+    // إشعار نجاح/خطأ
+    function showNotification(msg, isErr) {
       const n = document.getElementById("notification");
       n.textContent = msg;
-      n.classList.toggle("error", !!isErr);
+      n.classList.toggle("error", isErr);
       n.classList.add("show");
-      setTimeout(()=> n.classList.remove("show"),3000);
+      setTimeout(() => n.classList.remove("show"), 3000);
     }
 
-    // تهيئة تواريخ المعرض
+    // تهيئة تواريخ المعرض أسفل الصور
     function initGalleryDates() {
       const months = ["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"];
       const today = new Date();
       const dateStr = `${today.getDate()} ${months[today.getMonth()]}`;
-      document.querySelectorAll(".item-date").forEach(div=>{
+      document.querySelectorAll(".item-date").forEach(div => {
         div.textContent = `تاريخ اليوم: ${dateStr}`;
       });
     }
+
+    // نقطة البداية
+    window.onload = () => {
+      cleanupTemporaryCodes();
+      showSection("section-intro");
+      initGalleryDates();
+    };
   </script>
 </body>
 </html>
