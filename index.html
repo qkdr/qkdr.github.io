@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقع عرض أكواد سكربتات روبلوكس</title>
+  <title>موقع اكوادي روبلكس</title>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -208,8 +208,8 @@
 
   <!-- قسم المقدمة -->
   <section id="section-intro">
-    <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
-    <p>استعرض أحدث السكربتات وصورها مع إحصائيات المشاهدات والاستخدامات.</p>
+    <h1>مرحباً بك في موقع أكواد روبلوكس</h1>
+    <p>استعرض أحدث الاكواد و نحدثه يوميا.</p>
     <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
     <div class="gallery" id="gallery"></div>
   </section>
@@ -217,13 +217,13 @@
   <!-- قسم البحث عن الأكواد -->
   <section id="section-search">
     <div class="script-stats">
-      <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
-      <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
+      <div><strong>عدد المابات المتوفرة:</strong> <span id="script-count">0</span></div>
+      <div><strong>أسماء المابات:</strong><ul id="script-list"></ul></div>
     </div>
     <div class="outer-box">
       <div class="frame-box">
         <div class="inner-box">
-          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <input type="text" id="script-name-input" placeholder="اكتب اسم الماب هنا..." />
           <button onclick="showCodes()">عرض الأكواد</button>
         </div>
       </div>
@@ -238,7 +238,7 @@
   <section id="section-contact">
     <h2>تواصل معنا</h2>
     <p>
-      إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة سكربت جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!
+      إذا كان لديك أي استفسار أو اقتراح أو كنت تريد إضافة كود جديد إلى قاعدة البيانات، لا تتردد في مراسلتنا. نحن هنا للمساعدة!
     </p>
     <div class="contact-info">
       <ul>
@@ -677,7 +677,7 @@
       const container = document.getElementById("codes-container");
       container.innerHTML = "";
       if (!scriptsData[name]) {
-        showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
+        showNotification(`لا يوجد ماب باسم "${name}"!`, true);
         return;
       }
       if (!viewed.includes(name)) {
