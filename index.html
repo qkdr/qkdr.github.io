@@ -1,200 +1,324 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>موقع عرض أكواد سكربتات روبلوكس</title>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
-    /* ======== إعدادات عامة ======== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
+    /* ====== خلفية متحركة متدرجة ====== */
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: #0f0f1a; color: #ececec; direction:rtl;
-      overflow-x:hidden; min-height:100vh;
+      color: #fff;
+      overflow-x: hidden;
+      background: linear-gradient(60deg, #1a1a2e, #16213e, #0f3460, #53354a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
     }
-    button { cursor:pointer; border:none; background:none; font-family:inherit; }
-    a { color:inherit; text-decoration:none; }
-    ul { list-style:none; }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-    /* الهامبرجر والقائمة */
-    .menu-btn { position:fixed; top:15px; left:15px; width:35px; height:28px;
-      display:flex; flex-direction:column; justify-content:space-between; z-index:200; }
-    .menu-btn span { display:block; height:4px; background:#ececec; border-radius:2px;
-      transition:transform .3s, opacity .3s; }
+    /* ====== زُر الهامبرجر ====== */
+    .menu-btn {
+      position: fixed;
+      top: 20px; left: 20px;
+      width: 35px; height: 30px;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      display: block;
+      height: 4px;
+      margin: 4px 0;
+      background: rgba(255,255,255,0.8);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
     .menu-overlay {
-      position:fixed; top:0; left:-100%; width:260px; height:100%;
-      background:#1b1b2e; box-shadow:2px 0 12px rgba(0,0,0,.7);
-      transition:left .4s ease; padding-top:60px; z-index:150;
+      position: fixed;
+      top: 0; left: -260px;
+      width: 260px; height: 100%;
+      background: rgba(20,20,30,0.6);
+      backdrop-filter: blur(10px);
+      padding-top: 80px;
+      transition: left 0.4s;
+      z-index: 900;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.5);
     }
-    .menu-overlay.show { left:0; }
-    .menu-overlay ul { display:flex; flex-direction:column; align-items:flex-end; }
-    .menu-overlay li { margin:20px; }
+    .menu-overlay.show { left: 0; }
     .menu-overlay button {
-      background: linear-gradient(45deg,#3a0f75,#6b1fcf);
-      color:#fff; padding:12px 20px; border-radius:30px;
-      width:100%; text-align:right; box-shadow:0 4px 12px rgba(0,0,0,.5);
-      transition:transform .3s;
+      display: block;
+      width: 90%;
+      margin: 16px auto;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      transition: background 0.3s;
     }
-    .menu-overlay button:hover { transform:translateX(-8px); }
+    .menu-overlay button:hover {
+      background: rgba(255,255,255,0.2);
+    }
 
-    /* أقسام الموقع */
-    section { display:none; padding:80px 20px; }
-    #section-intro { display:block;
-      background:linear-gradient(135deg,#1b1b2f,#2b2b3f); text-align:center;
+    /* ====== قوالب زجاجية (Glassmorphism) ====== */
+    .glass {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
     }
-    #section-intro h1 { font-size:3rem; margin-bottom:20px; color:#ffa600;
-      text-shadow:2px 2px 8px rgba(0,0,0,.7); }
-    #section-intro p { font-size:1.2rem; max-width:800px; margin:0 auto 30px; line-height:1.8; }
+
+    section {
+      padding: 100px 20px;
+      min-height: 100vh;
+    }
+    /* ====== المقدمة ====== */
+    #section-intro {
+      text-align: center;
+    }
+    #section-intro h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    #section-intro p {
+      max-width: 700px;
+      margin: 20px auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
     #section-intro button {
-      padding:15px 30px; font-size:1.1rem; border-radius:50px;
-      background:linear-gradient(45deg,#16a085,#1abc9c); color:#fff;
-      box-shadow:0 6px 20px rgba(0,0,0,.5);
-      transition:transform .3s;
+      margin-top: 30px;
+      padding: 14px 30px;
+      font-size: 1rem;
+      color: #fff;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      transition: background 0.3s, transform 0.3s;
     }
-    #section-intro button:hover { transform:translateY(-4px); }
+    #section-intro button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-4px);
+    }
 
-    /* معرض الصور مع الإحصائيات */
+    /* ====== معرض الصور ====== */
     .gallery {
-      display:flex; flex-wrap:wrap; justify-content:center;
-      gap:30px; margin-top:40px; max-width:1000px; margin:40px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 40px;
     }
     .gallery-item {
-      position:relative; background:#272737; border:3px solid #ffa600;
-      border-radius:16px; width:200px; overflow:hidden;
-      box-shadow:0 0 30px rgba(255,166,0,.3);
-      transition:transform .3s, box-shadow .3s;
+      width: 200px;
+      position: relative;
+      overflow: hidden;
     }
-    .gallery-item:hover {
-      transform:translateY(-10px);
-      box-shadow:0 0 40px rgba(255,166,0,.5);
+    .gallery-item .glass {
+      padding: 12px;
+      transition: transform 0.3s;
     }
-    .item-frame { padding:12px; background:#3a3a5c; border-bottom:3px solid #ffa600; }
-    .item-frame img { width:100%; border-radius:12px; }
+    .gallery-item:hover .glass {
+      transform: translateY(-10px);
+    }
+    .item-frame img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
     .item-name {
-      background:#1f1f2f; padding:12px; color:#ffa600; font-size:1rem;
-      border-top:3px solid #ffa600; text-shadow:1px 1px 4px rgba(0,0,0,.7);
-      display:flex; align-items:center; justify-content:center; gap:6px;
+      margin-top: 12px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    /* أيقونة نار ثلاثية الأبعاد CSS */
+    /* أيقونة نار ثلاثية الأبعاد (CSS) */
     .hot-icon {
-      width:24px; height:24px;
-      background: radial-gradient(circle at 50% 50%, #ff9f00, #e74c3c);
-      mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="white" d="M32 2C21 18 24 32 24 32c0 6 2 12 8 14 6-2 8-8 8-14 0-6-3-14-8-16z"/></svg>') no-repeat center / contain;
-      animation: flame 1s infinite ease-in-out;
+      width: 24px; height: 24px;
+      background: radial-gradient(circle at 50% 50%, #ff8c00, #ff4500);
+      mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="white" d="M32 2C21 18 24 32 24 32c0 6 2 12 8 14 6-2 8-8 8-14 0-6-3-14-8-16z"/></svg>') no-repeat center/contain;
+      animation: flame3d 1s infinite alternate ease-in-out;
+      border-radius: 50%;
     }
-    @keyframes flame {
-      0%,100% { transform: scale(1) rotate(0deg); opacity:1; }
-      50% { transform: scale(1.1) rotate(2deg); opacity:.8; }
+    @keyframes flame3d {
+      from { transform: translateY(0) scale(1) rotateX(0deg); opacity:1; }
+      to   { transform: translateY(-4px) scale(1.1) rotateX(15deg); opacity:0.8; }
     }
     .item-stats {
-      background:#12122f; padding:8px; font-size:.9rem;
-      border-top:1px solid #444; text-align:center; line-height:1.4;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #ddd;
+      line-height: 1.4;
     }
-    .item-stats .stat { display:block; }
-    .item-stats .date { font-size:.8rem; color:#bbb; margin-top:4px; }
+    .item-stats .date { color: #bbb; font-size:0.8rem; }
 
-    /* البحث عن الأكواد */
-    #section-search { background:#1f1f2f; }
-    .script-stats {
-      max-width:700px; margin:0 auto 40px; background:#272737;
-      border-left:5px solid #ffa600; padding:20px 25px; border-radius:8px;
-      box-shadow:0 0 15px rgba(255,166,0,.3); font-size:1rem; line-height:1.5;
+    /* ====== البحث عن الأكواد ====== */
+    #section-search {
+      background: rgba(0,0,0,0.2);
     }
-    .script-stats ul { margin-top:12px; padding-right:20px; }
+    .script-stats {
+      max-width: 720px;
+      margin: 0 auto 40px;
+      padding: 20px;
+    }
     .outer-box {
-      max-width:700px; margin:0 auto 40px; background:#272737;
-      border:3px solid #ffa600; border-radius:16px; padding:25px;
-      box-shadow:0 0 25px rgba(255,166,0,.3);
+      max-width: 720px;
+      margin: 0 auto 30px;
+      padding: 16px;
     }
     .frame-box {
-      background:#3a3a5c; border:3px dashed #ffa600; border-radius:12px;
-      padding:20px; margin-bottom:20px;
+      padding: 20px;
     }
     .inner-box {
-      background:#4b4b7c; border:3px solid #ffa600; border-radius:12px;
-      padding:20px; display:flex; gap:12px; align-items:center;
+      display: flex;
+      gap: 12px;
     }
     .inner-box input {
-      flex:1; padding:14px; border:none; border-radius:8px;
-      background:#1f1f2f; color:#ececec; box-shadow:inset 0 0 8px rgba(0,0,0,.5);
+      flex: 1;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: #fff;
+      backdrop-filter: blur(6px);
     }
     .inner-box button {
-      padding:14px 28px; border-radius:50px;
-      background:linear-gradient(45deg,#ffa600,#ff5400); color:#fff;
-      box-shadow:0 6px 20px rgba(0,0,0,.5);
-      transition:transform .3s;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      color: #fff;
+      transition: background 0.3s, transform 0.3s;
     }
-    .inner-box button:hover { transform:translateY(-4px); }
+    .inner-box button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-4px);
+    }
 
-    /* عرض الأكواد */
-    #codes-container { max-width:750px; margin:0 auto; }
+    /* ====== عرض الأكواد ====== */
+    #codes-container { max-width: 760px; margin: 0 auto; }
     .code-card {
-      position:relative; background:#2f2f4f; border-left:5px solid #ffa600;
-      border-radius:8px; padding:20px; margin-bottom:30px; overflow:hidden;
-      box-shadow:0 0 12px rgba(255,166,0,.3);
+      position: relative;
+      margin-bottom: 24px;
+      padding: 20px;
+      border-left: 4px solid #ffa500;
     }
-    .code-card.blur { filter:blur(4px); }
-    .code-card.expired::after {
-      content:"🔒 تم انتهاء الصلاحية"; position:absolute;
-      top:50%; left:50%; transform:translate(-50%,-50%);
-      background:rgba(0,0,0,.8); color:#fff; padding:8px 16px; border-radius:6px;
+    .code-card.glass {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
     }
     .code-card h3 {
-      display:inline-block; font-size:1.3rem; color:#ffab00; margin:0 10px 12px 0;
-      text-shadow:1px 1px 4px rgba(0,0,0,.7);
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      color: #ffa500;
     }
     .countdown {
-      display:inline-block; background:#c0392b; color:#fff;
-      padding:2px 8px; border-radius:4px; font-size:.9rem; margin-left:10px;
+      font-size: 0.9rem;
+      color: #ff6666;
+      margin-left: 8px;
     }
     .copy-btn {
-      position:absolute; bottom:12px; right:12px;
-      background:linear-gradient(45deg,#16a085,#1abc9c);
-      color:#fff; padding:8px 14px; border-radius:6px;
-      font-size:.9rem; box-shadow:0 4px 12px rgba(0,0,0,.5);
-      transition:transform .3s;
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      backdrop-filter: blur(6px);
+      transition: background 0.3s, transform 0.3s;
     }
-    .copy-btn:hover { transform:translateY(-3px); }
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-3px);
+    }
     .code-block {
-      background:#3b3b5b; border:1px solid #444; border-radius:6px;
-      padding:15px; overflow-x:auto; font-family:"Courier New",monospace;
-      color:#ececec; line-height:1.5; margin-top:10px;
+      background: rgba(0,0,0,0.3);
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #eee;
+    }
+    .code-card.blur { filter: blur(4px); }
+    .code-card.expired::after {
+      content: "🔒 تم انتهاء الصلاحية";
+      position: absolute;
+      top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      background: rgba(0,0,0,0.6);
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #fff;
     }
 
     /* الإشعارات */
     .notification {
-      position:fixed; top:20px; right:20px;
-      background:#27ae60; color:#fff; padding:18px 25px;
-      border-radius:8px; box-shadow:0 0 16px rgba(0,0,0,.5);
-      opacity:0; transform:translateY(-30px);
-      transition:opacity .4s,transform .4s; z-index:250; text-align:center;
+      position: fixed; top:20px; right:20px;
+      padding:14px 20px;
+      background: rgba(39,174,96,0.9);
+      border-radius:8px;
+      backdrop-filter: blur(6px);
+      color:#fff; font-size:1rem;
+      opacity:0; transform:translateY(-20px);
+      transition:opacity .4s,transform .4s;
+      z-index:1000;
     }
     .notification.show { opacity:1; transform:translateY(0); }
-    .notification.error { background:#c0392b; }
+    .notification.error { background: rgba(192,57,43,0.9); }
 
     /* التواصل */
-    #section-contact { background:#1d1d3f; }
+    #section-contact {
+      text-align: center;
+      background: rgba(0,0,0,0.2);
+    }
     .contact-info {
-      max-width:700px; margin:0 auto; background:#272737;
-      border-left:5px solid #ffa600; border-radius:8px; padding:25px 30px;
-      box-shadow:0 0 15px rgba(255,166,0,.3); line-height:1.6;
+      max-width:700px;
+      margin:0 auto;
+      padding:25px;
+    }
+    .contact-info li {
+      margin:12px 0;
     }
     .contact-info a.email-link {
-      display:inline-block; margin-top:15px; background:linear-gradient(45deg,#ffa600,#ff5400);
-      padding:10px 20px; border-radius:50px; color:#fff;
-      box-shadow:0 4px 12px rgba(0,0,0,.5); transition:transform .3s;
+      display:inline-block;
+      margin-top:8px;
+      padding:10px 18px;
+      background: rgba(255,165,0,0.9);
+      border-radius:30px;
+      color:#1a1a2e;
+      font-weight:bold;
+      transition:transform .3s;
     }
-    .contact-info a.email-link:hover { transform:translateY(-4px); }
+    .contact-info a.email-link:hover {
+      transform:translateY(-4px);
+    }
   </style>
 </head>
 <body>
 
-  <!-- زر القائمة -->
-  <div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  <!-- الهامبرجر والقائمة -->
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
   <nav class="menu-overlay" id="menu-overlay">
     <ul>
       <li><button onclick="showSection('section-intro'); toggleMenu()">الرئيسية</button></li>
@@ -213,31 +337,31 @@
 
   <!-- البحث عن الأكواد -->
   <section id="section-search">
-    <div class="script-stats">
+    <div class="script-stats glass">
       <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
       <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
     </div>
-    <div class="outer-box"><div class="frame-box"><div class="inner-box">
-      <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
-      <button onclick="showCodes()">عرض الأكواد</button>
-    </div></div></div>
+    <div class="outer-box glass"><div class="frame-box">
+      <div class="inner-box">
+        <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..."/>
+        <button onclick="showCodes()">عرض الأكواد</button>
+      </div>
+    </div></div>
     <div id="codes-container"></div>
   </section>
 
   <!-- إشعار -->
   <div id="notification" class="notification"></div>
 
-  <!-- التواصل -->
+  <!-- تواصل -->
   <section id="section-contact">
     <h2>تواصل معنا</h2>
     <p>للاستفسار أو إضافة سكربت مؤقت أو دائم، تواصل عبر البريد أو ديسكورد.</p>
-    <div class="contact-info">
-      <ul>
-        <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
-        <li><strong>Discord:</strong> RobloxHelper#1234</li>
-        <li><strong>© 2025 جميع الحقوق محفوظة.</strong></li>
-      </ul>
-    </div>
+    <ul class="contact-info glass">
+      <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
+      <li><strong>Discord:</strong> RobloxHelper#1234</li>
+      <li>© 2025 جميع الحقوق محفوظة.</li>
+    </ul>
   </section>
 
   <script>
@@ -255,179 +379,128 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // بيانات السكربتات
     const scriptsData = {
-      "سكربت الأول": [
-        { title: "كود دائم", code: "-- هذا كود دائم" }
-      ],
-      "سكربت الرابع": [
-        {
-          title: "كود مؤقت",
-          code: "-- هذا كود مؤقت",
-          expires: Date.now() + 3600*1000*24 + 60000*30  // 1 يوم + 30 دقيقة
-        }
-      ]
+      "سكربت الأول": [{ title:"كود دائم", code:"-- هذا كود دائم" }],
+      "سكربت الرابع": [{
+        title:"كود مؤقت", code:"-- هذا كود مؤقت",
+        expires: Date.now()+3600*1000*24+60000*30
+      }]
     };
+    const viewedKey="viewed", usedKey="used";
+    const viewed=JSON.parse(localStorage.getItem(viewedKey)||"[]");
+    const used=JSON.parse(localStorage.getItem(usedKey)||"[]");
 
-    // علامات لمنع التكرار
-    const viewedKey = "viewedScripts";
-    const usedKey   = "usedScripts";
-    const viewed    = JSON.parse(localStorage.getItem(viewedKey) || "[]");
-    const used      = JSON.parse(localStorage.getItem(usedKey)   || "[]");
-
-    // تنظيف الأكواد المؤقتة
-    function cleanupTemporary() {
-      const now = Date.now();
-      for (const name in scriptsData) {
-        scriptsData[name] = scriptsData[name].filter(item => !item.expires || item.expires > now);
+    function cleanup() {
+      const now=Date.now();
+      for(const n in scriptsData){
+        scriptsData[n]=scriptsData[n].filter(i=>!i.expires||i.expires>now);
       }
     }
 
-    // بناء معرض الصور
-    async function buildGallery() {
-      const gallery = document.getElementById("gallery");
-      gallery.innerHTML = "";
-      const viewsSnap = await db.ref("views").get();
-      const usesSnap  = await db.ref("uses").get();
-      const views     = viewsSnap.val() || {};
-      const uses      = usesSnap.val()  || {};
-      const datesSnap = await db.ref("usesDates").get();
-      const usesDates = datesSnap.val() || {};
-
-      const maxViews = Math.max(0, ...Object.values(views));
-
-      Object.keys(scriptsData).forEach(name => {
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "gallery-item";
-        const lastUseDate = usesDates[name] 
-          ? new Date(usesDates[name]).toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" }) 
-          : "لم يستخدم بعد";
-        itemDiv.innerHTML = `
-          <div class="item-frame">
-            <img src="https://via.placeholder.com/200x150.png?text=${encodeURIComponent(name)}" alt="${name}" />
-          </div>
-          <div class="item-name">
-            ${name}
-            ${views[name] === maxViews && maxViews>0 ? `<span class="hot-icon"></span>` : ""}
-          </div>
-          <div class="item-stats">
-            <span class="stat">المشاهدات: ${views[name]||0}</span>
-            <span class="stat">الاستخدامات: ${uses[name]||0}</span>
-            <span class="date">آخر استخدام: ${lastUseDate}</span>
-          </div>`;
-        gallery.appendChild(itemDiv);
+    async function buildGallery(){
+      const g=document.getElementById("gallery");
+      g.innerHTML="";
+      const [viewsSnap,usesSnap,datesSnap]=await Promise.all([
+        db.ref("views").get(),db.ref("uses").get(),db.ref("usesDates").get()
+      ]);
+      const views=viewsSnap.val()||{}, uses=usesSnap.val()||{}, dates=datesSnap.val()||{};
+      const maxV=Math.max(0,...Object.values(views));
+      Object.keys(scriptsData).forEach(name=>{
+        const div=document.createElement("div");div.className="gallery-item glass";
+        const last=dates[name]?new Date(dates[name]).toLocaleDateString("ar",{day:"numeric",month:"long"}):"---";
+        div.innerHTML=`
+        <div class="item-frame"><img src="https://via.placeholder.com/200x150.png?text=${encodeURIComponent(name)}" alt="${name}"/></div>
+        <div class="item-name">${name}${views[name]===maxV&&maxV>0?'<span class="hot-icon"></span>':''}</div>
+        <div class="item-stats">
+          <span class="stat">المشاهدات: ${views[name]||0}</span>
+          <span class="stat">الاستخدامات: ${uses[name]||0}</span>
+          <span class="date">آخر: ${last}</span>
+        </div>`;
+        g.appendChild(div);
       });
     }
 
-    function updateScriptStats() {
-      const names = Object.keys(scriptsData);
-      document.getElementById("script-count").textContent = names.length;
-      const list = document.getElementById("script-list");
-      list.innerHTML = "";
-      names.forEach((n,i) => {
-        const li = document.createElement("li");
-        li.textContent = `${i+1}. ${n}`;
-        list.appendChild(li);
+    function updateStats(){
+      const names=Object.keys(scriptsData);
+      document.getElementById("script-count").textContent=names.length;
+      const ul=document.getElementById("script-list");ul.innerHTML="";
+      names.forEach((n,i)=>{
+        const li=document.createElement("li");li.textContent=`${i+1}. ${n}`;
+        ul.appendChild(li);
       });
     }
 
-    // عرض الأكواد وزيادة الإحصائيات
-    function showCodes() {
-      const name = document.getElementById("script-name-input").value.trim();
-      const container = document.getElementById("codes-container");
-      container.innerHTML = "";
-      if (!scriptsData[name]) {
-        showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
-        return;
-      }
-      // عد المشاهدات
-      if (!viewed.includes(name)) {
-        db.ref("views/" + name).transaction(v => (v||0)+1);
-        viewed.push(name);
-        localStorage.setItem(viewedKey, JSON.stringify(viewed));
+    function showCodes(){
+      const name=document.getElementById("script-name-input").value.trim();
+      const cont=document.getElementById("codes-container");cont.innerHTML="";
+      if(!scriptsData[name]){notify(`"${name}" غير موجود!`,true);return;}
+      if(!viewed.includes(name)){
+        db.ref("views/"+name).transaction(v=> (v||0)+1);
+        viewed.push(name);localStorage.setItem(viewedKey,JSON.stringify(viewed));
       }
       buildGallery();
-
-      // عرض الأكواد
-      scriptsData[name].forEach(item => {
-        const card = document.createElement("div");
-        card.className = "code-card";
-        card.innerHTML = `
-          <h3>${item.title}</h3>
-          ${item.expires ? `<span class="countdown"></span>` : ""}
+      scriptsData[name].forEach(item=>{
+        const c=document.createElement("div");c.className="code-card glass";
+        c.innerHTML=`<h3>${item.title}</h3>
+          ${item.expires?'<span class="countdown"></span>':''}
           <button class="copy-btn">نسخ</button>
           <pre class="code-block">${item.code}</pre>`;
-        container.appendChild(card);
-
-        // عداد تنازلي
-        if (item.expires) {
-          const cd = card.querySelector(".countdown");
-          const timer = setInterval(() => {
-            const diff = item.expires - Date.now();
-            if (diff <= 0) {
-              clearInterval(timer);
-              card.classList.add("blur","expired");
-              cd.remove();
-              return;
-            }
-            const days = Math.floor(diff/86400000);
-            const hrs  = Math.floor((diff%86400000)/3600000);
-            const mins = Math.floor((diff%3600000)/60000);
-            const secs = Math.floor((diff%60000)/1000);
-            cd.textContent = `${days}ي ${hrs}س ${mins}د ${secs}ث`;
+        cont.appendChild(c);
+        if(item.expires){
+          const cd=c.querySelector(".countdown"), exp=item.expires;
+          const iv=setInterval(()=>{
+            const d=exp-Date.now();
+            if(d<=0){clearInterval(iv);c.classList.add("blur","expired");cd.remove();return;}
+            const days=Math.floor(d/86400000), hrs=Math.floor(d%86400000/3600000),
+                  mins=Math.floor(d%3600000/60000), secs=Math.floor(d%60000/1000);
+            cd.textContent=`${days}ي ${hrs}س ${mins}د ${secs}ث`;
           },500);
         }
-
-        // زر النسخ والاستخدام
-        const btn = card.querySelector(".copy-btn");
-        btn.addEventListener("click", () => {
-          navigator.clipboard.writeText(item.code).then(() => {
-            if (!used.includes(name)) {
-              // زيادة الاستخدام
-              db.ref("uses/" + name).transaction(v => (v||0)+1);
-              // تسجيل تاريخ الاستخدام
-              db.ref("usesDates/" + name).set(Date.now());
-              used.push(name);
-              localStorage.setItem(usedKey, JSON.stringify(used));
+        const btn=c.querySelector(".copy-btn");
+        btn.addEventListener("click",()=>{
+          navigator.clipboard.writeText(item.code).then(()=>{
+            if(!used.includes(name)){
+              db.ref("uses/"+name).transaction(v=> (v||0)+1);
+              db.ref("usesDates/"+name).set(Date.now());
+              used.push(name);localStorage.setItem(usedKey,JSON.stringify(used));
               buildGallery();
             }
-            showNotification("تم النسخ!", false);
+            notify("تم النسخ!",false);
           });
         });
       });
-      document.getElementById("script-name-input").value = "";
-      showNotification(`تم عرض أكواد "${name}"!`, false);
+      document.getElementById("script-name-input").value="";
+      notify(`تم عرض أكواد "${name}"!`,false);
     }
 
-    function showNotification(msg, isErr) {
-      const n = document.getElementById("notification");
-      n.textContent = msg;
-      n.classList.toggle("error", isErr);
+    function notify(msg,err){
+      const n=document.getElementById("notification");
+      n.textContent=msg;
+      n.classList.toggle("error",err);
       n.classList.add("show");
-      setTimeout(() => n.classList.remove("show"), 3000);
+      setTimeout(()=>n.classList.remove("show"),3000);
     }
 
-    function showSection(id) {
-      ["section-intro","section-search","section-contact"].forEach(sec=>{
-        document.getElementById(sec).style.display = sec===id ? "block":"none";
+    function showSection(id){
+      ["section-intro","section-search","section-contact"].forEach(s=>{
+        document.getElementById(s).style.display=s===id?"block":"none";
       });
-      if (id==="section-search") updateScriptStats();
+      if(id==="section-search") updateStats();
     }
-    function toggleMenu() {
-      const nav = document.getElementById("menu-overlay");
+    function toggleMenu(){
+      const nav=document.getElementById("menu-overlay");
       nav.classList.toggle("show");
-      const spans = document.querySelectorAll(".menu-btn span");
-      if (nav.classList.contains("show")) {
-        spans[0].style.transform="rotate(45deg) translate(5px,5px)";
-        spans[1].style.opacity="0";
-        spans[2].style.transform="rotate(-45deg) translate(6px,-6px)";
-      } else spans.forEach(s=>{ s.style.transform=""; s.style.opacity="1"; });
+      document.querySelectorAll(".menu-btn span").forEach((sp,i)=>{
+        if(nav.classList.contains("show")){
+          if(i===0) sp.style.transform="rotate(45deg) translate(5px,5px)";
+          if(i===1) sp.style.opacity="0";
+          if(i===2) sp.style.transform="rotate(-45deg) translate(6px,-6px)";
+        } else sp.style.transform=sp.style.opacity="";
+      });
     }
 
-    window.onload = () => {
-      cleanupTemporary();
-      buildGallery();
-      showSection("section-intro");
+    window.onload=()=>{
+      cleanup();buildGallery();showSection("section-intro");
     };
   </script>
 </body>
