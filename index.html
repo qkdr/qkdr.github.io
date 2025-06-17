@@ -12,208 +12,189 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body {
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: #0d0d1a; color:#f2f2f2;
-      direction: rtl; overflow-x:hidden; min-height:100vh;
+      font-family: Arial, sans-serif;
+      background: #0f0f1a; color: #ececec; direction:rtl;
+      overflow-x:hidden; min-height:100vh;
     }
+    button { cursor:pointer; border:none; background:none; font-family:inherit; }
     a { color:inherit; text-decoration:none; }
     ul { list-style:none; }
-    button { font-family:inherit; cursor:pointer; border:none; background:none; }
 
-    /* ======== الهامبرجر والقائمة ======== */
-    .menu-btn { position:fixed; top:20px; left:20px; width:30px; height:24px;
+    /* الهامبرجر والقائمة */
+    .menu-btn { position:fixed; top:15px; left:15px; width:35px; height:28px;
       display:flex; flex-direction:column; justify-content:space-between; z-index:200; }
-    .menu-btn span { display:block; height:4px; background:#fff; border-radius:2px;
+    .menu-btn span { display:block; height:4px; background:#ececec; border-radius:2px;
       transition:transform .3s, opacity .3s; }
     .menu-overlay {
-      position:fixed; top:0; left:-260px; width:260px; height:100%;
-      background:rgba(30,30,50,.95); backdrop-filter:blur(6px);
-      transition:left .4s ease; padding-top:80px; z-index:150;
+      position:fixed; top:0; left:-100%; width:260px; height:100%;
+      background:#1b1b2e; box-shadow:2px 0 12px rgba(0,0,0,.7);
+      transition:left .4s ease; padding-top:60px; z-index:150;
     }
     .menu-overlay.show { left:0; }
     .menu-overlay ul { display:flex; flex-direction:column; align-items:flex-end; }
     .menu-overlay li { margin:20px; }
     .menu-overlay button {
-      display:block; width:100%; text-align:right; padding:12px 20px;
-      background:linear-gradient(135deg,#2a2a4a,#1a1a30);
-      color:#ffd700; border-radius:30px; font-size:1rem;
-      box-shadow:0 4px 12px rgba(0,0,0,.6); transition:background .3s;
-    }
-    .menu-overlay button:hover {
-      background:linear-gradient(135deg,#ffd700,#ffaa00); color:#000;
-    }
-
-    /* ======== شريحة المحتوى ======== */
-    section { display:none; padding:100px 20px 60px; min-height:100vh; }
-
-    /* ======== المقدمة ======== */
-    #section-intro { display:block;
-      background:linear-gradient(135deg,#1a1a2e,#16213e);
-      text-align:center;
-    }
-    #section-intro h1 {
-      font-size:3rem; margin-bottom:20px; color:#ffd700;
-      text-shadow:2px 2px 12px rgba(0,0,0,.7);
-    }
-    #section-intro p {
-      font-size:1.2rem; max-width:800px; margin:0 auto 40px;
-      line-height:1.6; color:#ddd;
-    }
-    #section-intro button {
-      padding:15px 35px; font-size:1.1rem; border-radius:50px;
-      background:linear-gradient(135deg,#ffd700,#ffaa00);
-      color:#000; box-shadow:0 6px 20px rgba(0,0,0,.7);
+      background: linear-gradient(45deg,#3a0f75,#6b1fcf);
+      color:#fff; padding:12px 20px; border-radius:30px;
+      width:100%; text-align:right; box-shadow:0 4px 12px rgba(0,0,0,.5);
       transition:transform .3s;
     }
-    #section-intro button:hover {
-      transform:translateY(-4px);
-    }
+    .menu-overlay button:hover { transform:translateX(-8px); }
 
-    /* ======== معرض الصور ======== */
+    /* أقسام الموقع */
+    section { display:none; padding:80px 20px; }
+    #section-intro { display:block;
+      background:linear-gradient(135deg,#1b1b2f,#2b2b3f); text-align:center;
+    }
+    #section-intro h1 { font-size:3rem; margin-bottom:20px; color:#ffa600;
+      text-shadow:2px 2px 8px rgba(0,0,0,.7); }
+    #section-intro p { font-size:1.2rem; max-width:800px; margin:0 auto 30px; line-height:1.8; }
+    #section-intro button {
+      padding:15px 30px; font-size:1.1rem; border-radius:50px;
+      background:linear-gradient(45deg,#16a085,#1abc9c); color:#fff;
+      box-shadow:0 6px 20px rgba(0,0,0,.5);
+      transition:transform .3s;
+    }
+    #section-intro button:hover { transform:translateY(-4px); }
+
+    /* معرض الصور مع الإحصائيات */
     .gallery {
       display:flex; flex-wrap:wrap; justify-content:center;
-      gap:30px; margin-top:40px; max-width:1000px; margin-left:auto;margin-right:auto;
+      gap:30px; margin-top:40px; max-width:1000px; margin:40px auto;
     }
     .gallery-item {
-      position:relative; width:220px; background:rgba(20,20,40,.8);
-      border:2px solid #ffd700; border-radius:15px; overflow:hidden;
-      box-shadow:0 8px 20px rgba(0,0,0,.7); transition:transform .3s;
+      position:relative; background:#272737; border:3px solid #ffa600;
+      border-radius:16px; width:200px; overflow:hidden;
+      box-shadow:0 0 30px rgba(255,166,0,.3);
+      transition:transform .3s, box-shadow .3s;
     }
-    .gallery-item:hover { transform:translateY(-10px); }
-    .item-frame {
-      padding:10px; background:rgba(30,30,60,.9); text-align:center;
+    .gallery-item:hover {
+      transform:translateY(-10px);
+      box-shadow:0 0 40px rgba(255,166,0,.5);
     }
-    .item-frame img {
-      width:100%; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,.7);
-    }
+    .item-frame { padding:12px; background:#3a3a5c; border-bottom:3px solid #ffa600; }
+    .item-frame img { width:100%; border-radius:12px; }
     .item-name {
-      padding:10px; font-size:1rem; color:#ffd700;
-      background:rgba(20,20,40,.9); border-top:2px solid #ffaa00;
+      background:#1f1f2f; padding:12px; color:#ffa600; font-size:1rem;
+      border-top:3px solid #ffa600; text-shadow:1px 1px 4px rgba(0,0,0,.7);
+      display:flex; align-items:center; justify-content:center; gap:6px;
+    }
+    /* أيقونة نار ثلاثية الأبعاد CSS */
+    .hot-icon {
+      width:24px; height:24px;
+      background: radial-gradient(circle at 50% 50%, #ff9f00, #e74c3c);
+      mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="white" d="M32 2C21 18 24 32 24 32c0 6 2 12 8 14 6-2 8-8 8-14 0-6-3-14-8-16z"/></svg>') no-repeat center / contain;
+      animation: flame 1s infinite ease-in-out;
+    }
+    @keyframes flame {
+      0%,100% { transform: scale(1) rotate(0deg); opacity:1; }
+      50% { transform: scale(1.1) rotate(2deg); opacity:.8; }
     }
     .item-stats {
-      background:rgba(15,15,30,.9); padding:8px; font-size:.9rem;
-      border-top:1px solid #333; text-align:center; line-height:1.4;
+      background:#12122f; padding:8px; font-size:.9rem;
+      border-top:1px solid #444; text-align:center; line-height:1.4;
     }
-    .item-stats .stat { display:block; margin:4px 0; }
-    .item-stats .hot-icon {
-      display:inline-block; margin-left:6px;
-      width:24px;height:24px;
-      background:url('https://i.imgur.com/3dXhX7s.gif') center/contain no-repeat;
-      vertical-align:middle;
-    }
+    .item-stats .stat { display:block; }
+    .item-stats .date { font-size:.8rem; color:#bbb; margin-top:4px; }
 
-    /* ======== البحث عن الأكواد ======== */
-    #section-search { background:linear-gradient(135deg,#16213e,#0b0c10); }
+    /* البحث عن الأكواد */
+    #section-search { background:#1f1f2f; }
     .script-stats {
-      max-width:700px; margin:0 auto 40px; padding:20px;
-      background:rgba(20,20,40,.8); border-left:5px solid #ffd700;
-      border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.6);
-      color:#ddd; font-size:1rem; line-height:1.5;
+      max-width:700px; margin:0 auto 40px; background:#272737;
+      border-left:5px solid #ffa600; padding:20px 25px; border-radius:8px;
+      box-shadow:0 0 15px rgba(255,166,0,.3); font-size:1rem; line-height:1.5;
     }
     .script-stats ul { margin-top:12px; padding-right:20px; }
-    .script-stats li { margin-bottom:8px; }
-
     .outer-box {
-      max-width:700px; margin:0 auto; padding:30px;
-      background:rgba(30,30,60,.8); border:2px solid #ffaa00;
-      border-radius:15px; box-shadow:0 8px 24px rgba(0,0,0,.7);
+      max-width:700px; margin:0 auto 40px; background:#272737;
+      border:3px solid #ffa600; border-radius:16px; padding:25px;
+      box-shadow:0 0 25px rgba(255,166,0,.3);
+    }
+    .frame-box {
+      background:#3a3a5c; border:3px dashed #ffa600; border-radius:12px;
+      padding:20px; margin-bottom:20px;
     }
     .inner-box {
-      display:flex; gap:15px; align-items:center;
-      background:rgba(20,20,40,.9); padding:20px;
-      border:2px dashed #ffd700; border-radius:12px;
+      background:#4b4b7c; border:3px solid #ffa600; border-radius:12px;
+      padding:20px; display:flex; gap:12px; align-items:center;
     }
     .inner-box input {
-      flex:1; padding:12px; font-size:1rem;
-      border-radius:8px; border:none;
-      background:rgba(10,10,30,.8); color:#eee;
+      flex:1; padding:14px; border:none; border-radius:8px;
+      background:#1f1f2f; color:#ececec; box-shadow:inset 0 0 8px rgba(0,0,0,.5);
     }
     .inner-box button {
-      padding:12px 28px; font-size:1rem; border-radius:50px;
-      background:linear-gradient(135deg,#ffd700,#ffaa00);
-      color:#000; box-shadow:0 6px 20px rgba(0,0,0,.7);
+      padding:14px 28px; border-radius:50px;
+      background:linear-gradient(45deg,#ffa600,#ff5400); color:#fff;
+      box-shadow:0 6px 20px rgba(0,0,0,.5);
       transition:transform .3s;
     }
-    .inner-box button:hover { transform:translateY(-3px); }
+    .inner-box button:hover { transform:translateY(-4px); }
 
-    /* ======== عرض الأكواد ======== */
-    #codes-container { max-width:800px; margin:0 auto; }
+    /* عرض الأكواد */
+    #codes-container { max-width:750px; margin:0 auto; }
     .code-card {
-      position:relative; background:rgba(20,20,40,.9);
-      padding:25px; margin-bottom:30px; border-left:5px solid #ffaa00;
-      border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,.7);
-      overflow:hidden;
+      position:relative; background:#2f2f4f; border-left:5px solid #ffa600;
+      border-radius:8px; padding:20px; margin-bottom:30px; overflow:hidden;
+      box-shadow:0 0 12px rgba(255,166,0,.3);
     }
-    .code-card.blur { filter:blur(5px); }
+    .code-card.blur { filter:blur(4px); }
     .code-card.expired::after {
-      content:"🔒 انتهاء الصلاحية"; position:absolute;
+      content:"🔒 تم انتهاء الصلاحية"; position:absolute;
       top:50%; left:50%; transform:translate(-50%,-50%);
-      background:rgba(0,0,0,.8); color:#ffd700; padding:10px 16px;
-      border-radius:8px; font-size:1rem;
+      background:rgba(0,0,0,.8); color:#fff; padding:8px 16px; border-radius:6px;
     }
     .code-card h3 {
-      color:#ffd700; font-size:1.3rem; margin-bottom:12px;
-      text-shadow:1px 1px 6px rgba(0,0,0,.7);
+      display:inline-block; font-size:1.3rem; color:#ffab00; margin:0 10px 12px 0;
+      text-shadow:1px 1px 4px rgba(0,0,0,.7);
     }
     .countdown {
-      display:inline-block; margin-left:12px;
-      background:#e74c3c; color:#fff; padding:4px 10px;
-      border-radius:6px; font-size:.9rem;
+      display:inline-block; background:#c0392b; color:#fff;
+      padding:2px 8px; border-radius:4px; font-size:.9rem; margin-left:10px;
     }
     .copy-btn {
-      position:absolute; top:16px; right:16px;
-      background:#27ae60; color:#fff; padding:6px 12px;
-      border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,.7);
-      transition:background .3s;
+      position:absolute; bottom:12px; right:12px;
+      background:linear-gradient(45deg,#16a085,#1abc9c);
+      color:#fff; padding:8px 14px; border-radius:6px;
+      font-size:.9rem; box-shadow:0 4px 12px rgba(0,0,0,.5);
+      transition:transform .3s;
     }
-    .copy-btn:hover { background:#2ecc71; }
-
+    .copy-btn:hover { transform:translateY(-3px); }
     .code-block {
-      background:rgba(10,10,30,.8); padding:20px;
-      border-radius:6px; font-family:"Courier New",monospace;
-      font-size:.95rem; line-height:1.6; color:#ddd;
-      overflow-x:auto; box-shadow:inset 0 4px 12px rgba(0,0,0,.7);
-      margin-top:12px;
+      background:#3b3b5b; border:1px solid #444; border-radius:6px;
+      padding:15px; overflow-x:auto; font-family:"Courier New",monospace;
+      color:#ececec; line-height:1.5; margin-top:10px;
     }
 
-    /* ======== الإشعارات ======== */
+    /* الإشعارات */
     .notification {
-      position:fixed; top:20px; right:20px; padding:18px 30px;
-      background:rgba(39,174,96,.95); color:#fff; border-radius:8px;
-      box-shadow:0 6px 20px rgba(0,0,0,.7);
+      position:fixed; top:20px; right:20px;
+      background:#27ae60; color:#fff; padding:18px 25px;
+      border-radius:8px; box-shadow:0 0 16px rgba(0,0,0,.5);
       opacity:0; transform:translateY(-30px);
-      transition:opacity .4s, transform .4s; z-index:300;
-      font-size:1rem; text-align:center;
+      transition:opacity .4s,transform .4s; z-index:250; text-align:center;
     }
     .notification.show { opacity:1; transform:translateY(0); }
-    .notification.error { background:rgba(192,57,43,.95); }
+    .notification.error { background:#c0392b; }
 
-    /* ======== تواصل ======== */
-    #section-contact { background:linear-gradient(135deg,#16213e,#0b0c10); }
+    /* التواصل */
+    #section-contact { background:#1d1d3f; }
     .contact-info {
-      max-width:700px; margin:0 auto; padding:30px;
-      background:rgba(20,20,40,.8); border-left:5px solid #ffaa00;
-      border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.7);
-      line-height:1.6; color:#ddd;
+      max-width:700px; margin:0 auto; background:#272737;
+      border-left:5px solid #ffa600; border-radius:8px; padding:25px 30px;
+      box-shadow:0 0 15px rgba(255,166,0,.3); line-height:1.6;
     }
     .contact-info a.email-link {
-      display:inline-block; margin-top:20px; padding:10px 22px;
-      background:linear-gradient(135deg,#ffd700,#ffaa00); color:#000;
-      border-radius:50px; box-shadow:0 6px 20px rgba(0,0,0,.7);
-      transition:transform .3s; font-size:1rem;
+      display:inline-block; margin-top:15px; background:linear-gradient(45deg,#ffa600,#ff5400);
+      padding:10px 20px; border-radius:50px; color:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,.5); transition:transform .3s;
     }
-    .contact-info a.email-link:hover {
-      transform:translateY(-4px);
-    }
-
+    .contact-info a.email-link:hover { transform:translateY(-4px); }
   </style>
 </head>
 <body>
 
   <!-- زر القائمة -->
-  <div class="menu-btn" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   <nav class="menu-overlay" id="menu-overlay">
     <ul>
       <li><button onclick="showSection('section-intro'); toggleMenu()">الرئيسية</button></li>
@@ -222,11 +203,11 @@
     </ul>
   </nav>
 
-  <!-- مقدمة مع معرض -->
+  <!-- المقدمة -->
   <section id="section-intro">
-    <h1>مرحباً بك في موقع أكواد سكربتات روبلوکس</h1>
+    <h1>مرحباً بك في موقع أكواد سكربتات روبلوكس</h1>
     <p>استعرض أحدث السكربتات وصورها مع إحصائيات المشاهدات والاستخدامات.</p>
-    <button onclick="showSection('section-search')">الانتقال إلى البحث عن الأكواد</button>
+    <button onclick="showSection('section-search')">اذهب إلى البحث عن الأكواد</button>
     <div class="gallery" id="gallery"></div>
   </section>
 
@@ -236,26 +217,25 @@
       <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
       <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
     </div>
-    <div class="outer-box">
-      <div class="inner-box">
-        <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
-        <button onclick="showCodes()">عرض الأكواد</button>
-      </div>
-    </div>
+    <div class="outer-box"><div class="frame-box"><div class="inner-box">
+      <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+      <button onclick="showCodes()">عرض الأكواد</button>
+    </div></div></div>
     <div id="codes-container"></div>
   </section>
 
   <!-- إشعار -->
   <div id="notification" class="notification"></div>
 
-  <!-- تواصل -->
+  <!-- التواصل -->
   <section id="section-contact">
     <h2>تواصل معنا</h2>
-    <p>للاستفسار أو اقتراح أو إضافة سكربت جديد، تواصل عبر:</p>
+    <p>للاستفسار أو إضافة سكربت مؤقت أو دائم، تواصل عبر البريد أو ديسكورد.</p>
     <div class="contact-info">
       <ul>
         <li><strong>البريد الإلكتروني:</strong> <a href="mailto:example@example.com" class="email-link">example@example.com</a></li>
         <li><strong>Discord:</strong> RobloxHelper#1234</li>
+        <li><strong>© 2025 جميع الحقوق محفوظة.</strong></li>
       </ul>
     </div>
   </section>
@@ -277,113 +257,177 @@
 
     // بيانات السكربتات
     const scriptsData = {
-      "سكربت الأول": [{ title:"كود دائم", code:"-- كود دائم" }],
-      "سكربت الرابع":[{ title:"كود مؤقت", code:"-- كود مؤقت", expires:Date.now()+3600*1000*24 }]
+      "سكربت الأول": [
+        { title: "كود دائم", code: "-- هذا كود دائم" }
+      ],
+      "سكربت الرابع": [
+        {
+          title: "كود مؤقت",
+          code: "-- هذا كود مؤقت",
+          expires: Date.now() + 3600*1000*24 + 60000*30  // 1 يوم + 30 دقيقة
+        }
+      ]
     };
 
-    // منع التسجيل المكرر
-    const viewedKey="viewed", usedKey="used";
-    const viewed=JSON.parse(localStorage.getItem(viewedKey)||"[]");
-    const used =JSON.parse(localStorage.getItem(usedKey )||"[]");
+    // علامات لمنع التكرار
+    const viewedKey = "viewedScripts";
+    const usedKey   = "usedScripts";
+    const viewed    = JSON.parse(localStorage.getItem(viewedKey) || "[]");
+    const used      = JSON.parse(localStorage.getItem(usedKey)   || "[]");
 
-    // تنظيف مؤقت
-    function cleanup() {
-      const now=Date.now();
-      for(let n in scriptsData){
-        scriptsData[n]=scriptsData[n].filter(i=>!i.expires||i.expires>now);
+    // تنظيف الأكواد المؤقتة
+    function cleanupTemporary() {
+      const now = Date.now();
+      for (const name in scriptsData) {
+        scriptsData[name] = scriptsData[name].filter(item => !item.expires || item.expires > now);
       }
     }
 
-    // إنشاء المعرض
-    async function buildGallery(){
-      const g=document.getElementById("gallery");
-      g.innerHTML="";
-      const views=await (await db.ref("views").get()).val()||{};
-      const uses =await (await db.ref("uses" ).get()).val()||{};
-      const maxV=Math.max(0,...Object.values(views));
-      Object.keys(scriptsData).forEach(name=>{
-        const div=document.createElement("div");
-        div.className="gallery-item";
-        div.innerHTML=`
-          <div class="item-frame"><img src="https://via.placeholder.com/200x150?text=${encodeURIComponent(name)}" alt="${name}"></div>
-          <div class="item-name">${name}${views[name]===maxV&&maxV>0?'<span class="hot-icon"></span>':''}</div>
+    // بناء معرض الصور
+    async function buildGallery() {
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = "";
+      const viewsSnap = await db.ref("views").get();
+      const usesSnap  = await db.ref("uses").get();
+      const views     = viewsSnap.val() || {};
+      const uses      = usesSnap.val()  || {};
+      const datesSnap = await db.ref("usesDates").get();
+      const usesDates = datesSnap.val() || {};
+
+      const maxViews = Math.max(0, ...Object.values(views));
+
+      Object.keys(scriptsData).forEach(name => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "gallery-item";
+        const lastUseDate = usesDates[name] 
+          ? new Date(usesDates[name]).toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" }) 
+          : "لم يستخدم بعد";
+        itemDiv.innerHTML = `
+          <div class="item-frame">
+            <img src="https://via.placeholder.com/200x150.png?text=${encodeURIComponent(name)}" alt="${name}" />
+          </div>
+          <div class="item-name">
+            ${name}
+            ${views[name] === maxViews && maxViews>0 ? `<span class="hot-icon"></span>` : ""}
+          </div>
           <div class="item-stats">
             <span class="stat">المشاهدات: ${views[name]||0}</span>
             <span class="stat">الاستخدامات: ${uses[name]||0}</span>
+            <span class="date">آخر استخدام: ${lastUseDate}</span>
           </div>`;
-        g.appendChild(div);
+        gallery.appendChild(itemDiv);
       });
     }
 
-    // إحصائيات البحث
-    function updateStats(){
-      const names=Object.keys(scriptsData);
-      document.getElementById("script-count").textContent=names.length;
-      const ul=document.getElementById("script-list");
-      ul.innerHTML="";
-      names.forEach((n,i)=>{ let li=document.createElement("li"); li.textContent=`${i+1}. ${n}`; ul.appendChild(li); });
+    function updateScriptStats() {
+      const names = Object.keys(scriptsData);
+      document.getElementById("script-count").textContent = names.length;
+      const list = document.getElementById("script-list");
+      list.innerHTML = "";
+      names.forEach((n,i) => {
+        const li = document.createElement("li");
+        li.textContent = `${i+1}. ${n}`;
+        list.appendChild(li);
+      });
     }
 
-    // عرض الأكواد وتحديث DB
-    function showCodes(){
-      const name=document.getElementById("script-name-input").value.trim();
-      const cont=document.getElementById("codes-container");
-      cont.innerHTML="";
-      if(!scriptsData[name]){ notify(`لا يوجد سكربت "${name}"!`,true); return; }
-      if(!viewed.includes(name)){ db.ref("views/"+name).transaction(v=>(v||0)+1); viewed.push(name); localStorage.setItem(viewedKey,JSON.stringify(viewed)); }
+    // عرض الأكواد وزيادة الإحصائيات
+    function showCodes() {
+      const name = document.getElementById("script-name-input").value.trim();
+      const container = document.getElementById("codes-container");
+      container.innerHTML = "";
+      if (!scriptsData[name]) {
+        showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
+        return;
+      }
+      // عد المشاهدات
+      if (!viewed.includes(name)) {
+        db.ref("views/" + name).transaction(v => (v||0)+1);
+        viewed.push(name);
+        localStorage.setItem(viewedKey, JSON.stringify(viewed));
+      }
       buildGallery();
-      scriptsData[name].forEach(item=>{
-        const card=document.createElement("div"); card.className="code-card";
-        card.innerHTML=`<h3>${item.title}</h3>${item.expires?'<span class="countdown"></span>':''}<button class="copy-btn">نسخ</button><pre class="code-block">${item.code}</pre>`;
-        cont.appendChild(card);
-        if(item.expires){
-          const cd=card.querySelector(".countdown"), exp=item.expires;
-          let t=setInterval(()=>{
-            let d=exp-Date.now();
-            if(d<=0){ clearInterval(t); card.classList.add("blur","expired"); cd.remove(); return; }
-            let days=Math.floor(d/86400000), hrs=Math.floor((d%86400000)/3600000),
-                mins=Math.floor((d%3600000)/60000), secs=Math.floor((d%60000)/1000);
-            cd.textContent=`${days}ي ${hrs}س ${mins}د ${secs}ث`;
+
+      // عرض الأكواد
+      scriptsData[name].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "code-card";
+        card.innerHTML = `
+          <h3>${item.title}</h3>
+          ${item.expires ? `<span class="countdown"></span>` : ""}
+          <button class="copy-btn">نسخ</button>
+          <pre class="code-block">${item.code}</pre>`;
+        container.appendChild(card);
+
+        // عداد تنازلي
+        if (item.expires) {
+          const cd = card.querySelector(".countdown");
+          const timer = setInterval(() => {
+            const diff = item.expires - Date.now();
+            if (diff <= 0) {
+              clearInterval(timer);
+              card.classList.add("blur","expired");
+              cd.remove();
+              return;
+            }
+            const days = Math.floor(diff/86400000);
+            const hrs  = Math.floor((diff%86400000)/3600000);
+            const mins = Math.floor((diff%3600000)/60000);
+            const secs = Math.floor((diff%60000)/1000);
+            cd.textContent = `${days}ي ${hrs}س ${mins}د ${secs}ث`;
           },500);
         }
-        card.querySelector(".copy-btn").onclick=()=>{
-          navigator.clipboard.writeText(item.code).then(()=>{
-            if(!used.includes(name)){ db.ref("uses/"+name).transaction(v=>(v||0)+1); used.push(name); localStorage.setItem(usedKey,JSON.stringify(used)); buildGallery(); }
-            notify("تم النسخ!");
+
+        // زر النسخ والاستخدام
+        const btn = card.querySelector(".copy-btn");
+        btn.addEventListener("click", () => {
+          navigator.clipboard.writeText(item.code).then(() => {
+            if (!used.includes(name)) {
+              // زيادة الاستخدام
+              db.ref("uses/" + name).transaction(v => (v||0)+1);
+              // تسجيل تاريخ الاستخدام
+              db.ref("usesDates/" + name).set(Date.now());
+              used.push(name);
+              localStorage.setItem(usedKey, JSON.stringify(used));
+              buildGallery();
+            }
+            showNotification("تم النسخ!", false);
           });
-        };
+        });
       });
-      document.getElementById("script-name-input").value="";
-      notify(`تم عرض أكواد "${name}"!`);
+      document.getElementById("script-name-input").value = "";
+      showNotification(`تم عرض أكواد "${name}"!`, false);
     }
 
-    // إشعار
-    function notify(msg,err=false){
-      const n=document.getElementById("notification");
-      n.textContent=msg; n.classList.toggle("error",err); n.classList.add("show");
-      setTimeout(()=>n.classList.remove("show"),3000);
+    function showNotification(msg, isErr) {
+      const n = document.getElementById("notification");
+      n.textContent = msg;
+      n.classList.toggle("error", isErr);
+      n.classList.add("show");
+      setTimeout(() => n.classList.remove("show"), 3000);
     }
 
-    // تنقل + هامبرجر
-    function showSection(id){
-      ["section-intro","section-search","section-contact"].forEach(s=>{
-        document.getElementById(s).style.display=s===id?"block":"none";
+    function showSection(id) {
+      ["section-intro","section-search","section-contact"].forEach(sec=>{
+        document.getElementById(sec).style.display = sec===id ? "block":"none";
       });
-      if(id==="section-search")updateStats();
+      if (id==="section-search") updateScriptStats();
     }
-    function toggleMenu(){
-      const m=document.getElementById("menu-overlay"),spans=document.querySelectorAll(".menu-btn span");
-      m.classList.toggle("show");
-      if(m.classList.contains("show")){
+    function toggleMenu() {
+      const nav = document.getElementById("menu-overlay");
+      nav.classList.toggle("show");
+      const spans = document.querySelectorAll(".menu-btn span");
+      if (nav.classList.contains("show")) {
         spans[0].style.transform="rotate(45deg) translate(5px,5px)";
         spans[1].style.opacity="0";
         spans[2].style.transform="rotate(-45deg) translate(6px,-6px)";
-      } else spans.forEach(s=>{s.style.transform="";s.style.opacity="1";});
+      } else spans.forEach(s=>{ s.style.transform=""; s.style.opacity="1"; });
     }
 
-    // بدء
-    window.onload=()=>{
-      cleanup(); buildGallery(); showSection("section-intro");
+    window.onload = () => {
+      cleanupTemporary();
+      buildGallery();
+      showSection("section-intro");
     };
   </script>
 </body>
