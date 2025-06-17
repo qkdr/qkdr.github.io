@@ -9,181 +9,212 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     /* ======== إعدادات عامة ======== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: Arial, sans-serif;
-      background: #121212; color: #e0e0e0; direction:rtl;
-      overflow-x:hidden; min-height:100vh;
+      background: #121212;
+      color: #e0e0e0;
+      direction: rtl;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
-    button { cursor:pointer; border:none; background:none; font-family:inherit; }
-    a { color:inherit; text-decoration:none; }
-    ul { list-style:none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
 
     /* الهامبرجر والقائمة */
-    .menu-btn { position:fixed; top:15px; left:15px; width:35px; height:28px;
-      display:flex; flex-direction:column; justify-content:space-between; z-index:200; }
-    .menu-btn span { display:block; height:4px; background:#e0e0e0; border-radius:2px;
-      transition:transform .3s, opacity .3s; }
-    .menu-overlay {
-      position:fixed; top:0; left:-100%; width:250px; height:100%;
-      background:#1f1f1f; box-shadow:2px 0 12px rgba(0,0,0,.7);
-      transition:left .4s ease; padding-top:60px; z-index:150;
+    .menu-btn {
+      position: fixed; top: 15px; left: 15px;
+      width: 35px; height: 28px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      z-index: 200;
     }
-    .menu-overlay.show { left:0; }
-    .menu-overlay ul { display:flex; flex-direction:column; align-items:flex-end; }
-    .menu-overlay li { margin:15px 20px; }
+    .menu-btn span {
+      display: block; height: 4px; background: #e0e0e0; border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .menu-overlay {
+      position: fixed; top: 0; left: -100%;
+      width: 250px; height: 100%;
+      background: #1f1f1f; box-shadow: 2px 0 12px rgba(0,0,0,.7);
+      transition: left .4s ease;
+      padding-top: 60px; z-index: 150;
+    }
+    .menu-overlay.show { left: 0; }
+    .menu-overlay ul { display: flex; flex-direction: column; align-items: flex-end; }
+    .menu-overlay li { margin: 15px 20px; }
     .menu-overlay button {
-      background:#272727; color:#f1c40f; padding:10px 18px; border-radius:25px;
-      width:100%; text-align:right; box-shadow:0 2px 8px rgba(0,0,0,.5);
-      transition:background .3s, transform .3s;
+      background: #272727; color: #f1c40f; padding: 10px 18px; border-radius: 25px;
+      width: 100%; text-align: right; box-shadow: 0 2px 8px rgba(0,0,0,.5);
+      transition: background .3s, transform .3s;
     }
     .menu-overlay button:hover {
-      background:#f1c40f; color:#1f1f1f; transform:translateX(-5px);
+      background: #f1c40f; color: #1f1f1f; transform: translateX(-5px);
     }
 
-    /* أقسام الموقع */
-    section { display:none; padding:60px 20px; }
-    #section-intro { display:block;
-      background:linear-gradient(135deg,#1b1b2f,#2b2b3f); text-align:center; padding-top:100px;
+    /* أقسام الموقع بعرض كامل */
+    section {
+      display: none;
+      padding: 60px 20px;
+      width: 100vw;
+      box-sizing: border-box;
     }
-    #section-intro h1 { font-size:3rem; margin-bottom:20px; color:#f1c40f;
-      text-shadow:2px 2px 8px rgba(0,0,0,.6); }
-    #section-intro p { font-size:1.2rem; max-width:800px; margin:0 auto 30px; line-height:1.8; }
+    #section-intro { display: block;
+      background: linear-gradient(135deg,#1b1b2f,#2b2b3f);
+      text-align: center; padding-top: 100px;
+    }
+    #section-intro h1 {
+      font-size: 3rem; margin-bottom: 20px; color: #f1c40f;
+      text-shadow: 2px 2px 8px rgba(0,0,0,.6);
+    }
+    #section-intro p {
+      font-size: 1.2rem; max-width: 90%; margin: 0 auto 30px; line-height: 1.8;
+    }
     #section-intro button {
-      padding:15px 30px; font-size:1.1rem; border-radius:50px;
-      background:linear-gradient(45deg,#16a085,#1abc9c); color:#fff;
-      box-shadow:0 4px 15px rgba(0,0,0,.4); transition:transform .3s,box-shadow .3s;
-      margin-bottom:40px;
+      padding: 15px 30px; font-size: 1.1rem; border-radius: 50px;
+      background: linear-gradient(45deg,#16a085,#1abc9c); color: #fff;
+      box-shadow: 0 4px 15px rgba(0,0,0,.4);
+      transition: transform .3s,box-shadow .3s; margin-bottom: 40px;
     }
     #section-intro button:hover {
-      transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,.6);
+      transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.6);
     }
 
-    /* معرض الصور مع الإحصائيات */
+    /* معرض الصور بعرض كامل */
     .gallery {
-      display:flex; flex-wrap:wrap; justify-content:center;
-      gap:25px; margin-bottom:60px; max-width:1000px; margin:0 auto;
+      display: flex; flex-wrap: wrap; justify-content: space-around;
+      gap: 20px; margin-bottom: 60px;
+      width: 100%;
     }
     .gallery-item {
-      position:relative; background:#272737; border:3px solid #f39c12;
-      border-radius:12px; width:200px; overflow:hidden;
-      box-shadow:0 0 20px rgba(0,0,0,.5); transition:transform .3s;
+      position: relative; background: #272737; border: 3px solid #f39c12;
+      border-radius: 12px; width: 30%; min-width: 200px; overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,.5); transition: transform .3s;
     }
-    .gallery-item:hover { transform:translateY(-8px); }
-    .item-frame { padding:12px; background:#3a3a5c; border-bottom:2px solid #e67e22; }
-    .item-frame img { width:100%; border-radius:8px; }
+    .gallery-item:hover { transform: translateY(-8px); }
+    .item-frame {
+      padding: 12px; background: #3a3a5c; border-bottom: 2px solid #e67e22;
+    }
+    .item-frame img {
+      width: 100%; border-radius: 8px;
+    }
     .item-name {
-      background:#1f1f2f; padding:10px; color:#f1c40f; font-size:1rem;
-      border-top:2px solid #e67e22; position:relative;
+      background: #1f1f2f; padding: 10px; color: #f1c40f; font-size: 1rem;
+      border-top: 2px solid #e67e22; display: flex; justify-content: center; align-items: center;
     }
     .item-stats {
-      background:#12122f; padding:8px; font-size:.9rem;
-      border-top:1px solid #444; text-align:center; line-height:1.4;
+      background: #12122f; padding: 8px; font-size: .9rem;
+      border-top: 1px solid #444; text-align: center; line-height: 1.4;
     }
-    .item-stats .stat { display:block; }
-    .item-stats .hot { color:#e74c3c; font-size:1.2rem; }
+    .item-stats .stat { display: block; }
+    .item-stats .hot { color: #e74c3c; font-size: 1.2rem; }
 
-    /* البحث عن الأكواد */
-    #section-search { background:#1f1f2f; }
+    /* البحث عن الأكواد بعرض كامل */
+    #section-search { background: #1f1f2f; }
     .script-stats {
-      max-width:700px; margin:0 auto 40px; background:#272737;
-      border-left:5px solid #f1c40f; padding:20px 25px; border-radius:8px;
-      box-shadow:0 0 15px rgba(0,0,0,.5); font-size:1rem; line-height:1.5;
+      width: 100%; max-width: none; margin: 0 auto 40px;
+      background: #272737; border-left: 5px solid #f1c40f;
+      padding: 20px; border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,.5); font-size: 1rem; line-height: 1.5;
     }
-    .script-stats ul { margin-top:12px; padding-right:20px; }
-    .script-stats li { margin-bottom:8px; }
-    .outer-box, .frame-box, .inner-box { box-shadow:0 0 20px rgba(0,0,0,.5); }
+    .script-stats ul { margin-top: 12px; padding-right: 20px; }
+    .script-stats li { margin-bottom: 8px; }
     .outer-box {
-      max-width:700px; margin:0 auto 40px; background:#272737;
-      border:2px solid #f39c12; border-radius:12px; padding:25px;
+      width: 100%; max-width: none; margin: 0 auto 40px;
+      background: #272737; border: 2px solid #f39c12; border-radius: 12px;
+      padding: 25px; box-shadow: 0 0 20px rgba(0,0,0,.5);
     }
     .frame-box {
-      background:#3a3a5c; border:2px dashed #e67e22;
-      border-radius:10px; padding:20px; margin-bottom:20px;
+      width: 100%; background: #3a3a5c; border: 2px dashed #e67e22;
+      border-radius: 10px; padding: 20px; box-shadow: inset 0 0 12px rgba(0,0,0,.3);
     }
     .inner-box {
-      background:#4b4b7c; border:2px solid #f1c40f;
-      border-radius:8px; padding:20px; display:flex; gap:10px;
+      width: 100%; display: flex; gap: 10px;
     }
     .inner-box input {
-      flex:1; padding:12px; border:none; border-radius:8px;
-      background:#1f1f2f; color:#e0e0e0;
+      flex: 1; padding: 12px; border-radius: 8px; border: none;
+      background: #1f1f2f; color: #e0e0e0;
     }
     .inner-box button {
-      padding:12px 28px; border-radius:50px;
-      background:linear-gradient(45deg,#f39c12,#d35400); color:#fff;
-      transition:transform .3s,box-shadow .3s;
+      padding: 12px 28px; border-radius: 50px;
+      background: linear-gradient(45deg,#f39c12,#d35400); color: #fff;
+      transition: transform .3s,box-shadow .3s;
     }
     .inner-box button:hover {
-      transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.6);
+      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.6);
     }
 
-    /* عرض الأكواد */
-    #codes-container { max-width:750px; margin:0 auto; }
+    /* عرض الأكواد بعرض كامل */
+    #codes-container { width: 100%; }
     .code-card {
-      position:relative; background:#2f2f4f; border-left:5px solid #f1c40f;
-      border-radius:8px; padding:20px; margin-bottom:30px; overflow:hidden;
-      box-shadow:0 0 10px rgba(0,0,0,.5);
+      position: relative; background: #2f2f4f; border-left: 5px solid #f1c40f;
+      border-radius: 8px; padding: 20px; margin-bottom: 30px; overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,.5);
     }
-    .code-card.blur { filter:blur(4px); }
+    .code-card.blur { filter: blur(4px); }
     .code-card.expired::after {
-      content:"🔒 تم انتهاء الصلاحية"; position:absolute;
-      top:50%; left:50%; transform:translate(-50%,-50%);
-      background:rgba(0,0,0,.7); color:#fff; padding:8px 12px; border-radius:6px;
+      content: "🔒 تم انتهاء الصلاحية"; position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      background: rgba(0,0,0,.7); color: #fff; padding: 8px 12px; border-radius: 6px;
     }
     .code-card h3 {
-      display:inline-block; font-size:1.3rem; color:#e67e22; margin:0 10px 12px 0;
+      font-size: 1.3rem; color: #e67e22; margin-bottom: 10px;
     }
     .countdown {
-      display:inline-block; background:#c0392b; color:#fff;
-      padding:2px 8px; border-radius:4px; font-size:.9rem; margin-left:10px;
+      display: inline-block; background: #c0392b; color: #fff;
+      padding: 2px 8px; border-radius: 4px; font-size: .9rem; margin-left: 10px;
     }
     .copy-btn {
-      position:absolute; top:12px; right:12px;
-      background:#27ae60; color:#fff; padding:6px 10px; border-radius:4px;
-      font-size:.9rem; box-shadow:0 2px 6px rgba(0,0,0,.5);
-      transition:background .3s;
+      position: absolute; top: 12px; right: 12px;
+      background: #27ae60; color: #fff; padding: 6px 10px; border-radius: 4px;
+      font-size: .9rem; box-shadow: 0 2px 6px rgba(0,0,0,.5);
+      transition: background .3s;
     }
-    .copy-btn:hover { background:#2ecc71; }
+    .copy-btn:hover { background: #2ecc71; }
     .code-block {
-      background:#3b3b5b; border:1px solid #444; border-radius:6px;
-      padding:15px; overflow-x:auto; font-family:"Courier New",monospace;
-      color:#ecf0f1; line-height:1.5; margin-top:10px;
+      background: #3b3b5b; border: 1px solid #444; border-radius: 6px;
+      padding: 15px; overflow-x: auto; font-family: "Courier New", monospace;
+      color: #ecf0f1; line-height: 1.5; margin-top: 10px;
     }
 
     /* الإشعارات */
     .notification {
-      position:fixed; top:20px; right:20px;
-      background:#27ae60; color:#fff; padding:18px 25px;
-      border-radius:8px; box-shadow:0 0 16px rgba(0,0,0,.5);
-      opacity:0; transform:translateY(-30px);
-      transition:opacity .4s,transform .4s; z-index:250; text-align:center;
+      position: fixed; top: 20px; right: 20px;
+      background: #27ae60; color: #fff; padding: 18px 25px;
+      border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,.5);
+      opacity: 0; transform: translateY(-30px);
+      transition: opacity .4s, transform .4s; z-index: 250; text-align: center;
     }
-    .notification.show { opacity:1; transform:translateY(0); }
-    .notification.error { background:#c0392b; }
+    .notification.show { opacity: 1; transform: translateY(0); }
+    .notification.error { background: #c0392b; }
 
-    /* التواصل */
-    #section-contact { background:#1d1d3f; }
+    /* التواصل بعرض كامل */
+    #section-contact { background: #1d1d3f; }
     .contact-info {
-      max-width:700px; margin:0 auto; background:#272737;
-      border-left:5px solid #f39c12; border-radius:8px; padding:25px 30px;
-      box-shadow:0 0 15px rgba(0,0,0,.5); line-height:1.6;
+      width: 100%; max-width: none; margin: 0 auto;
+      background: #272737; border-left: 5px solid #f39c12;
+      border-radius: 8px; padding: 25px 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,.5); line-height: 1.6;
     }
     .contact-info a.email-link {
-      display:inline-block; margin-top:15px; background:linear-gradient(45deg,#e67e22,#f39c12);
-      padding:10px 20px; border-radius:50px; color:#fff;
-      box-shadow:0 3px 12px rgba(0,0,0,.3); transition:transform .3s;
+      margin-top: 15px; display: inline-block;
+      background: linear-gradient(45deg,#e67e22,#f39c12);
+      padding: 10px 20px; border-radius: 50px; color: #fff;
+      box-shadow: 0 3px 12px rgba(0,0,0,.3);
+      transition: transform .3s;
     }
     .contact-info a.email-link:hover {
-      transform:translateY(-3px); box-shadow:0 5px 18px rgba(0,0,0,.5);
+      transform: translateY(-3px); box-shadow: 0 5px 18px rgba(0,0,0,.5);
     }
   </style>
 </head>
 <body>
 
   <!-- زر القائمة -->
-  <div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
   <nav class="menu-overlay" id="menu-overlay">
     <ul>
       <li><button onclick="showSection('section-intro'); toggleMenu()">الرئيسية</button></li>
@@ -206,14 +237,18 @@
       <div><strong>عدد السكربتات المتوفرة:</strong> <span id="script-count">0</span></div>
       <div><strong>أسماء السكربتات:</strong><ul id="script-list"></ul></div>
     </div>
-    <div class="outer-box"><div class="frame-box"><div class="inner-box">
-      <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
-      <button onclick="showCodes()">عرض الأكواد</button>
-    </div></div></div>
+    <div class="outer-box">
+      <div class="frame-box">
+        <div class="inner-box">
+          <input type="text" id="script-name-input" placeholder="اكتب اسم السكربت هنا..." />
+          <button onclick="showCodes()">عرض الأكواد</button>
+        </div>
+      </div>
+    </div>
     <div id="codes-container"></div>
   </section>
 
-  <!-- الإشعار -->
+  <!-- إشعار -->
   <div id="notification" class="notification"></div>
 
   <!-- قسم التواصل -->
@@ -244,7 +279,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // بيانات السكربتات النموذجية
+    // بيانات السكربتات
     const scriptsData = {
       "سكربت الأول": [
         { title: "كود دائم", code: "-- هذا كود دائم" }
@@ -258,11 +293,10 @@
       ]
     };
 
-    // علامات لمنع الزيادة المكررة
-    const viewedKey = "viewedScripts";
-    const usedKey   = "usedScripts";
-    const viewed    = JSON.parse(localStorage.getItem(viewedKey) || "[]");
-    const used      = JSON.parse(localStorage.getItem(usedKey)   || "[]");
+    // منع الزيادة المكررة
+    const viewedKey = "viewedScripts", usedKey = "usedScripts";
+    const viewed = JSON.parse(localStorage.getItem(viewedKey) || "[]");
+    const used   = JSON.parse(localStorage.getItem(usedKey)   || "[]");
 
     // تنظيف الأكواد المؤقتة
     function cleanupTemporary() {
@@ -276,18 +310,16 @@
     async function buildGallery() {
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = "";
-      // جلب الأعداد من Firebase
       const viewsSnap = await db.ref("views").get();
       const usesSnap  = await db.ref("uses").get();
       const views     = viewsSnap.val() || {};
       const uses      = usesSnap.val()  || {};
-      // أقصى مشاهدات
       const maxViews  = Math.max(0, ...Object.values(views));
 
       Object.keys(scriptsData).forEach(name => {
-        const item = document.createElement("div");
-        item.className = "gallery-item";
-        item.innerHTML = `
+        const elem = document.createElement("div");
+        elem.className = "gallery-item";
+        elem.innerHTML = `
           <div class="item-frame">
             <img src="https://via.placeholder.com/200x150.png?text=${encodeURIComponent(name)}" alt="${name}" />
           </div>
@@ -296,10 +328,10 @@
             ${views[name] === maxViews && maxViews>0 ? "<span class='hot'>🔥</span>" : ""}
           </div>
           <div class="item-stats">
-            <span class="stat">المشاهدات: ${views[name] || 0}</span>
-            <span class="stat">الاستخدامات: ${uses[name] || 0}</span>
+            <span class="stat">المشاهدات: ${views[name]||0}</span>
+            <span class="stat">الاستخدامات: ${uses[name]||0}</span>
           </div>`;
-        gallery.appendChild(item);
+        gallery.appendChild(elem);
       });
     }
 
@@ -316,7 +348,7 @@
       });
     }
 
-    // عرض الأكواد وزيادة الإحصائيات في Firebase
+    // عرض الأكواد وزيادة الإحصائيات
     function showCodes() {
       const name = document.getElementById("script-name-input").value.trim();
       const container = document.getElementById("codes-container");
@@ -325,9 +357,9 @@
         showNotification(`لا يوجد سكربت باسم "${name}"!`, true);
         return;
       }
-      // مشاهدات
+      // تسجيل مشاهدة
       if (!viewed.includes(name)) {
-        db.ref("views/" + name).transaction(v => (v || 0) + 1);
+        db.ref("views/" + name).transaction(v => (v||0)+1);
         viewed.push(name);
         localStorage.setItem(viewedKey, JSON.stringify(viewed));
       }
@@ -346,9 +378,9 @@
 
         // عداد تنازلي
         if (item.expires) {
-          const cd       = card.querySelector(".countdown");
+          const cd = card.querySelector(".countdown");
           const expireAt = item.expires;
-          const timer    = setInterval(() => {
+          const timer = setInterval(() => {
             const diff = expireAt - Date.now();
             if (diff <= 0) {
               clearInterval(timer);
@@ -369,7 +401,7 @@
         btn.addEventListener("click", () => {
           navigator.clipboard.writeText(item.code).then(() => {
             if (!used.includes(name)) {
-              db.ref("uses/" + name).transaction(v => (v || 0) + 1);
+              db.ref("uses/" + name).transaction(v => (v||0)+1);
               used.push(name);
               localStorage.setItem(usedKey, JSON.stringify(used));
               buildGallery();
@@ -386,7 +418,7 @@
     function showNotification(msg, isErr) {
       const n = document.getElementById("notification");
       n.textContent = msg;
-      n.classList.toggle("error", isErr);
+      n.classList.toggle("error", !!isErr);
       n.classList.add("show");
       setTimeout(() => n.classList.remove("show"), 3000);
     }
@@ -396,20 +428,20 @@
       ["section-intro","section-search","section-contact"].forEach(sec => {
         document.getElementById(sec).style.display = sec===id ? "block" : "none";
       });
-      if (id==="section-search") updateScriptStats();
+      if (id === "section-search") updateScriptStats();
     }
     function toggleMenu() {
       const nav = document.getElementById("menu-overlay");
       nav.classList.toggle("show");
       const spans = document.querySelectorAll(".menu-btn span");
       if (nav.classList.contains("show")) {
-        spans[0].style.transform="rotate(45deg) translate(5px,5px)";
-        spans[1].style.opacity="0";
-        spans[2].style.transform="rotate(-45deg) translate(6px,-6px)";
-      } else spans.forEach(s=>{s.style.transform=""; s.style.opacity="1";});
+        spans[0].style.transform = "rotate(45deg) translate(5px,5px)";
+        spans[1].style.opacity = "0";
+        spans[2].style.transform = "rotate(-45deg) translate(6px,-6px)";
+      } else spans.forEach(s => { s.style.transform = ""; s.style.opacity = "1"; });
     }
 
-    // البدء
+    // بدء التشغيل
     window.onload = () => {
       cleanupTemporary();
       buildGallery();
