@@ -1,52 +1,134 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<title>موقع نشر السكربتات</title>
-<style>
-  body { font-family: Arial, sans-serif; max-width: 600px; margin: 2em auto; }
-  textarea { width: 100%; height: 150px; }
-  button { padding: 10px 15px; margin-top: 10px; }
-  .script-item { background: #f0f0f0; padding: 10px; margin-top: 10px; border-radius: 5px; }
-  .link-btn { margin-top: 5px; display: inline-block; padding: 5px 10px; background: #007bff; color: white; text-decoration: none; border-radius: 3px; }
-</style>
+  <meta charset="UTF-8">
+  <title>موقع إدارة السكربتات</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 2em auto; direction: rtl; line-height: 1.6; }
+    textarea { width: 100%; height: 150px; padding: .5em; font-family: monospace; }
+    button { padding: .5em 1em; margin-top: .5em; cursor: pointer; }
+    .script-item { background: #f9f9f9; padding: .8em; margin: .8em 0; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+    .link-btn { display: inline-block; margin-top: .5em; padding: .4em .8em; background: #007bff; color: #fff; text-decoration: none; border-radius: 3px; }
+    pre { background: #f5f5f5; padding: 1em; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-<h2>نشر سكربت جديد</h2>
-<textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
-<button onclick="publishScript()">نشر</button>
+  <div id="app">
+    <!-- المحتوى سيتم توليده ديناميكيًا -->
+  </div>
 
-<div id="scriptsContainer"></div>
-
-<script>
-  function publishScript() {
-    const container = document.getElementById('scriptsContainer');
-    const scriptText = document.getElementById('scriptInput').value.trim();
-    if (!scriptText) {
-      alert('الرجاء إدخال السكربت.');
-      return;
-    }
-    // انشئ عنصر جديد يعرض السكربت وزر الرابط (رابط وهمي هنا)
-    const scriptDiv = document.createElement('div');
-    scriptDiv.classList.add('script-item');
-    scriptDiv.textContent = scriptText;
-
-    const linkBtn = document.createElement('a');
-    linkBtn.href = '#';
-    linkBtn.className = 'link-btn';
-    linkBtn.textContent = 'رابط مباشر للسكربت';
-    linkBtn.onclick = (e) => {
-      e.preventDefault();
-      alert('هذا رابط وهمي. لتفعيل روابط مباشرة تحتاج Backend.');
+  <script>
+    // ==== 1) تهيئة Firebase =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyDNqkmtclhU6XchpsZwS_yk8IWRNoKP4TI",
+      authDomain: "theronex-8f4ae.firebaseapp.com",
+      projectId: "theronex-8f4ae",
+      storageBucket: "theronex-8f4ae.firebasestorage.app",
+      messagingSenderId: "518618111587",
+      appId: "1:518618111587:web:f72dcfa29362d35217e256",
+      measurementId: "G-86LNQ442CW"
     };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    container.appendChild(scriptDiv);
-    container.appendChild(linkBtn);
+    // ==== 2) دالة لإظهار واجهة النشر ====
+    function renderIndexView() {
+      const html = `
+        <h2>نشر سكربت جديد</h2>
+        <textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
+        <button id="publishBtn">نشر</button>
 
-    document.getElementById('scriptInput').value = '';
-  }
-</script>
+        <h3>آخر السكربتات المنشورة</h3>
+        <div id="scriptsContainer"></div>
+      `;
+      document.getElementById('app').innerHTML = html;
+
+      document.getElementById('publishBtn').addEventListener('click', async () => {
+        const txt = document.getElementById('scriptInput').value.trim();
+        if (!txt) { alert('الرجاء إدخال السكربت'); return; }
+        try {
+          const docRef = await db.collection('scripts').add({
+            content: txt,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          appendScriptToUI(docRef.id, txt);
+          document.getElementById('scriptInput').value = '';
+        } catch (e) {
+          console.error(e);
+          alert('حدث خطأ أثناء الحفظ');
+        }
+      });
+
+      // تحميل آخر 20 سكربت
+      db.collection('scripts')
+        .orderBy('createdAt', 'desc')
+        .limit(20)
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            appendScriptToUI(doc.id, doc.data().content);
+          });
+        })
+        .catch(e => console.error(e));
+    }
+
+    // ==== 3) دالة لإضافة عنصر سكربت للواجهة ====
+    function appendScriptToUI(id, content) {
+      const container = document.getElementById('scriptsContainer');
+      const div = document.createElement('div');
+      div.className = 'script-item';
+      div.textContent = content;
+
+      const link = document.createElement('a');
+      link.className = 'link-btn';
+      link.href = `${location.pathname}?id=${id}`;
+      link.textContent = 'عرض هذا السكربت';
+      link.target = '_blank';
+
+      container.appendChild(div);
+      container.appendChild(link);
+    }
+
+    // ==== 4) دالة لإظهار صفحة عرض السكربت ====
+    function renderScriptView(id) {
+      const html = `
+        <button onclick="location.href='${location.pathname}'">‹ رجوع للنشر</button>
+        <h2>عرض السكربت</h2>
+        <div id="scriptContainer">جاري التحميل...</div>
+      `;
+      document.getElementById('app').innerHTML = html;
+
+      const container = document.getElementById('scriptContainer');
+      db.collection('scripts').doc(id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            container.textContent = 'السكربت غير موجود.';
+          } else {
+            const pre = document.createElement('pre');
+            pre.textContent = doc.data().content;
+            container.innerHTML = '';
+            container.appendChild(pre);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          container.textContent = 'حدث خطأ في جلب السكربت.';
+        });
+    }
+
+    // ==== 5) تحديد ما نعرض بناءً على وجود المعرف في الرابط ====
+    const params = new URLSearchParams(window.location.search);
+    const scriptId = params.get('id');
+    if (scriptId) {
+      renderScriptView(scriptId);
+    } else {
+      renderIndexView();
+    }
+  </script>
 
 </body>
 </html>
