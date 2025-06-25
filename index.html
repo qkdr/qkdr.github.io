@@ -31,40 +31,67 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // === عرض واجهة النشر ===
+    // === عرض واجهة النشر أو العرض الخام بناءً على المعرف في الرابط ===
+    const params = new URLSearchParams(window.location.search);
+    const scriptId = params.get('id');
+    if (scriptId) {
+      renderViewRaw(scriptId);
+    } else {
+      renderIndex();
+    }
+
+    // === واجهة النشر والقائمة ===
     function renderIndex() {
       document.getElementById('app').innerHTML = `
         <h2>نشر سكربت جديد</h2>
         <textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
         <button id="publishBtn">نشر</button>
-        <h3>آخر السكربتات المنشورة</h3>
+        <h3>آخر السكربتات</h3>
         <div id="scriptsContainer"></div>
       `;
-      document.getElementById('publishBtn').onclick = async () => {
-        const txt = document.getElementById('scriptInput').value.trim();
-        if (!txt) return alert('الرجاء إدخال السكربت');
+      document.getElementById('publishBtn').onclick = publishScript;
+      loadScripts();
+    }
+
+    async function publishScript() {
+      const txt = document.getElementById('scriptInput').value.trim();
+      if (!txt) { alert('الرجاء إدخال السكربت'); return; }
+      try {
         const docRef = await db.collection('scripts').add({
           content: txt,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        appendUI(docRef.id, txt);
+        appendScript(docRef.id, txt);
         document.getElementById('scriptInput').value = '';
-      };
-      const snap = await db.collection('scripts').orderBy('createdAt','desc').limit(20).get();
-      snap.forEach(doc => appendUI(doc.id, doc.data().content));
+      } catch (e) {
+        console.error(e); alert('خطأ في الحفظ');
+      }
     }
 
-    // === إضافة سكربت للقائمة ===
-    function appendUI(id, content) {
+    function loadScripts() {
+      db.collection('scripts').orderBy('createdAt','desc').limit(20).get()
+        .then(snap => snap.forEach(doc => appendScript(doc.id, doc.data().content)))
+        .catch(e => console.error(e));
+    }
+
+    function appendScript(id, content) {
       const c = document.getElementById('scriptsContainer');
-      const d = document.createElement('div'); d.className='script-item'; d.textContent=content;
-      const a = document.createElement('a'); a.className='link-btn';
-      a.href = `/script/${id}`; a.textContent = 'رابط مباشر للسكربت'; a.target='_blank';
-      c.append(d, a);
+      const div = document.createElement('div'); div.className='script-item'; div.textContent=content;
+      const link = document.createElement('a');
+      link.className='link-btn';
+      link.href = `/raw/${id}`;
+      link.textContent = 'رابط خام للسكربت';
+      link.target = '_blank';
+      c.appendChild(div);
+      c.appendChild(link);
     }
 
-    // === افتراضياً شغّل واجهة النشر ===
-    renderIndex();
+    // === عرض نص السكربت الخام (سيحضره Cloud Function) ===
+    function renderViewRaw(id) {
+      // لإعادة التوجيه إلى الرابط الخام نفسه (بدون إعادة تحميل)
+      location.replace(`/raw/${id}`);
+    }
   </script>
+
 </body>
 </html>
