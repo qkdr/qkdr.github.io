@@ -1,140 +1,52 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="ar" dir="rtl">
 <head>
-    <title>LuaObfuscator - Scripts</title>
-    <style>
-        html {
-            /* Only here so we don't get a bright white flash while page loads! */
-            background-color: #1e1e1e;
-            color: lightblue;
-        }
-    </style>
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/css/code-lua.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Online Lua Obfuscator. Beautify/Minify/Obfuscate all the lua dialects, including LuaU, gLua, Pluto and vanilla Lua 5.1 (and above)." />
-    <meta name="keywords" content="Lua Obfuscator, Online Lua Obfuscation, Lua Beautifier, Lua Minifier, Lua deobfuscator, obfuscator, lua, deobfuscation, roblox obfuscator, roblox protection, packer, crypter, lua emulator, FiveM Obfuscator, LuaU beautifier, Luraph beautifier, Pluto Beautifier, LuaU minifier, OSRS Plugins, Roblox whitelist" />
-    <meta property="og:title" content="Online Lua Obfuscator" />
-    <meta property="og:image" content="/img/logo.png">
-    <meta property="og:description" content="Online Lua Obfuscator. Beautify/Minify/Obfuscate all the lua dialects, including LuaU, gLua, Pluto and vanilla Lua 5.1 (and above)." />
-    <meta property="og:url" content="https://luaobfuscator.com" />
-    <link rel="icon" type="image/png" href="/img/logo.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=VT323&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<title>موقع نشر السكربتات</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 600px; margin: 2em auto; }
+  textarea { width: 100%; height: 150px; }
+  button { padding: 10px 15px; margin-top: 10px; }
+  .script-item { background: #f0f0f0; padding: 10px; margin-top: 10px; border-radius: 5px; }
+  .link-btn { margin-top: 5px; display: inline-block; padding: 5px 10px; background: #007bff; color: white; text-decoration: none; border-radius: 3px; }
+</style>
 </head>
 <body>
-    <div class="main-container" style="height: 100% !important">
-        
 
-<div class="notepad-body">
+<h2>نشر سكربت جديد</h2>
+<textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
+<button onclick="publishScript()">نشر</button>
 
-    <div class="notepad-test-2">
-        
-<!-- FORUM NAVBAR START -->
-<div class="notepad-top" style="display: flex; height: 38px; width: 100%; background-color: #1E1E1E">
-    <ul style="display: flex; flex-wrap: nowrap; flex-direction: row; width: 100%; height: 100%; margin: 0; padding: 0;">
-        <li class="top-crumb"><a style="text-decoration: none;" href="/">Home</a></li>
-        <li class="top-crumb"><a style="text-decoration: none;" href="/forum">Forum</a></li>
-                    <li class="top-crumb">Scripts</li>
-                    <li class="top-crumb">Upload</li>
-    </ul>
-    <div style="display: flex; margin-right: 12px; height: 100%;line-height: 38px; background: var(--color-background-light);">
-            <div class="box-avatar" style="width: 30px!important; height:30px!important; background-size: 30px;background-image: url(https://cdn.discordapp.com/avatars/1258594652244807753/1628fc11e7961d85181295493426b775.webp), url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAYAAADFeBvrAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAARtSURBVGhD7ZjLaxNRFIdPmjQm2li1mrbW+qjamEyePiiCxQc+ca8ogujehSAi+A+4cCG41pUgLly5EXfiRhHR1KapVXzbSl1YbXxAU+M5Z+6dzKTNe5IMJR9MzjQzmZlvfvfMHbVlMhlYSLSIumBoClmdppDVaehTLrJjQDt5/OkTm1itioYJkUwoqIi/AF4OJ7hWK1Z3IRSJYnmul9FTrVhdheQQyyejp1KxugnlDrFSKVes5kLlpFKIUsVqKlRpKoUoJlYTIbNSKUQ+MdOFapFKIXLFTBNCkRksjnrK6CExkjLl1Uek0lAZSVVCJFLvIZYLyWyN0lytUrGQFGlkKiwTi4hvVMoWskoqMUwlFo3A9lhYfKtSlpBVUonyEMtAf99aSM/MwMH9g6AEfLxPSU85EqHa6FSiUUrDBpvXrwGPxwMu1yLe1up0gtvtghPHTxV/ylkllVhElbFhMm/efYbFSxaDo9WhyUjyJmSZVMIoglNm9nXABs/jcV67dOEcftJlqlvzJtToVMYnvrJMhFMBOLBvEA4d2I2Xrsl0Z195sqqEISGrpNLp9UJ3Vxds7uvlXnG02sFhd8DS9qWcgtgVbt+5dRbLDVqX32sJkcxqPEijZCYnJ9VUwiHo6uzCyTKgNT7JUK/kghI3sWygdZTroWoYcuNf1ajrDZ0zPTsLkVAIW0IN4NmLBDyLj3AqbZ42Q+Pn8FHUy/RhEFL8fvD7fHWVonOFQ0FY0403mPv7HzUCxIde4jJEu7xqacn/MMaU8AfMRfqYsyf9mMR+/frNJ5v+OS22mAsdW5UJgW/jOtgWU2DnQBSOHNzLMohHNP52+qME7tGHXuiMqIzb5WKxz1++mJ4YHS8UDEIYl20R6pU27hWZBIngkqJ1TICr4JOoc8D99lLVC10X1YCvv5/F3r//ULWYTIVkiN2DA7DKuxK8nV5u+vkan5BPMKRXVAO67VkhvCOeRDIJtMzH2t5eFvs2+a0iMVVEzm3ULBl4+Ogx3H/wEK5cvc5NX6DxS8bQQ2LMLs8nRXR0dLCYvNvFkPsFFQX27BrAHtkjtgAM4fdDw8PaP5/NwCBE4MGn6AQodYbE/vz9K7YYISklsAWSydG8YqpIgGVC/k38oElNp+Do4X28jc5jpgxR9G0bJ9w/WFwkMD/q9SSSI1xpSElBBWWU/j4cSm5wUo+Il0mnsxVOnTw9RwQnR74YfU+Uy5yEcsE76BaJnafEvk9NiS0CnDOoHzgxfyArEwhwTYy9xQkyAR0rV2hvxna7nS7+GO9gMkWFJCh1jcTGJyZekNgszuwMT4Yy5Qwsa2/XZAjaNPpqTGt8HXdFNZWShSQoFSOx0bExfiJ+/IRTA76uZOjKcaD09NArlRDEMjwyAul0ejn9Rv1SBYeVuCPmUraQhC6QlulUisWmvv9QPbgnbZBAEVrEfjnjtCCvRa0IM/+j0XCg3EQkZjR+IUwTKpVaC1U85KzKghOq+5CrNc0hZ3WaQlanKWR1FpgQwH9UmCUYiRjgsgAAAABJRU5ErkJggg==); width: 30px;height: 30px;margin: 0; margin: 4px;"></div>
-        <a href="/forum/user/10554">rby08495</a>
-        <form method="POST" style="display: inline-block; margin-left: 12px;" action="/forum/logout">
-            <input style="cursor: pointer; height: 30px;" class="pink-btn-light" type="submit" value="Logout" />
-        </form>
-    </div>
-</div>
-<!-- FORUM NAVBAR END -->
-        <div class="notepad-script">
-            <div class="micro-forum">
-                
-<!-- WAIFU BOX START -->
-<div id="waifu-box" class="content-box content-box-interactable" style="min-height: 10px;">
-    <div class="content-box-middle" style="color:var(--white); display: block; height: auto; max-height: 100%;"> 
-        <div class="flare-box" style="width: 100%;max-height: 360px;display: block;">       
-            <img alt="anime waifu banner" src="/img/banners/roblox_3.png"></img>
-            <div style="
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    top: 0;
-                    left: 0;
-                    padding: 5%;
-                    box-sizing: border-box;
-                    text-shadow: 2px 2px 2px BLACK;
-                ">
-                <h1 style="color: var(--primary)">Brick game obfuscater</h1>
-            </div>
-        </div>
-    </div>
-    <div class="content-box-right">
-        <h3 class="title-small"><a style="color: var(--secondary);" href="/forum/scripts/">My Scripts</a></h3>
-        <h3 class="title-small"><a style="color: var(--secondary);" href="/forum/keys/">API Keys</a></h3>
-        <h3 class="title-small"><a style="color: var(--secondary);" href="/forum/docs/">Docs</a></h3>
-        
+<div id="scriptsContainer"></div>
 
-    </div>
-</div>
-<!-- WAIFU BOX END-->
-                <!-- SCRIPTS START -->
-                <div class="content-box content-box-interactable" style="margin-bottom: 30px;">
-                    <div class="content-box-middle-big">
-                        <a style="text-decoration: none;" href="/forum/scripts">
-                            <h2 class="post-title post-title-interactable" style="">🎯Bulletproof™️ Scripts</h2>
-                        </a>
-                        <div class="box-text" href="#" style="color: var(--white); text-decoration: none;">
-                            
-                            <form action="/forum/scripts/upload" method="POST" enctype="multipart/form-data">
-                                <p>Upload your <b>ALREADY PROTECTED</b> Lua script to get started with 🎯Bulletproof™️!</p>
+<script>
+  function publishScript() {
+    const container = document.getElementById('scriptsContainer');
+    const scriptText = document.getElementById('scriptInput').value.trim();
+    if (!scriptText) {
+      alert('الرجاء إدخال السكربت.');
+      return;
+    }
+    // انشئ عنصر جديد يعرض السكربت وزر الرابط (رابط وهمي هنا)
+    const scriptDiv = document.createElement('div');
+    scriptDiv.classList.add('script-item');
+    scriptDiv.textContent = scriptText;
 
-                                <br/>
-                                <label>Script Name: </label><input type="text" name="name" value="ScriptName"/>
+    const linkBtn = document.createElement('a');
+    linkBtn.href = '#';
+    linkBtn.className = 'link-btn';
+    linkBtn.textContent = 'رابط مباشر للسكربت';
+    linkBtn.onclick = (e) => {
+      e.preventDefault();
+      alert('هذا رابط وهمي. لتفعيل روابط مباشرة تحتاج Backend.');
+    };
 
-                                <br/>
-                                <br/>
+    container.appendChild(scriptDiv);
+    container.appendChild(linkBtn);
 
-                                <div class="scriptfile-input">
-                                    <input type="file" id="scriptfile" name="scriptfile" class="scriptfile-input__input" />
-                                    <label for="scriptfile" class="scriptfile-input__label">
-                                        <span class="scriptfile-input__icon"><i class="fas fa-cloud-upload-alt"></i></span>
-                                        <span class="scriptfile-input__text">Drag and drop your <b>PROTECTED</b> Lua file or click to browse</span>
-                                    </label>
-                                </div>
-                                <br/>
-                                <br/>
-                                <input class="big-pink-btn" type="submit" value="Create Script 🚀" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- SCRIPTS EMD -->
-            </div>
-        </div>
-    </div>
-</div>
+    document.getElementById('scriptInput').value = '';
+  }
+</script>
 
-
-    </div>
-
-    <script defer src="/js/luaEngine.js"></script>
-    <script defer src="/js/index.js"></script>
-    
-    <script>
-        var maincontainer = document.getElementsByClassName('main-container')[0];
-        var notepadbody = document.getElementsByClassName('notepad-body')[0];
-        const observer = new MutationObserver(function (mutations, observer) {
-            maincontainer.style.height = "100%";
-            if (notepadbody != null)
-                notepadbody.style.height = "100%";
-        });
-        observer.observe(maincontainer, {
-            attributes: true,
-            attributeFilter: ['style']
-        });
-    </script>
 </body>
 </html>
