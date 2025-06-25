@@ -2,95 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>نشر السكربتات - رابط مباشر</title>
+  <title>موقع إدارة السكربتات</title>
   <style>
     body { font-family: sans-serif; max-width: 700px; margin: 2em auto; direction: rtl; line-height: 1.6; }
     textarea { width: 100%; height: 150px; padding: .5em; font-family: monospace; }
     button { padding: .5em 1em; margin-top: .5em; cursor: pointer; }
-    .script-item { background: #f9f9f9; padding: .8em; margin: .8em 0; border-radius: 5px; }
-    .link-btn { display: inline-block; margin-top: .5em; padding: .4em .8em; background: #007bff; color: #fff; text-decoration: none; border-radius: 3px; word-break: break-all; }
+    .script-item { background: #f9f9f9; padding: .8em; margin: .8em 0; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+    .link-btn { display: inline-block; margin-top: .5em; padding: .4em .8em; background: #007bff; color: #fff; text-decoration: none; border-radius: 3px; }
   </style>
-  <!-- مكتبات Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 </head>
 <body>
 
-  <h2>نشر سكربت جديد</h2>
-  <textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
-  <button id="publishBtn">نشر</button>
-
-  <h3>آخر السكربتات المنشورة</h3>
-  <div id="scriptsContainer"></div>
+  <div id="app"></div>
 
   <script>
-    // ===== 1) تهيئة Firebase =====
+    // === تهيئة Firebase ===
     const firebaseConfig = {
       apiKey: "AIzaSyDNqkmtclhU6XchpsZwS_yk8IWRNoKP4TI",
       authDomain: "theronex-8f4ae.firebaseapp.com",
       projectId: "theronex-8f4ae",
-      storageBucket: "theronex-8f4ae.appspot.com",
+      storageBucket: "theronex-8f4ae.firebasestorage.app",
       messagingSenderId: "518618111587",
       appId: "1:518618111587:web:f72dcfa29362d35217e256",
       measurementId: "G-86LNQ442CW"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
-    // ===== 2) عند النشر =====
-    document.getElementById('publishBtn').addEventListener('click', async () => {
-      const txt = document.getElementById('scriptInput').value.trim();
-      if (!txt) return alert('الرجاء إدخال السكربت');
-      try {
-        // 1) أنشئ معرف فريد عبر Firestore
-        const docRef = db.collection('scripts').doc();
-        const id = docRef.id;
-        // 2) ارفع النص كملف txt
-        const blob = new Blob([txt], { type: 'text/plain' });
-        const storageRef = storage.ref(`scripts/${id}.txt`);
-        await storageRef.put(blob);
-        // 3) احصل على الرابط المباشر
-        const url = await storageRef.getDownloadURL();
-        // 4) خزن ميتاداتا العرض
-        await docRef.set({
-          url,
+    // === عرض واجهة النشر ===
+    function renderIndex() {
+      document.getElementById('app').innerHTML = `
+        <h2>نشر سكربت جديد</h2>
+        <textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
+        <button id="publishBtn">نشر</button>
+        <h3>آخر السكربتات المنشورة</h3>
+        <div id="scriptsContainer"></div>
+      `;
+      document.getElementById('publishBtn').onclick = async () => {
+        const txt = document.getElementById('scriptInput').value.trim();
+        if (!txt) return alert('الرجاء إدخال السكربت');
+        const docRef = await db.collection('scripts').add({
+          content: txt,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        // 5) أضف للواجهة
-        appendScriptToUI(id, url);
+        appendUI(docRef.id, txt);
         document.getElementById('scriptInput').value = '';
-      } catch (e) {
-        console.error(e);
-        alert('حدث خطأ أثناء النشر');
-      }
-    });
-
-    // ===== 3) دالة لإضافة عنصر للواجهة =====
-    function appendScriptToUI(id, url) {
-      const container = document.getElementById('scriptsContainer');
-      const item = document.createElement('div');
-      item.className = 'script-item';
-      item.innerHTML = `
-        معرف: <strong>${id}</strong><br/>
-        <a class="link-btn" href="${url}" target="_blank">${url}</a>
-      `;
-      container.prepend(item);
+      };
+      const snap = await db.collection('scripts').orderBy('createdAt','desc').limit(20).get();
+      snap.forEach(doc => appendUI(doc.id, doc.data().content));
     }
 
-    // ===== 4) تحميل آخر 20 سكربت عند فتح الصفحة =====
-    db.collection('scripts')
-      .orderBy('createdAt', 'desc')
-      .limit(20)
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          appendScriptToUI(doc.id, doc.data().url);
-        });
-      })
-      .catch(console.error);
-  </script>
+    // === إضافة سكربت للقائمة ===
+    function appendUI(id, content) {
+      const c = document.getElementById('scriptsContainer');
+      const d = document.createElement('div'); d.className='script-item'; d.textContent=content;
+      const a = document.createElement('a'); a.className='link-btn';
+      a.href = `/script/${id}`; a.textContent = 'رابط مباشر للسكربت'; a.target='_blank';
+      c.append(d, a);
+    }
 
+    // === افتراضياً شغّل واجهة النشر ===
+    renderIndex();
+  </script>
 </body>
 </html>
