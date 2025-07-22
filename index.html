@@ -2,96 +2,214 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>موقع إدارة السكربتات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مرحبا بكم في مكتبة السكربتات</title>
   <style>
-    body { font-family: sans-serif; max-width: 700px; margin: 2em auto; direction: rtl; line-height: 1.6; }
-    textarea { width: 100%; height: 150px; padding: .5em; font-family: monospace; }
-    button { padding: .5em 1em; margin-top: .5em; cursor: pointer; }
-    .script-item { background: #f9f9f9; padding: .8em; margin: .8em 0; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
-    .link-btn { display: inline-block; margin-top: .5em; padding: .4em .8em; background: #007bff; color: #fff; text-decoration: none; border-radius: 3px; }
+    /* خلفية متحركة */
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      color: #fff;
+      background: linear-gradient(-45deg, #1e3c72, #2a5298, #1e3c72, #2a5298);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      overflow-x: hidden;
+    }
+    /* إطار زجاجي */
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+      transition: transform 0.3s;
+    }
+    .glass:hover {
+      transform: scale(1.02);
+    }
+    /* العنوان */
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    /* زر شفاف */
+    .btn {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 10px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s, transform 0.2s;
+      margin: 5px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    /* صور داخل إطارات */
+    .image-frame {
+      display: inline-block;
+      overflow: hidden;
+      border-radius: 12px;
+      margin: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.3s;
+    }
+    .image-frame:hover {
+      transform: scale(1.05);
+    }
+    .image-frame img {
+      display: block;
+      max-width: 200px;
+      height: auto;
+    }
+    /* حاوية النتائج */
+    #results {
+      margin-top: 20px;
+    }
+    /* نافذة عرض السكربت */
+    .modal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 80%; max-width: 700px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+    }
+    .modal.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .modal pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 60vh;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .modal .close {
+      float: left;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div id="app"></div>
+  <div class="glass">
+    <h1>أهلاً وسهلاً بكم في مكتبة السكربتات</h1>
+    <p style="text-align:center;">
+      يمكنك البحث عن أي سكربت تشاء من موقع ScriptBlox بنقرة زر!
+    </p>
+    <div style="text-align:center;">
+      <input id="searchInput" type="text" placeholder="أدخل اسم اللعبة أو السكربت" style="padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.5); backdrop-filter: blur(4px); background: rgba(255,255,255,0.1); color:#fff; width:60%;">
+      <button id="searchBtn" class="btn">🔍 بحث</button>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <div class="glass" style="text-align:center;">
+    <!-- أمثلة لصور داخل إطارات -->
+    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=ScriptBlox" alt="ScriptBlox"></div>
+    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=Roblox+Scripts" alt="Roblox Scripts"></div>
+    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=Gaming+Fun" alt="Gaming"></div>
+  </div>
+
+  <!-- مودال عرض السكربت -->
+  <div id="scriptModal" class="modal">
+    <span class="close" onclick="closeModal()">✖️ إغلاق</span>
+    <h2 id="scriptTitle"></h2>
+    <pre id="scriptContent"></pre>
+  </div>
 
   <script>
-    // === تهيئة Firebase ===
-    const firebaseConfig = {
-      apiKey: "AIzaSyDNqkmtclhU6XchpsZwS_yk8IWRNoKP4TI",
-      authDomain: "theronex-8f4ae.firebaseapp.com",
-      projectId: "theronex-8f4ae",
-      storageBucket: "theronex-8f4ae.firebasestorage.app",
-      messagingSenderId: "518618111587",
-      appId: "1:518618111587:web:f72dcfa29362d35217e256",
-      measurementId: "G-86LNQ442CW"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    const resultsDiv = document.getElementById('results');
+    const modal = document.getElementById('scriptModal');
+    const titleEl = document.getElementById('scriptTitle');
+    const contentEl = document.getElementById('scriptContent');
 
-    // === عرض واجهة النشر أو العرض الخام بناءً على المعرف في الرابط ===
-    const params = new URLSearchParams(window.location.search);
-    const scriptId = params.get('id');
-    if (scriptId) {
-      renderViewRaw(scriptId);
-    } else {
-      renderIndex();
-    }
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      runSearch(q);
+    });
 
-    // === واجهة النشر والقائمة ===
-    function renderIndex() {
-      document.getElementById('app').innerHTML = `
-        <h2>نشر سكربت جديد</h2>
-        <textarea id="scriptInput" placeholder="اكتب السكربت هنا..."></textarea><br/>
-        <button id="publishBtn">نشر</button>
-        <h3>آخر السكربتات</h3>
-        <div id="scriptsContainer"></div>
-      `;
-      document.getElementById('publishBtn').onclick = publishScript;
-      loadScripts();
-    }
-
-    async function publishScript() {
-      const txt = document.getElementById('scriptInput').value.trim();
-      if (!txt) { alert('الرجاء إدخال السكربت'); return; }
-      try {
-        const docRef = await db.collection('scripts').add({
-          content: txt,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    function runSearch(query) {
+      resultsDiv.innerHTML = '<p>جاري البحث...</p>';
+      fetch(`https://scriptblox.com/api/script/search?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+          resultsDiv.innerHTML = '';
+          if (!data.result || data.result.scripts.length === 0) {
+            resultsDiv.innerHTML = `<p>❌ لم يتم العثور على أي سكربتات لـ "${query}"</p>`;
+            return;
+          }
+          data.result.scripts.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.textContent = s.title || 'بدون عنوان';
+            btn.onclick = () => fetchScript(s.slug, s.title);
+            resultsDiv.appendChild(btn);
+          });
+        })
+        .catch(err => {
+          resultsDiv.innerHTML = `<p>❌ حدث خطأ في الاتصال بالموقع</p>`;
+          console.error(err);
         });
-        appendScript(docRef.id, txt);
-        document.getElementById('scriptInput').value = '';
-      } catch (e) {
-        console.error(e); alert('خطأ في الحفظ');
-      }
     }
 
-    function loadScripts() {
-      db.collection('scripts').orderBy('createdAt','desc').limit(20).get()
-        .then(snap => snap.forEach(doc => appendScript(doc.id, doc.data().content)))
-        .catch(e => console.error(e));
+    function fetchScript(slug, title) {
+      fetch(`https://scriptblox.com/api/script/${slug}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.script && data.script.script) {
+            showModal(title, data.script.script);
+          } else {
+            alert('⚠️ السكربت محمي أو غير متاح');
+          }
+        })
+        .catch(err => {
+          alert('❌ فشل تحميل السكربت');
+          console.error(err);
+        });
     }
 
-    function appendScript(id, content) {
-      const c = document.getElementById('scriptsContainer');
-      const div = document.createElement('div'); div.className='script-item'; div.textContent=content;
-      const link = document.createElement('a');
-      link.className='link-btn';
-      link.href = `/raw/${id}`;
-      link.textContent = 'رابط خام للسكربت';
-      link.target = '_blank';
-      c.appendChild(div);
-      c.appendChild(link);
+    function showModal(title, content) {
+      titleEl.textContent = title;
+      contentEl.textContent = content;
+      modal.classList.add('show');
     }
 
-    // === عرض نص السكربت الخام (سيحضره Cloud Function) ===
-    function renderViewRaw(id) {
-      // لإعادة التوجيه إلى الرابط الخام نفسه (بدون إعادة تحميل)
-      location.replace(`/raw/${id}`);
+    function closeModal() {
+      modal.classList.remove('show');
     }
+
+    // بحث مبدئي عن "Dead Rails"
+    window.addEventListener('load', () => {
+      document.getElementById('searchInput').value = 'Dead Rails';
+      runSearch('Dead Rails');
+    });
   </script>
-
 </body>
 </html>
