@@ -67,11 +67,8 @@
     }
     .script-info{padding:10px;text-align:center}
     .script-info h3{
-      margin:5px 0;
-      font-size:1.1em;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      margin:5px 0;font-size:1.1em;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
     .script-info p{margin:4px 0;font-size:.9em}
     #loadMore{margin:20px auto;display:block}
@@ -122,137 +119,103 @@
   </div>
 
   <script>
-    let currentMode = 'fetch';
-    let currentQuery = '';
-    let currentPage = 1;
-    let totalPages = 1;
-
-    const resultsDiv = document.getElementById('results');
-    const loadBtn = document.getElementById('loadMore');
+    let mode = 'fetch', query = '', page = 1, total = 1;
+    const results = document.getElementById('results');
+    const loadMore = document.getElementById('loadMore');
     const modal = document.getElementById('scriptModal');
-    const titleEl = document.getElementById('scriptTitle');
-    const contentEl = document.getElementById('scriptContent');
+    const tEl = document.getElementById('scriptTitle');
+    const cEl = document.getElementById('scriptContent');
 
-    // دالة موحدة للاتصال
-    async function callAPI(url) {
-      console.debug('Request URL:', url);
-      const res = await fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-      return res.json();
+    // لتعويض CORS على GitHub Pages نستخدم AllOrigins
+    function proxy(url) {
+      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
 
-    // بناء الرابط حسب الوضع
-    function buildURL() {
+    function apiURL() {
       const base = 'https://scriptblox.com/api/script/';
-      const p = `&page=${currentPage}`;
-      switch (currentMode) {
+      const p = `&page=${page}`;
+      switch (mode) {
         case 'search':
-          return `${base}search?q=${encodeURIComponent(currentQuery)}${p}`;
+          return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
         case 'free':
-          return `${base}fetch?mode=free${p}`;
+          return proxy(base + `fetch?mode=free${p}`);
         case 'unverified':
-          return `${base}fetch?verified=0${p}`;
+          return proxy(base + `fetch?verified=0${p}`);
         case 'mostviewed':
-          return `${base}fetch?sortBy=views&order=desc${p}`;
+          return proxy(base + `fetch?sortBy=views&order=desc${p}`);
         case 'trending':
-          return `${base}trending${p}`;
+          return proxy(base + `trending${p}`);
         case 'verified':
-          return `${base}fetch?filters=verified&legacy_filters=true${p}`;
+          return proxy(base + `fetch?filters=verified&legacy_filters=true${p}`);
         default:
-          return `${base}fetch?page=${currentPage}`;
+          return proxy(base + `fetch?page=${page}`);
       }
     }
 
-    // تحميل السكربتات
-    async function loadScripts() {
-      try {
-        // عرض رسالة انتظار
-        if (currentPage === 1) resultsDiv.innerHTML = `<p style="width:100%; text-align:center;">جاري التحميل...</p>`;
-        const data = await callAPI(buildURL());
-        const resObj = data.result ? data : { result: data };
-        totalPages = resObj.result.totalPages || 1;
-
-        // عند الصفحة الأولى نمسح المحتوى القديم
-        if (currentPage === 1) resultsDiv.innerHTML = '';
-        const arr = resObj.result.scripts || [];
-        if (arr.length === 0 && currentPage === 1) {
-          resultsDiv.innerHTML = `<p style="width:100%; text-align:center;">لا توجد نتائج.</p>`;
-        }
-        arr.forEach(s => {
-          const card = document.createElement('div');
-          card.className = 'script-card';
-          card.innerHTML = `
-            <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="${s.title}">
-            <div class="script-info">
-              <h3>${s.title}</h3>
-              <p>📦 ${s.game?.name || 'عام'}</p>
-              <button class="btn" onclick="fetchScript('${s.slug}', '${s.title}')">عرض السكربت</button>
-            </div>`;
-          resultsDiv.appendChild(card);
+    function loadScripts() {
+      if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
+      fetch(apiURL())
+        .then(r => r.json())
+        .then(data => {
+          const R = data.result || data;
+          total = R.totalPages || 1;
+          if (page === 1) results.innerHTML = '';
+          if (!R.scripts || !R.scripts.length) {
+            if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
+          } else {
+            R.scripts.forEach(s => {
+              const card = document.createElement('div');
+              card.className = 'script-card';
+              card.innerHTML = `
+                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
+                <div class="script-info">
+                  <h3>${s.title}</h3>
+                  <p>📦 ${s.game?.name||'عام'}</p>
+                  <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض السكربت</button>
+                </div>`;
+              results.appendChild(card);
+            });
+          }
+          loadMore.style.display = page<total?'block':'none';
+        })
+        .catch(e=>{
+          results.innerHTML = `<p style="width:100%;text-align:center;">❌ خطأ في الاتصال</p>`;
+          console.error(e);
         });
-
-        // زر المزيد
-        loadBtn.style.display = (currentPage < totalPages) ? 'block' : 'none';
-      } catch (err) {
-        console.error(err);
-        resultsDiv.innerHTML = `<p style="width:100%; text-align:center;">❌ خطأ في الاتصال: ${err.message}</p>`;
-      }
     }
 
-    // جلب السكربت المفصل
-    async function fetchScript(slug, title) {
-      try {
-        const data = await callAPI(`https://scriptblox.com/api/script/${slug}`);
-        if (data.script && data.script.script) {
-          showModal(title, data.script.script);
-        } else {
-          alert('⚠️ السكربت محمي أو غير متاح');
-        }
-      } catch (err) {
-        console.error(err);
-        alert(`❌ فشل تحميل السكربت: ${err.message}`);
-      }
+    function showScript(slug, title) {
+      fetch(proxy(`https://scriptblox.com/api/script/${slug}`))
+        .then(r=>r.json())
+        .then(d=>{
+          const sc = d.script;
+          if (sc && sc.script) {
+            tEl.textContent = title;
+            cEl.textContent = sc.script;
+            modal.classList.add('show');
+          } else alert('⚠️ غير متاح');
+        })
+        .catch(e=>{
+          alert('❌ فشل التحميل');
+          console.error(e);
+        });
     }
 
-    function showModal(title, content) {
-      titleEl.textContent = title;
-      contentEl.textContent = content;
-      modal.classList.add('show');
-    }
-    function closeModal() {
-      modal.classList.remove('show');
-    }
+    function closeModal(){ modal.classList.remove('show'); }
 
-    // أحداث الأزرار
-    document.querySelectorAll('.controls .btn[data-mode]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentMode = btn.dataset.mode;
-        currentQuery = '';
-        currentPage = 1;
-        loadScripts();
-      });
+    document.querySelectorAll('.controls .btn[data-mode]').forEach(b=>{
+      b.onclick=()=>{
+        mode=b.dataset.mode; query=''; page=1; results.innerHTML=''; loadScripts();
+      };
     });
-    document.getElementById('searchBtn').addEventListener('click', () => {
-      const q = document.getElementById('searchInput').value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
-      currentMode = 'search';
-      currentQuery = q;
-      currentPage = 1;
-      loadScripts();
-    });
-    loadBtn.addEventListener('click', () => {
-      if (currentPage < totalPages) {
-        currentPage++;
-        loadScripts();
-      }
-    });
+    document.getElementById('searchBtn').onclick=()=>{
+      const q=document.getElementById('searchInput').value.trim();
+      if(!q)return alert('فضلاً أدخل كلمة بحث');
+      mode='search'; query=q; page=1; results.innerHTML=''; loadScripts();
+    };
+    loadMore.onclick=()=>{ if(page<total){ page++; loadScripts(); } };
 
-    // تحميل مبدئي
-    window.addEventListener('load', () => loadScripts());
+    window.addEventListener('load', loadScripts);
   </script>
 </body>
 </html>
