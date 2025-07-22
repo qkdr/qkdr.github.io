@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>مرحبا بكم في مكتبة السكربتات</title>
+  <title>مكتبة سكربتات ScriptBlox</title>
   <style>
-    /* خلفية متحركة */
     @keyframes gradient {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       font-family: 'Tajawal', sans-serif;
       color: #fff;
       background: linear-gradient(-45deg, #1e3c72, #2a5298, #1e3c72, #2a5298);
@@ -21,96 +19,82 @@
       animation: gradient 15s ease infinite;
       overflow-x: hidden;
     }
-    /* إطار زجاجي */
     .glass {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 16px;
       backdrop-filter: blur(8px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 800px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+      padding: 20px; margin: 20px auto;
+      max-width: 900px;
       transition: transform 0.3s;
     }
-    .glass:hover {
-      transform: scale(1.02);
-    }
-    /* العنوان */
-    h1 {
-      text-align: center;
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-    /* زر شفاف */
+    .glass:hover { transform: scale(1.02); }
+    h1 { text-align: center; font-size: 2.5em; margin-bottom: 10px; }
+    .controls { text-align: center; margin-bottom: 15px; }
     .btn {
       display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 10px 24px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background 0.3s, transform 0.2s;
-      margin: 5px;
-      text-decoration: none;
-      color: #fff;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 8px 16px; border-radius: 12px;
+      cursor: pointer; font-size: 1em;
+      margin: 5px; transition: background 0.3s, transform 0.2s;
+      color: #fff; text-decoration: none;
     }
     .btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.3);
       transform: translateY(-2px);
     }
-    /* صور داخل إطارات */
-    .image-frame {
-      display: inline-block;
-      overflow: hidden;
+    input[type="text"] {
+      padding:8px 12px; border-radius:8px;
+      border:1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px); background: rgba(255,255,255,0.1);
+      color:#fff; width:50%;
+      margin-right:5px;
+    }
+    #results { display: flex; flex-wrap: wrap; justify-content: center; }
+    .script-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 12px;
       margin: 10px;
-      border: 2px solid rgba(255, 255, 255, 0.4);
+      width: 240px;
+      overflow: hidden;
       transition: transform 0.3s;
     }
-    .image-frame:hover {
-      transform: scale(1.05);
+    .script-card:hover { transform: scale(1.03); }
+    .script-card img {
+      width: 100%; height: 140px; object-fit: cover;
     }
-    .image-frame img {
-      display: block;
-      max-width: 200px;
-      height: auto;
+    .script-info {
+      padding: 10px;
+      text-align: center;
     }
-    /* حاوية النتائج */
-    #results {
-      margin-top: 20px;
+    .script-info h3 {
+      margin: 5px 0; font-size: 1.1em; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
     }
-    /* نافذة عرض السكربت */
+    .script-info p { margin: 4px 0; font-size: 0.9em; }
+    #loadMore { margin: 20px auto; display: block; }
     .modal {
-      position: fixed;
-      top: 50%; left: 50%;
+      position: fixed; top:50%; left:50%;
       transform: translate(-50%, -50%) scale(0);
-      width: 80%; max-width: 700px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 12px;
-      padding: 20px;
-      color: #fff;
-      z-index: 1000;
+      width: 90%; max-width: 700px;
+      background: rgba(0,0,0,0.85);
+      border-radius: 12px; padding: 20px;
+      color: #fff; z-index:1000;
       transition: transform 0.3s ease-in-out;
     }
-    .modal.show {
-      transform: translate(-50%, -50%) scale(1);
+    .modal.show { transform: translate(-50%, -50%) scale(1); }
+    .modal .close {
+      float: left; cursor: pointer;
+      font-size: 1.3em; margin-bottom: 10px;
     }
     .modal pre {
-      white-space: pre-wrap;
-      word-break: break-all;
-      max-height: 60vh;
-      overflow-y: auto;
+      white-space: pre-wrap; word-break: break-all;
+      max-height: 60vh; overflow-y: auto;
       background: rgba(255,255,255,0.05);
-      padding: 10px;
-      border-radius: 8px;
-    }
-    .modal .close {
-      float: left;
-      cursor: pointer;
-      font-size: 1.2em;
-      margin-bottom: 10px;
+      padding: 10px; border-radius: 8px;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
@@ -118,25 +102,21 @@
 <body>
 
   <div class="glass">
-    <h1>أهلاً وسهلاً بكم في مكتبة السكربتات</h1>
-    <p style="text-align:center;">
-      يمكنك البحث عن أي سكربت تشاء من موقع ScriptBlox بنقرة زر!
-    </p>
-    <div style="text-align:center;">
-      <input id="searchInput" type="text" placeholder="أدخل اسم اللعبة أو السكربت" style="padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.5); backdrop-filter: blur(4px); background: rgba(255,255,255,0.1); color:#fff; width:60%;">
-      <button id="searchBtn" class="btn">🔍 بحث</button>
+    <h1>أهلاً في مكتبة سكربتات ScriptBlox</h1>
+    <div class="controls">
+      <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
+      <button class="btn" id="searchBtn">🔍 بحث</button>
+      <button class="btn" data-mode="fetch">الرئيسية</button>
+      <button class="btn" data-mode="free">مجانية</button>
+      <button class="btn" data-mode="unverified">غير محققة</button>
+      <button class="btn" data-mode="mostviewed">الأكثر مشاهدة</button>
+      <button class="btn" data-mode="trending">تريندينج</button>
+      <button class="btn" data-mode="verified">محققة</button>
     </div>
     <div id="results"></div>
+    <button class="btn" id="loadMore" style="display:none;">▶️ المزيد</button>
   </div>
 
-  <div class="glass" style="text-align:center;">
-    <!-- أمثلة لصور داخل إطارات -->
-    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=ScriptBlox" alt="ScriptBlox"></div>
-    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=Roblox+Scripts" alt="Roblox Scripts"></div>
-    <div class="image-frame"><img src="https://via.placeholder.com/200x120?text=Gaming+Fun" alt="Gaming"></div>
-  </div>
-
-  <!-- مودال عرض السكربت -->
   <div id="scriptModal" class="modal">
     <span class="close" onclick="closeModal()">✖️ إغلاق</span>
     <h2 id="scriptTitle"></h2>
@@ -144,37 +124,103 @@
   </div>
 
   <script>
+    let currentMode = 'fetch';
+    let currentQuery = '';
+    let currentPage = 1;
+    let totalPages = 1;
+
     const resultsDiv = document.getElementById('results');
+    const loadBtn = document.getElementById('loadMore');
     const modal = document.getElementById('scriptModal');
     const titleEl = document.getElementById('scriptTitle');
     const contentEl = document.getElementById('scriptContent');
 
+    document.querySelectorAll('.controls .btn[data-mode]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentMode = btn.dataset.mode;
+        currentQuery = '';
+        currentPage = 1;
+        resultsDiv.innerHTML = '';
+        loadScripts();
+      });
+    });
+
     document.getElementById('searchBtn').addEventListener('click', () => {
       const q = document.getElementById('searchInput').value.trim();
       if (!q) return alert('فضلاً أدخل كلمة بحث');
-      runSearch(q);
+      currentMode = 'search';
+      currentQuery = q;
+      currentPage = 1;
+      resultsDiv.innerHTML = '';
+      loadScripts();
     });
 
-    function runSearch(query) {
-      resultsDiv.innerHTML = '<p>جاري البحث...</p>';
-      fetch(`https://scriptblox.com/api/script/search?q=${encodeURIComponent(query)}`)
+    loadBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadScripts();
+      }
+    });
+
+    function buildURL() {
+      const base = 'https://scriptblox.com/api/script/';
+      let url = '';
+      switch (currentMode) {
+        case 'search':
+          url = base + `search?q=${encodeURIComponent(currentQuery)}&page=${currentPage}`;
+          break;
+        case 'free':
+          url = base + `fetch?mode=free&page=${currentPage}`;
+          break;
+        case 'unverified':
+          url = base + `fetch?verified=0&page=${currentPage}`;
+          break;
+        case 'mostviewed':
+          url = base + `fetch?sortBy=views&order=desc&page=${currentPage}`;
+          break;
+        case 'trending':
+          url = base + `trending?page=${currentPage}`;
+          break;
+        case 'verified':
+          url = base + `fetch?filters=verified&legacy_filters=true&page=${currentPage}`;
+          break;
+        default:
+          // fetch (home)
+          url = base + `fetch?page=${currentPage}`;
+      }
+      return url;
+    }
+
+    function loadScripts() {
+      resultsDiv.innerHTML += `<p style="width:100%; text-align:center;">جاري التحميل...</p>`;
+      fetch(buildURL())
         .then(res => res.json())
         .then(data => {
-          resultsDiv.innerHTML = '';
-          if (!data.result || data.result.scripts.length === 0) {
-            resultsDiv.innerHTML = `<p>❌ لم يتم العثور على أي سكربتات لـ "${query}"</p>`;
-            return;
+          // حسب نوع الاستجابة: result.scripts
+          const resObj = data.result || data.script ? data : { result: data.result };
+          totalPages = resObj.result.totalPages || 1;
+          resultsDiv.innerHTML = ''; // نمسح رسالة التحميل
+          if (!resObj.result.scripts || resObj.result.scripts.length === 0) {
+            resultsDiv.innerHTML = `<p style="width:100%; text-align:center;">لا توجد نتائج.</p>`;
+          } else {
+            resObj.result.scripts.forEach(s => {
+              const card = document.createElement('div');
+              card.className = 'script-card';
+              card.innerHTML = `
+                <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="${s.title}">
+                <div class="script-info">
+                  <h3>${s.title}</h3>
+                  <p>📦 ${s.game?.name || 'عام'}</p>
+                  <button class="btn" onclick="fetchScript('${s.slug}', '${s.title}')">عرض السكربت</button>
+                </div>`;
+              resultsDiv.appendChild(card);
+            });
           }
-          data.result.scripts.forEach(s => {
-            const btn = document.createElement('button');
-            btn.className = 'btn';
-            btn.textContent = s.title || 'بدون عنوان';
-            btn.onclick = () => fetchScript(s.slug, s.title);
-            resultsDiv.appendChild(btn);
-          });
+          // زر المزيد
+          loadBtn.style.display = (currentPage < totalPages) ? 'block' : 'none';
         })
         .catch(err => {
-          resultsDiv.innerHTML = `<p>❌ حدث خطأ في الاتصال بالموقع</p>`;
+          resultsDiv.innerHTML = `<p style="width:100%; text-align:center;">❌ خطأ في الاتصال</p>`;
           console.error(err);
         });
     }
@@ -183,8 +229,9 @@
       fetch(`https://scriptblox.com/api/script/${slug}`)
         .then(res => res.json())
         .then(data => {
-          if (data.script && data.script.script) {
-            showModal(title, data.script.script);
+          const sc = data.script;
+          if (sc && sc.script) {
+            showModal(title, sc.script);
           } else {
             alert('⚠️ السكربت محمي أو غير متاح');
           }
@@ -200,16 +247,12 @@
       contentEl.textContent = content;
       modal.classList.add('show');
     }
-
     function closeModal() {
       modal.classList.remove('show');
     }
 
-    // بحث مبدئي عن "Dead Rails"
-    window.addEventListener('load', () => {
-      document.getElementById('searchInput').value = 'Dead Rails';
-      runSearch('Dead Rails');
-    });
+    // تحميل مبدئي
+    window.addEventListener('load', () => loadScripts());
   </script>
 </body>
 </html>
