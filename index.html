@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>مكتبة سكربتات ScriptBlox</title>
   <style>
-    /* خلفية متحركة أكثر أناقة */
+    /* خلفية متحركة فخمة */
     @keyframes gradient {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
+      0%   { background-position: 0% 0%; }
+      50%  { background-position: 100% 100%; }
       100% { background-position: 0% 0%; }
     }
     body {
       margin: 0; padding: 0;
       font-family: 'Tajawal', sans-serif;
       color: #fff;
-      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
-      background-size: 400% 400%;
+      background: radial-gradient(circle at top left, #4b6cb7, #182848);
+      background-size: 200% 200%;
       animation: gradient 12s ease infinite;
       overflow-x: hidden;
     }
@@ -49,8 +49,11 @@
     input[type="text"] {
       padding: 8px 12px; border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.5);
-      backdrop-filter: blur(4px); background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(4px); background: rgba(255,255,255,0.15);
       color: #fff; width: 50%; margin-right: 5px;
+    }
+    input[type="text"]::placeholder {
+      color: rgba(255,255,255,0.7);
     }
     #results { display: flex; flex-wrap: wrap; justify-content: center }
     .script-card {
@@ -92,16 +95,24 @@
     }
     .modal.show { transform: translate(-50%, -50%) scale(1) }
     .modal .close {
-      float: left; cursor: pointer; font-size: 1.3em; margin-bottom: 10px;
+      position: absolute; top: 12px; right: 16px;
+      cursor: pointer; font-size: 1.4em;
     }
+    .modal .copy-btn {
+      position: absolute; bottom: 16px; right: 16px;
+      background: rgba(255,255,255,0.2); border: none;
+      padding: 6px 12px; border-radius: 8px;
+      cursor: pointer; color: #fff; transition: background .3s;
+    }
+    .modal .copy-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .modal h2 { margin-top: 0; padding-top: 20px; text-align: center; }
     .modal pre {
       white-space: pre-wrap; word-break: break-all;
       max-height: 60vh; overflow-y: auto;
       background: rgba(255,255,255,0.05);
       padding: 10px; border-radius: 8px;
-    }
-    #copyBtn {
-      position: absolute; top: 20px; left: 20px;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
@@ -124,10 +135,10 @@
   </div>
 
   <div id="scriptModal" class="modal">
-    <span class="close" onclick="closeModal()">✖️ إغلاق</span>
-    <button class="btn" id="copyBtn">نسخ</button>
-    <h2 id="scriptTitle" style="margin-top:10px;"></h2>
+    <span class="close" onclick="closeModal()">✖️</span>
+    <h2 id="scriptTitle"></h2>
     <pre id="scriptContent"></pre>
+    <button class="copy-btn" id="copyBtn">نسخ السكربت</button>
   </div>
 
   <script>
@@ -138,8 +149,10 @@
     const tEl = document.getElementById('scriptTitle');
     const cEl = document.getElementById('scriptContent');
     const copyBtn = document.getElementById('copyBtn');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
 
-    // استخدم Codetabs لتجاوز CORS
+    // بروكسي لتجاوز CORS
     function proxy(url) {
       return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
     }
@@ -165,20 +178,19 @@
 
     async function loadScripts() {
       try {
-        if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
-        const res = await fetch(apiURL());
+        if (page === 1) results.innerHTML = `<p style="width:100%; text-align:center;">جاري التحميل...</p>`;
+        const res  = await fetch(apiURL());
         const data = await res.json();
-        const R = data.result || data;
-        total = R.totalPages || 1;
+        const R    = data.result || data;
+        total      = R.totalPages || 1;
         if (page === 1) results.innerHTML = '';
         if (!R.scripts || R.scripts.length === 0) {
-          if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
+          if (page === 1) results.innerHTML = `<p style="width:100%; text-align:center;">لا توجد نتائج.</p>`;
         } else {
           R.scripts.forEach(s => {
             const card = document.createElement('div');
             card.className = 'script-card';
-            // حساب التاريخ والمشاهدات
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const date  = new Date(s.createdAt).toLocaleDateString('ar-EG');
             const views = s.views || 0;
             card.innerHTML = `
               <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="">
@@ -195,15 +207,15 @@
         loadMore.style.display = page < total ? 'block' : 'none';
       } catch (e) {
         console.error(e);
-        results.innerHTML = `<p style="width:100%;text-align:center;">❌ خطأ في الاتصال</p>`;
+        results.innerHTML = `<p style="width:100%; text-align:center;">❌ خطأ في الاتصال</p>`;
       }
     }
 
     async function showScript(slug, title) {
       try {
         const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d = await res.json();
-        const sc = d.script;
+        const d   = await res.json();
+        const sc  = d.script;
         if (sc && sc.script) {
           tEl.textContent = title;
           cEl.textContent = sc.script;
@@ -221,26 +233,43 @@
       modal.classList.remove('show');
     }
 
-    // نسخ للكود
-    copyBtn.addEventListener('click', () => {
+    // زر البحث + دعم مفتاح Enter
+    searchBtn.onclick = doSearch;
+    searchInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') doSearch();
+    });
+    function doSearch() {
+      const q = searchInput.value.trim();
+      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      mode  = 'search';
+      query = q;
+      page  = 1;
+      results.innerHTML = '';
+      loadScripts();
+    }
+
+    // نسخ السكربت
+    copyBtn.onclick = () => {
       navigator.clipboard.writeText(cEl.textContent)
         .then(() => alert('✅ تم نسخ السكربت'))
         .catch(() => alert('❌ فشل النسخ'));
-    });
+    };
 
-    // تفعيل الأزرار
+    // أزرار الفلتر
     document.querySelectorAll('.controls .btn[data-mode]').forEach(b => {
       b.onclick = () => {
-        mode = b.dataset.mode; query = ''; page = 1; results.innerHTML = ''; loadScripts();
+        mode = b.dataset.mode;
+        query = '';
+        page = 1;
+        results.innerHTML = '';
+        loadScripts();
       };
     });
-    document.getElementById('searchBtn').onclick = () => {
-      const q = document.getElementById('searchInput').value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
-      mode = 'search'; query = q; page = 1; results.innerHTML = ''; loadScripts();
-    };
     loadMore.onclick = () => {
-      if (page < total) { page++; loadScripts(); }
+      if (page < total) {
+        page++;
+        loadScripts();
+      }
     };
 
     window.addEventListener('load', loadScripts);
