@@ -5,91 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>مكتبة سكربتات ScriptBlox</title>
   <style>
+    /* خلفية متحركة أكثر أناقة */
     @keyframes gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
     }
     body {
-      margin:0; padding:0;
-      font-family:'Tajawal',sans-serif;
-      color:#fff;
-      background:linear-gradient(-45deg,#1e3c72,#2a5298,#1e3c72,#2a5298);
-      background-size:400% 400%;
-      animation:gradient 15s ease infinite;
-      overflow-x:hidden;
+      margin: 0; padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      color: #fff;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+      background-size: 400% 400%;
+      animation: gradient 12s ease infinite;
+      overflow-x: hidden;
     }
     .glass {
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:16px;
-      backdrop-filter:blur(8px);
-      box-shadow:0 4px 30px rgba(0,0,0,0.2);
-      padding:20px; margin:20px auto;
-      max-width:900px;
-      transition:transform .3s;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+      padding: 20px; margin: 20px auto;
+      max-width: 900px;
+      transition: transform .3s;
     }
-    .glass:hover{transform:scale(1.02)}
-    h1{text-align:center;font-size:2.5em;margin-bottom:10px}
-    .controls{text-align:center;margin-bottom:15px}
+    .glass:hover { transform: scale(1.02) }
+    h1 { text-align: center; font-size: 2.5em; margin-bottom: 10px }
+    .controls { text-align: center; margin-bottom: 15px }
     .btn {
-      display:inline-block;
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.5);
-      padding:8px 16px;border-radius:12px;
-      cursor:pointer;font-size:1em;
-      margin:5px;transition:background .3s,transform .2s;
-      color:#fff;text-decoration:none;
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 8px 16px; border-radius: 12px;
+      cursor: pointer; font-size: 1em;
+      margin: 5px; transition: background .3s, transform .2s;
+      color: #fff; text-decoration: none;
     }
-    .btn:hover{
-      background:rgba(255,255,255,0.3);
-      transform:translateY(-2px);
+    .btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
     }
     input[type="text"] {
-      padding:8px 12px;border-radius:8px;
-      border:1px solid rgba(255,255,255,0.5);
-      backdrop-filter:blur(4px);background:rgba(255,255,255,0.1);
-      color:#fff;width:50%;margin-right:5px;
+      padding: 8px 12px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px); background: rgba(255,255,255,0.1);
+      color: #fff; width: 50%; margin-right: 5px;
     }
-    #results{display:flex;flex-wrap:wrap;justify-content:center}
+    #results { display: flex; flex-wrap: wrap; justify-content: center }
     .script-card {
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:12px;
-      margin:10px;
-      width:240px;
-      overflow:hidden;
-      transition:transform .3s;
+      position: relative;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      margin: 10px;
+      width: 240px;
+      overflow: hidden;
+      transition: transform .3s;
     }
-    .script-card:hover{transform:scale(1.03)}
-    .script-card img{
-      width:100%;height:140px;object-fit:cover;
+    .script-card:hover { transform: scale(1.03) }
+    .script-card img {
+      width: 100%; height: 140px; object-fit: cover;
     }
-    .script-info{padding:10px;text-align:center}
-    .script-info h3{
-      margin:5px 0;font-size:1.1em;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    .overlay-left, .overlay-right {
+      position: absolute; top: 8px; padding: 4px 8px;
+      background: rgba(0,0,0,0.5); border-radius: 8px;
+      font-size: 0.8em;
     }
-    .script-info p{margin:4px 0;font-size:.9em}
-    #loadMore{margin:20px auto;display:block}
+    .overlay-left { left: 8px; }
+    .overlay-right { right: 8px; }
+    .script-info { padding: 10px; text-align: center }
+    .script-info h3 {
+      margin: 5px 0; font-size: 1.1em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .script-info p { margin: 4px 0; font-size: .9em }
+    #loadMore { margin: 20px auto; display: block }
     .modal {
-      position:fixed;top:50%;left:50%;
-      transform:translate(-50%,-50%) scale(0);
-      width:90%;max-width:700px;
-      background:rgba(0,0,0,0.85);
-      border-radius:12px;padding:20px;
-      color:#fff;z-index:1000;
-      transition:transform .3s ease-in-out;
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 90%; max-width: 700px;
+      background: rgba(0,0,0,0.9);
+      border-radius: 12px; padding: 20px;
+      color: #fff; z-index: 1000;
+      transition: transform .3s ease-in-out;
     }
-    .modal.show{transform:translate(-50%,-50%) scale(1)}
-    .modal .close{
-      float:left;cursor:pointer;font-size:1.3em;margin-bottom:10px;
+    .modal.show { transform: translate(-50%, -50%) scale(1) }
+    .modal .close {
+      float: left; cursor: pointer; font-size: 1.3em; margin-bottom: 10px;
     }
-    .modal pre{
-      white-space:pre-wrap;word-break:break-all;
-      max-height:60vh;overflow-y:auto;
-      background:rgba(255,255,255,0.05);
-      padding:10px;border-radius:8px;
+    .modal pre {
+      white-space: pre-wrap; word-break: break-all;
+      max-height: 60vh; overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      padding: 10px; border-radius: 8px;
+    }
+    #copyBtn {
+      position: absolute; top: 20px; left: 20px;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
@@ -97,7 +109,7 @@
 <body>
 
   <div class="glass">
-    <h1>أهلاً في مكتبة سكربتات ScriptBlox</h1>
+    <h1>مكتبة سكربتات ScriptBlox</h1>
     <div class="controls">
       <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
       <button class="btn" id="searchBtn">🔍 بحث</button>
@@ -105,7 +117,6 @@
       <button class="btn" data-mode="free">مجانية</button>
       <button class="btn" data-mode="unverified">غير محققة</button>
       <button class="btn" data-mode="mostviewed">الأكثر مشاهدة</button>
-      <button class="btn" data-mode="trending">تريندينج</button>
       <button class="btn" data-mode="verified">محققة</button>
     </div>
     <div id="results"></div>
@@ -114,7 +125,8 @@
 
   <div id="scriptModal" class="modal">
     <span class="close" onclick="closeModal()">✖️ إغلاق</span>
-    <h2 id="scriptTitle"></h2>
+    <button class="btn" id="copyBtn">نسخ</button>
+    <h2 id="scriptTitle" style="margin-top:10px;"></h2>
     <pre id="scriptContent"></pre>
   </div>
 
@@ -125,10 +137,11 @@
     const modal = document.getElementById('scriptModal');
     const tEl = document.getElementById('scriptTitle');
     const cEl = document.getElementById('scriptContent');
+    const copyBtn = document.getElementById('copyBtn');
 
-    // لتعويض CORS على GitHub Pages نستخدم AllOrigins
+    // استخدم Codetabs لتجاوز CORS
     function proxy(url) {
-      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+      return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
     }
 
     function apiURL() {
@@ -143,8 +156,6 @@
           return proxy(base + `fetch?verified=0${p}`);
         case 'mostviewed':
           return proxy(base + `fetch?sortBy=views&order=desc${p}`);
-        case 'trending':
-          return proxy(base + `trending${p}`);
         case 'verified':
           return proxy(base + `fetch?filters=verified&legacy_filters=true${p}`);
         default:
@@ -152,68 +163,85 @@
       }
     }
 
-    function loadScripts() {
-      if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
-      fetch(apiURL())
-        .then(r => r.json())
-        .then(data => {
-          const R = data.result || data;
-          total = R.totalPages || 1;
-          if (page === 1) results.innerHTML = '';
-          if (!R.scripts || !R.scripts.length) {
-            if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
-          } else {
-            R.scripts.forEach(s => {
-              const card = document.createElement('div');
-              card.className = 'script-card';
-              card.innerHTML = `
-                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
-                <div class="script-info">
-                  <h3>${s.title}</h3>
-                  <p>📦 ${s.game?.name||'عام'}</p>
-                  <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض السكربت</button>
-                </div>`;
-              results.appendChild(card);
-            });
-          }
-          loadMore.style.display = page<total?'block':'none';
-        })
-        .catch(e=>{
-          results.innerHTML = `<p style="width:100%;text-align:center;">❌ خطأ في الاتصال</p>`;
-          console.error(e);
-        });
+    async function loadScripts() {
+      try {
+        if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
+        const res = await fetch(apiURL());
+        const data = await res.json();
+        const R = data.result || data;
+        total = R.totalPages || 1;
+        if (page === 1) results.innerHTML = '';
+        if (!R.scripts || R.scripts.length === 0) {
+          if (page === 1) results.innerHTML = `<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
+        } else {
+          R.scripts.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'script-card';
+            // حساب التاريخ والمشاهدات
+            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const views = s.views || 0;
+            card.innerHTML = `
+              <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="">
+              <div class="overlay-left">👁️ ${views}</div>
+              <div class="overlay-right">📅 ${date}</div>
+              <div class="script-info">
+                <h3>${s.title}</h3>
+                <p>📦 ${s.game?.name || 'عام'}</p>
+                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض السكربت</button>
+              </div>`;
+            results.appendChild(card);
+          });
+        }
+        loadMore.style.display = page < total ? 'block' : 'none';
+      } catch (e) {
+        console.error(e);
+        results.innerHTML = `<p style="width:100%;text-align:center;">❌ خطأ في الاتصال</p>`;
+      }
     }
 
-    function showScript(slug, title) {
-      fetch(proxy(`https://scriptblox.com/api/script/${slug}`))
-        .then(r=>r.json())
-        .then(d=>{
-          const sc = d.script;
-          if (sc && sc.script) {
-            tEl.textContent = title;
-            cEl.textContent = sc.script;
-            modal.classList.add('show');
-          } else alert('⚠️ غير متاح');
-        })
-        .catch(e=>{
-          alert('❌ فشل التحميل');
-          console.error(e);
-        });
+    async function showScript(slug, title) {
+      try {
+        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        const d = await res.json();
+        const sc = d.script;
+        if (sc && sc.script) {
+          tEl.textContent = title;
+          cEl.textContent = sc.script;
+          modal.classList.add('show');
+        } else {
+          alert('⚠️ السكربت محمي أو غير متاح');
+        }
+      } catch (e) {
+        console.error(e);
+        alert('❌ فشل التحميل');
+      }
     }
 
-    function closeModal(){ modal.classList.remove('show'); }
+    function closeModal() {
+      modal.classList.remove('show');
+    }
 
-    document.querySelectorAll('.controls .btn[data-mode]').forEach(b=>{
-      b.onclick=()=>{
-        mode=b.dataset.mode; query=''; page=1; results.innerHTML=''; loadScripts();
+    // نسخ للكود
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(cEl.textContent)
+        .then(() => alert('✅ تم نسخ السكربت'))
+        .catch(() => alert('❌ فشل النسخ'));
+    });
+
+    // تفعيل الأزرار
+    document.querySelectorAll('.controls .btn[data-mode]').forEach(b => {
+      b.onclick = () => {
+        mode = b.dataset.mode; query = ''; page = 1; results.innerHTML = ''; loadScripts();
       };
     });
-    document.getElementById('searchBtn').onclick=()=>{
-      const q=document.getElementById('searchInput').value.trim();
-      if(!q)return alert('فضلاً أدخل كلمة بحث');
-      mode='search'; query=q; page=1; results.innerHTML=''; loadScripts();
+    document.getElementById('searchBtn').onclick = () => {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      mode = 'search'; query = q; page = 1; results.innerHTML = ''; loadScripts();
     };
-    loadMore.onclick=()=>{ if(page<total){ page++; loadScripts(); } };
+    loadMore.onclick = () => {
+      if (page < total) { page++; loadScripts(); }
+    };
 
     window.addEventListener('load', loadScripts);
   </script>
