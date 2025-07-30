@@ -5,153 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>اكسبلويت العرب</title>
   <style>
-    /* تدرجات لونية متنوعة وعشوائية */
+    /* تدرجات لونية متنوعة */
     @keyframes gradient {
       0%   { background-position: 0% 0%; }
       50%  { background-position: 100% 100%; }
       100% { background-position: 0% 0%; }
     }
     body {
-      margin: 0; padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      color: #fff;
-      background-size: 200% 200%;
-      animation: gradient 12s ease infinite;
-      overflow-x: hidden;
+      margin:0; padding:0;
+      font-family:'Tajawal',sans-serif;
+      color:#fff;
+      background-size:200% 200%;
+      animation:gradient 12s ease infinite;
+      overflow-x:hidden;
     }
     .glass {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-      padding: 20px; margin: 20px auto;
-      max-width: 900px;
-      transition: transform .3s;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:16px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 8px 40px rgba(0,0,0,0.3);
+      padding:20px; margin:20px auto;
+      max-width:900px;
+      transition:transform .3s;
     }
-    .glass:hover { transform: scale(1.02) }
-    h1 { text-align: center; font-size: 2.5em; margin-bottom: 10px }
-    .controls { text-align: center; margin-bottom: 15px }
+    .glass:hover { transform:scale(1.02) }
+    h1 { text-align:center; font-size:2.5em; margin-bottom:10px }
+    .controls { text-align:center; margin-bottom:15px }
     .btn {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      padding: 8px 16px; border-radius: 12px;
-      cursor: pointer; font-size: 1em;
-      margin: 5px; transition: background .3s, transform .2s;
-      color: #fff; text-decoration: none;
+      display:inline-block;
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.4);
+      padding:8px 16px; border-radius:12px;
+      cursor:pointer; font-size:1em;
+      margin:5px; transition:background .3s,transform .2s;
+      color:#fff; text-decoration:none;
     }
     .btn:hover {
-      background: rgba(255,255,255,0.3);
-      transform: translateY(-2px);
+      background:rgba(255,255,255,0.3);
+      transform:translateY(-2px);
     }
     input[type="text"] {
-      padding: 8px 12px; border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.5);
-      backdrop-filter: blur(4px); background: rgba(255,255,255,0.15);
-      color: #fff; width: 50%; margin-right: 5px;
+      padding:8px 12px; border-radius:8px;
+      border:1px solid rgba(255,255,255,0.5);
+      backdrop-filter:blur(4px); background:rgba(255,255,255,0.15);
+      color:#fff; width:50%; margin-right:5px;
     }
     input[type="text"]::placeholder {
-      color: rgba(255,255,255,0.7);
+      color:rgba(255,255,255,0.7);
     }
     #results {
-      display: flex; flex-wrap: wrap; justify-content: center;
+      display:flex; flex-wrap:wrap; justify-content:center;
     }
     .script-card {
-      position: relative;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      margin: 10px; width: 240px; overflow: hidden;
-      transition: transform .3s;
+      position:relative;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:12px;
+      margin:10px; width:240px; overflow:hidden;
+      transition:transform .3s;
     }
-    .script-card:hover { transform: scale(1.03) }
+    .script-card:hover { transform:scale(1.03) }
     .script-card img {
-      width: 100%; height: 140px; object-fit: cover;
+      width:100%; height:140px; object-fit:cover;
     }
     .overlay-left, .overlay-right {
-      position: absolute; top: 8px; padding: 4px 8px;
-      background: rgba(0,0,0,0.5); border-radius: 8px; font-size: 0.8em;
+      position:absolute; top:8px; padding:4px 8px;
+      background:rgba(0,0,0,0.5); border-radius:8px; font-size:.8em;
     }
-    .overlay-left { left: 8px; }
-    .overlay-right { right: 8px; }
+    .overlay-left { left:8px; }
+    .overlay-right { right:8px; }
     .script-info {
-      padding: 10px; text-align: center;
+      padding:10px; text-align:center;
     }
     .script-info h3 {
-      margin: 5px 0; font-size: 1.1em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin:5px 0; font-size:1.1em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .script-info p { margin: 4px 0; font-size: .9em }
-    #loadMore { margin: 20px auto; display: block }
+    .script-info p { margin:4px 0; font-size:.9em }
+    #loadMore { margin:20px auto; display:block }
     .modal {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%,-50%) scale(0);
-      width: 90%; max-width: 700px;
-      background: rgba(0,0,0,0.9);
-      border-radius: 12px; padding: 20px;
-      color: #fff; z-index: 1000;
-      transition: transform .3s ease-in-out;
+      position:fixed; top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(0);
+      width:90%; max-width:700px;
+      background:rgba(0,0,0,0.9);
+      border-radius:12px; padding:20px;
+      color:#fff; z-index:1000;
+      transition:transform .3s ease-in-out;
     }
-    .modal.show { transform: translate(-50%,-50%) scale(1) }
+    .modal.show { transform:translate(-50%,-50%) scale(1) }
     .modal .close {
-      position: absolute; top: 12px; right: 16px;
-      cursor: pointer; font-size: 1.4em;
+      position:absolute; top:12px; right:16px;
+      cursor:pointer; font-size:1.4em;
     }
     .modal .copy-btn {
-      position: absolute; bottom: 16px; right: 16px;
-      background: rgba(255,255,255,0.2); border: none;
-      padding: 6px 12px; border-radius: 8px;
-      cursor: pointer; color: #fff; transition: background .3s;
+      position:absolute; bottom:16px; right:16px;
+      background:rgba(255,255,255,0.2); border:none;
+      padding:6px 12px; border-radius:8px;
+      cursor:pointer; color:#fff; transition:background .3s;
     }
     .modal .copy-btn:hover {
-      background: rgba(255,255,255,0.3);
+      background:rgba(255,255,255,0.3);
     }
-    .modal h2 { margin-top: 0; padding-top: 20px; text-align: center; }
+    .modal h2 { margin-top:0; padding-top:20px; text-align:center; }
     .modal pre {
-      white-space: pre-wrap; word-break: break-all;
-      max-height: 60vh; overflow-y: auto;
-      background: rgba(255,255,255,0.05);
-      padding: 10px; border-radius: 8px;
-    }
-    /* نافذة الترحيب */
-    #welcomeOverlay {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.8); display:flex;
-      align-items:center; justify-content:center;
-      z-index:2000;
-    }
-    #welcomeBox {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 16px; padding: 30px;
-      max-width: 500px; text-align: center;
-      backdrop-filter: blur(10px); color: #fff;
-    }
-    #welcomeBox p { margin: 15px 0; font-size: 1em; }
-    #welcomeBox button {
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      padding: 8px 16px; border-radius: 12px;
-      color: #fff; cursor: pointer;
-      transition: background .3s;
-    }
-    #welcomeBox button:hover {
-      background: rgba(255,255,255,0.3);
+      white-space:pre-wrap; word-break:break-all;
+      max-height:60vh; overflow-y:auto;
+      background:rgba(255,255,255,0.05);
+      padding:10px; border-radius:8px;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-  <!-- نافذة الترحيب -->
-  <div id="welcomeOverlay">
-    <div id="welcomeBox">
-      <h2>أهلاً بك!</h2>
-      <p>هذا الموقع تجريبي وقد يحتوي على بعض الأخطاء البسيطة.</p>
-      <button id="dismissWelcome">حسناً، فهمت</button>
-    </div>
-  </div>
 
   <div class="glass">
     <h1>اكسبلويت العرب</h1>
@@ -176,7 +142,7 @@
   </div>
 
   <script>
-    // مجموعة التدرجات بعد إزالة الألوان الوردية
+    // تدرجات عشوائية
     const gradients = [
       'radial-gradient(circle at top left, #4b6cb7, #182848)',
       'linear-gradient(60deg, #96fbc4, #f9f586)',
@@ -184,11 +150,11 @@
       'linear-gradient(75deg, #ffecd2, #fcb69f)',
       'radial-gradient(circle at bottom right, #89f7fe, #66a6ff)',
       'linear-gradient(45deg, #feb47b, #ff7e5f)',
-      'radial-gradient(circle at center, #a18cd1, #fbc2eb)'
+      'radial-gradient(circle at center, #a18cd1, #6e45e2)'
     ];
-    document.body.style.background = gradients[Math.floor(Math.random() * gradients.length)];
+    document.body.style.background = gradients[Math.floor(Math.random()*gradients.length)];
 
-    let mode = 'fetch', query = '', page = 1, total = 1;
+    let mode='fetch', query='', page=1, total=1;
     const results = document.getElementById('results');
     const loadMore = document.getElementById('loadMore');
     const modal = document.getElementById('scriptModal');
@@ -197,113 +163,105 @@
     const copyBtn = document.getElementById('copyBtn');
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
-    const welcomeOverlay = document.getElementById('welcomeOverlay');
-    const dismissWelcome = document.getElementById('dismissWelcome');
 
+    // استخدم AllOrigins لتخطي CORS
     function proxy(url) {
-      return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
+      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
 
     function apiURL() {
-      const base = 'https://scriptblox.com/api/script/';
-      const p = `&page=${page}`;
-      switch (mode) {
+      const base='https://scriptblox.com/api/script/';
+      const p=`&page=${page}`;
+      switch(mode) {
         case 'search':
-          return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
+          return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
         case 'free':
-          return proxy(base + `fetch?mode=free${p}`);
+          return proxy(base+`fetch?mode=free${p}`);
         case 'unverified':
-          return proxy(base + `fetch?verified=0${p}`);
+          return proxy(base+`fetch?verified=0${p}`);
         case 'mostviewed':
-          return proxy(base + `fetch?sortBy=views&order=desc${p}`);
+          return proxy(base+`fetch?sortBy=views&order=desc${p}`);
         case 'verified':
-          return proxy(base + `fetch?filters=verified&legacy_filters=true${p}`);
+          return proxy(base+`fetch?filters=verified&legacy_filters=true${p}`);
         default:
-          return proxy(base + `fetch?page=${page}`);
+          return proxy(base+`fetch?page=${page}`);
       }
     }
 
     async function loadScripts() {
       try {
-        if (page === 1) results.innerHTML = `<p style="width:100%; text-align:center;">جاري التحميل...</p>`;
-        const res = await fetch(apiURL());
-        const data = await res.json();
-        const R = data.result || data;
-        total = R.totalPages || 1;
-        if (page === 1) results.innerHTML = '';
-        if (!R.scripts || !R.scripts.length) {
-          if (page === 1) results.innerHTML = `<p style="width:100%; text-align:center;">لا توجد نتائج.</p>`;
+        if(page===1) results.innerHTML=`<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
+        const res=await fetch(apiURL());
+        const data=await res.json();
+        const R=data.result||data;
+        total=R.totalPages||1;
+        if(page===1) results.innerHTML='';
+        if(!R.scripts||!R.scripts.length) {
+          if(page===1) results.innerHTML=`<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
         } else {
-          R.scripts.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views = s.views || 0;
-            card.innerHTML = `
-              <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="">
+          R.scripts.forEach(s=>{
+            const card=document.createElement('div');
+            card.className='script-card';
+            const date=new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const views=s.views||0;
+            card.innerHTML=`
+              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
               <div class="overlay-left">👁️ ${views}</div>
               <div class="overlay-right">📅 ${date}</div>
               <div class="script-info">
                 <h3>${s.title}</h3>
-                <p>📦 ${s.game?.name || 'عام'}</p>
+                <p>📦 ${s.game?.name||'عام'}</p>
                 <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض السكربت</button>
               </div>`;
             results.appendChild(card);
           });
         }
-        loadMore.style.display = page < total ? 'block' : 'none';
-      } catch (e) {
-        console.error(e);
-        results.innerHTML = `<p style="width:100%; text-align:center;">❌ خطأ في الاتصال</p>`;
+        loadMore.style.display= page<total?'block':'none';
+      } catch(err) {
+        console.error(err);
+        results.innerHTML=`<p style="width:100%;text-align:center;">❌ خطأ في الاتصال: حاول لاحقاً</p>`;
       }
     }
 
-    async function showScript(slug, title) {
+    async function showScript(slug,title) {
       try {
-        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d = await res.json();
-        const sc = d.script;
-        if (sc && sc.script) {
-          tEl.textContent = title;
-          cEl.textContent = sc.script;
+        const res=await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        const d=await res.json();
+        const sc=d.script;
+        if(sc&&sc.script) {
+          tEl.textContent=title;
+          cEl.textContent=sc.script;
           modal.classList.add('show');
-        } else {
-          alert('⚠️ السكربت محمي أو غير متاح');
-        }
-      } catch (e) {
-        console.error(e);
-        alert('❌ فشل التحميل');
+        } else alert('⚠️ السكربت محمي أو غير متاح');
+      } catch(err) {
+        console.error(err);
+        alert('❌ فشل التحميل: حاول لاحقاً');
       }
     }
 
-    function closeModal() {
-      modal.classList.remove('show');
-    }
+    function closeModal(){ modal.classList.remove('show'); }
 
     function doSearch() {
-      const q = searchInput.value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
-      mode = 'search'; query = q; page = 1; results.innerHTML = ''; loadScripts();
+      const q=searchInput.value.trim();
+      if(!q) return alert('فضلاً أدخل كلمة بحث');
+      mode='search'; query=q; page=1; results.innerHTML=''; loadScripts();
     }
 
-    // تعامل مع الواجهة
+    // ربط الأحداث
     searchBtn.addEventListener('click', doSearch);
-    searchInput.addEventListener('keypress', e => { if (e.key === 'Enter') doSearch(); });
-    copyBtn.addEventListener('click', () => {
+    searchInput.addEventListener('keypress', e=>{ if(e.key==='Enter') doSearch(); });
+    copyBtn.addEventListener('click', ()=>{
       navigator.clipboard.writeText(cEl.textContent)
-        .then(() => alert('✅ تم نسخ السكربت'))
-        .catch(() => alert('❌ فشل النسخ'));
+        .then(()=>alert('✅ تم النسخ'))
+        .catch(()=>alert('❌ فشل النسخ'));
     });
-    document.querySelectorAll('.controls .btn[data-mode]').forEach(b => {
-      b.addEventListener('click', () => {
-        mode = b.dataset.mode; query = ''; page = 1; results.innerHTML = ''; loadScripts();
+    document.querySelectorAll('.controls .btn[data-mode]').forEach(b=>{
+      b.addEventListener('click',()=>{
+        mode=b.dataset.mode; query=''; page=1; results.innerHTML=''; loadScripts();
       });
     });
-    loadMore.addEventListener('click', () => { if (page < total) { page++; loadScripts(); } });
-
-    // إغلاق رسالة الترحيب
-    dismissWelcome.addEventListener('click', () => {
-      welcomeOverlay.style.display = 'none';
+    loadMore.addEventListener('click',()=>{
+      if(page<total){ page++; loadScripts(); }
     });
 
     window.addEventListener('load', loadScripts);
