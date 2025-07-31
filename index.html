@@ -5,266 +5,300 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>اكسبلويت العرب</title>
   <style>
-    /* تدرجات لونية متنوعة */
-    @keyframes gradient {
-      0%   { background-position: 0% 0%; }
-      50%  { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
+    :root {
+      --bg-light: #ffffff;
+      --text-light: #000000;
+      --bg-dark: #121212;
+      --text-dark: #ffffff;
+      --card-bg-light: rgba(0,0,0,0.05);
+      --card-bg-dark: rgba(255,255,255,0.1);
     }
     body {
-      margin:0; padding:0;
-      font-family:'Tajawal',sans-serif;
-      color:#fff;
-      background-size:200% 200%;
-      animation:gradient 12s ease infinite;
-      overflow-x:hidden;
+      margin: 0; padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.light-theme {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+    body.dark-theme {
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
     .glass {
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.2);
-      border-radius:16px;
-      backdrop-filter:blur(10px);
-      box-shadow:0 8px 40px rgba(0,0,0,0.3);
-      padding:20px; margin:20px auto;
-      max-width:900px;
-      transition:transform .3s;
+      background: var(--card-bg-light);
+      border-radius: 12px;
+      padding: 20px; margin: 20px auto;
+      max-width: 900px;
+      transition: background 0.3s;
     }
-    .glass:hover { transform:scale(1.02) }
-    h1 { text-align:center; font-size:2.5em; margin-bottom:10px }
-    .controls { text-align:center; margin-bottom:15px }
+    body.dark-theme .glass {
+      background: var(--card-bg-dark);
+    }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+    }
+    .toggle-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    body.light-theme .toggle-btn {
+      background: #333; color: #fff;
+    }
+    body.dark-theme .toggle-btn {
+      background: #eee; color: #000;
+    }
+    .controls {
+      text-align: center; margin-bottom: 15px;
+    }
+    select, input[type="text"], .btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      margin: 0 5px 10px;
+      font-size: 1em;
+    }
+    body.dark-theme select,
+    body.dark-theme input[type="text"] {
+      background: #222; color: #ddd; border-color: #555;
+    }
+    body.light-theme select,
+    body.light-theme input[type="text"] {
+      background: #fff; color: #000;
+    }
     .btn {
-      display:inline-block;
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.4);
-      padding:8px 16px; border-radius:12px;
-      cursor:pointer; font-size:1em;
-      margin:5px; transition:background .3s,transform .2s;
-      color:#fff; text-decoration:none;
+      cursor: pointer;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      transition: background 0.3s;
     }
     .btn:hover {
-      background:rgba(255,255,255,0.3);
-      transform:translateY(-2px);
+      background: #0056b3;
     }
-    input[type="text"] {
-      padding:8px 12px; border-radius:8px;
-      border:1px solid rgba(255,255,255,0.5);
-      backdrop-filter:blur(4px); background:rgba(255,255,255,0.15);
-      color:#fff; width:50%; margin-right:5px;
-    }
-    input[type="text"]::placeholder {
-      color:rgba(255,255,255,0.7);
+    #searchLabel {
+      margin-bottom: 10px;
+      font-weight: bold;
     }
     #results {
-      display:flex; flex-wrap:wrap; justify-content:center;
+      display: flex; flex-wrap: wrap; justify-content: center;
     }
     .script-card {
-      position:relative;
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:12px;
-      margin:10px; width:240px; overflow:hidden;
-      transition:transform .3s;
+      width: 240px; margin: 10px;
+      border-radius: 8px; overflow: hidden;
+      transition: transform 0.2s;
+      background: var(--card-bg-light);
     }
-    .script-card:hover { transform:scale(1.03) }
+    body.dark-theme .script-card {
+      background: var(--card-bg-dark);
+    }
+    .script-card:hover { transform: scale(1.03); }
     .script-card img {
-      width:100%; height:140px; object-fit:cover;
+      width: 100%; height: 140px; object-fit: cover;
     }
     .overlay-left, .overlay-right {
-      position:absolute; top:8px; padding:4px 8px;
-      background:rgba(0,0,0,0.5); border-radius:8px; font-size:.8em;
+      position: absolute; top: 8px; padding: 4px 8px;
+      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
+      font-size: 0.8em;
     }
-    .overlay-left { left:8px; }
-    .overlay-right { right:8px; }
-    .script-info {
-      padding:10px; text-align:center;
-    }
+    .overlay-left { left: 8px; }
+    .overlay-right { right: 8px; }
+    .script-info { padding: 10px; text-align: center; position: relative; }
     .script-info h3 {
-      margin:5px 0; font-size:1.1em;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      margin: 5px 0; font-size: 1em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .script-info p { margin:4px 0; font-size:.9em }
-    #loadMore { margin:20px auto; display:block }
+    #loadMore { display: block; margin: 20px auto; }
     .modal {
-      position:fixed; top:50%; left:50%;
-      transform:translate(-50%,-50%) scale(0);
-      width:90%; max-width:700px;
-      background:rgba(0,0,0,0.9);
-      border-radius:12px; padding:20px;
-      color:#fff; z-index:1000;
-      transition:transform .3s ease-in-out;
+      position: fixed; top:50%; left:50%;
+      transform: translate(-50%,-50%) scale(0);
+      width: 90%; max-width: 700px;
+      background: var(--bg-light); color: var(--text-light);
+      padding:20px; border-radius:8px; transition: transform 0.3s;
+      z-index: 1000;
     }
-    .modal.show { transform:translate(-50%,-50%) scale(1) }
+    body.dark-theme .modal {
+      background: var(--bg-dark); color: var(--text-dark);
+    }
+    .modal.show { transform: translate(-50%,-50%) scale(1); }
     .modal .close {
-      position:absolute; top:12px; right:16px;
-      cursor:pointer; font-size:1.4em;
+      position: absolute; top:8px; right:12px; cursor: pointer;
+      font-size: 1.2em;
     }
     .modal .copy-btn {
-      position:absolute; bottom:16px; right:16px;
-      background:rgba(255,255,255,0.2); border:none;
-      padding:6px 12px; border-radius:8px;
-      cursor:pointer; color:#fff; transition:background .3s;
+      position: absolute; bottom:12px; right:12px;
+      padding:6px 12px; border:none; cursor:pointer;
+      background: #28a745; color:#fff; border-radius:4px;
     }
-    .modal .copy-btn:hover {
-      background:rgba(255,255,255,0.3);
-    }
-    .modal h2 { margin-top:0; padding-top:20px; text-align:center; }
+    .modal .copy-btn:hover { background: #1e7e34; }
+    .modal h2 { margin-top:0; text-align:center; }
     .modal pre {
-      white-space:pre-wrap; word-break:break-all;
       max-height:60vh; overflow-y:auto;
-      background:rgba(255,255,255,0.05);
-      padding:10px; border-radius:8px;
+      background: rgba(0,0,0,0.05); padding:10px; border-radius:4px;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="light-theme">
+
+  <div class="topbar">
+    <h1>اكسبلويت العرب</h1>
+    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
+  </div>
 
   <div class="glass">
-    <h1>اكسبلويت العرب</h1>
     <div class="controls">
+      <label id="searchLabel">بحث عن: —</label><br>
       <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-      <button id="searchBtn" class="btn">🔍 بحث</button>
-      <button class="btn" data-mode="fetch">الرئيسية</button>
-      <button class="btn" data-mode="free">مجانية</button>
-      <button class="btn" data-mode="unverified">غير محققة</button>
-      <button class="btn" data-mode="mostviewed">الأكثر مشاهدة</button>
-      <button class="btn" data-mode="verified">محققة</button>
+      <button id="searchBtn" class="btn">بحث</button><br>
+      <select id="modeSelect">
+        <option value="fetch">الرئيسية</option>
+        <option value="free">مجانية</option>
+        <option value="unverified">غير محققة</option>
+        <option value="mostviewed">الأكثر مشاهدة</option>
+        <option value="verified">محققة</option>
+      </select>
     </div>
     <div id="results"></div>
-    <button id="loadMore" class="btn" style="display:none;">▶️ المزيد</button>
+    <button id="loadMore" class="btn" style="display:none;">المزيد</button>
   </div>
 
   <div id="scriptModal" class="modal">
-    <span class="close" onclick="closeModal()">✖️</span>
+    <span class="close" onclick="closeModal()">✖</span>
     <h2 id="scriptTitle"></h2>
     <pre id="scriptContent"></pre>
-    <button class="copy-btn" id="copyBtn">نسخ السكربت</button>
+    <button class="copy-btn" id="copyBtn">نسخ</button>
   </div>
 
   <script>
-    // تدرجات عشوائية
-    const gradients = [
-      'radial-gradient(circle at top left, #4b6cb7, #182848)',
-      'linear-gradient(60deg, #96fbc4, #f9f586)',
-      'linear-gradient(120deg, #84fab0, #8fd3f4)',
-      'linear-gradient(75deg, #ffecd2, #fcb69f)',
-      'radial-gradient(circle at bottom right, #89f7fe, #66a6ff)',
-      'linear-gradient(45deg, #feb47b, #ff7e5f)',
-      'radial-gradient(circle at center, #a18cd1, #6e45e2)'
-    ];
-    document.body.style.background = gradients[Math.floor(Math.random()*gradients.length)];
-
-    let mode='fetch', query='', page=1, total=1;
+    let mode = 'fetch', query = '', page = 1, total = 1;
     const results = document.getElementById('results');
     const loadMore = document.getElementById('loadMore');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const modeSelect = document.getElementById('modeSelect');
+    const searchLabel = document.getElementById('searchLabel');
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
     const modal = document.getElementById('scriptModal');
     const tEl = document.getElementById('scriptTitle');
     const cEl = document.getElementById('scriptContent');
     const copyBtn = document.getElementById('copyBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
 
-    // استخدم AllOrigins لتخطي CORS
     function proxy(url) {
       return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
-
     function apiURL() {
-      const base='https://scriptblox.com/api/script/';
-      const p=`&page=${page}`;
-      switch(mode) {
-        case 'search':
-          return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
-        case 'free':
-          return proxy(base+`fetch?mode=free${p}`);
-        case 'unverified':
-          return proxy(base+`fetch?verified=0${p}`);
-        case 'mostviewed':
-          return proxy(base+`fetch?sortBy=views&order=desc${p}`);
-        case 'verified':
-          return proxy(base+`fetch?filters=verified&legacy_filters=true${p}`);
-        default:
-          return proxy(base+`fetch?page=${page}`);
-      }
+      const base = 'https://scriptblox.com/api/script/';
+      const p = `&page=${page}`;
+      if (mode === 'search')
+        return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
+      return proxy(base + 
+        (mode === 'fetch' ? `fetch?page=${page}` :
+        mode === 'free' ? `fetch?mode=free${p}` :
+        mode === 'unverified' ? `fetch?verified=0${p}` :
+        mode === 'mostviewed' ? `fetch?sortBy=views&order=desc${p}` :
+        `fetch?filters=verified&legacy_filters=true${p}`)
+      );
     }
 
     async function loadScripts() {
       try {
-        if(page===1) results.innerHTML=`<p style="width:100%;text-align:center;">جاري التحميل...</p>`;
-        const res=await fetch(apiURL());
-        const data=await res.json();
-        const R=data.result||data;
-        total=R.totalPages||1;
-        if(page===1) results.innerHTML='';
-        if(!R.scripts||!R.scripts.length) {
-          if(page===1) results.innerHTML=`<p style="width:100%;text-align:center;">لا توجد نتائج.</p>`;
+        if (page === 1) results.innerHTML = `<p>جاري التحميل…</p>`;
+        const res = await fetch(apiURL());
+        const data = await res.json();
+        const R = data.result || data;
+        total = R.totalPages || 1;
+        if (page === 1) results.innerHTML = '';
+        if (!R.scripts || !R.scripts.length) {
+          if (page === 1) results.innerHTML = `<p>لا توجد نتائج.</p>`;
         } else {
-          R.scripts.forEach(s=>{
-            const card=document.createElement('div');
-            card.className='script-card';
-            const date=new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views=s.views||0;
-            card.innerHTML=`
-              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
-              <div class="overlay-left">👁️ ${views}</div>
-              <div class="overlay-right">📅 ${date}</div>
+          R.scripts.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'script-card';
+            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const views = s.views || 0;
+            card.innerHTML = `
+              <div style="position:relative;">
+                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
+                <div class="overlay-left">👁️ ${views}</div>
+                <div class="overlay-right">📅 ${date}</div>
+              </div>
               <div class="script-info">
                 <h3>${s.title}</h3>
-                <p>📦 ${s.game?.name||'عام'}</p>
-                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض السكربت</button>
+                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
               </div>`;
             results.appendChild(card);
           });
         }
-        loadMore.style.display= page<total?'block':'none';
-      } catch(err) {
-        console.error(err);
-        results.innerHTML=`<p style="width:100%;text-align:center;">❌ خطأ في الاتصال: حاول لاحقاً</p>`;
+        loadMore.style.display = page < total ? 'block' : 'none';
+      } catch {
+        results.innerHTML = `<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
       }
     }
 
-    async function showScript(slug,title) {
+    async function showScript(slug, title) {
       try {
-        const res=await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d=await res.json();
-        const sc=d.script;
-        if(sc&&sc.script) {
-          tEl.textContent=title;
-          cEl.textContent=sc.script;
+        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        const d = await res.json();
+        const sc = d.script;
+        if (sc && sc.script) {
+          tEl.textContent = title;
+          cEl.textContent = sc.script;
           modal.classList.add('show');
-        } else alert('⚠️ السكربت محمي أو غير متاح');
-      } catch(err) {
-        console.error(err);
-        alert('❌ فشل التحميل: حاول لاحقاً');
+        } else alert('⚠️ غير متاح');
+      } catch {
+        alert('❌ فشل التحميل');
       }
     }
-
-    function closeModal(){ modal.classList.remove('show'); }
+    function closeModal() { modal.classList.remove('show'); }
 
     function doSearch() {
-      const q=searchInput.value.trim();
-      if(!q) return alert('فضلاً أدخل كلمة بحث');
-      mode='search'; query=q; page=1; results.innerHTML=''; loadScripts();
+      const q = searchInput.value.trim();
+      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      query = q; mode = 'search'; page = 1; results.innerHTML = '';
+      searchLabel.textContent = `بحث عن: ${q}`;
+      loadScripts();
     }
 
-    // ربط الأحداث
     searchBtn.addEventListener('click', doSearch);
-    searchInput.addEventListener('keypress', e=>{ if(e.key==='Enter') doSearch(); });
-    copyBtn.addEventListener('click', ()=>{
-      navigator.clipboard.writeText(cEl.textContent)
-        .then(()=>alert('✅ تم النسخ'))
-        .catch(()=>alert('❌ فشل النسخ'));
-    });
-    document.querySelectorAll('.controls .btn[data-mode]').forEach(b=>{
-      b.addEventListener('click',()=>{
-        mode=b.dataset.mode; query=''; page=1; results.innerHTML=''; loadScripts();
-      });
-    });
-    loadMore.addEventListener('click',()=>{
-      if(page<total){ page++; loadScripts(); }
+    searchInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') doSearch();
     });
 
-    window.addEventListener('load', loadScripts);
+    modeSelect.addEventListener('change', () => {
+      mode = modeSelect.value; query = ''; page = 1; results.innerHTML = '';
+      searchLabel.textContent = 'بحث عن: —';
+      loadScripts();
+    });
+
+    loadMore.addEventListener('click', () => {
+      if (page < total) { page++; loadScripts(); }
+    });
+
+    themeToggle.addEventListener('click', () => {
+      if (body.classList.contains('light-theme')) {
+        body.classList.replace('light-theme','dark-theme');
+        themeToggle.textContent = 'الوضع الفاتح';
+      } else {
+        body.classList.replace('dark-theme','light-theme');
+        themeToggle.textContent = 'الوضع الليلي';
+      }
+    });
+
+    window.addEventListener('load', () => {
+      loadScripts();
+    });
   </script>
 </body>
 </html>
