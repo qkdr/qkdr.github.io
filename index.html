@@ -12,11 +12,15 @@
       --text-dark: #ffffff;
       --card-bg-light: rgba(0,0,0,0.05);
       --card-bg-dark: rgba(255,255,255,0.1);
+      --modal-bg-light: #fff;
+      --modal-text-light: #000;
+      --modal-bg-dark: #333;
+      --modal-text-dark: #fff;
     }
     body {
-      margin: 0; padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      transition: background 0.3s, color 0.3s;
+      margin:0; padding:0;
+      font-family:'Tajawal',sans-serif;
+      transition:background 0.3s,color 0.3s;
     }
     body.light-theme {
       background: var(--bg-light);
@@ -26,140 +30,176 @@
       background: var(--bg-dark);
       color: var(--text-dark);
     }
+    .topbar {
+      display:flex; justify-content:space-between;
+      align-items:center; padding:10px 20px;
+      background:rgba(0,0,0,0.1);
+    }
+    body.dark-theme .topbar {
+      background: rgba(255,255,255,0.1);
+    }
+    .topbar h1 { margin:0; font-size:1.5em; }
+    .topbar .buttons {
+      display:flex; align-items:center;
+    }
+    .toggle-btn, .auth-btn {
+      margin-left:10px; padding:8px 12px;
+      border:none; border-radius:6px; cursor:pointer;
+      transition:background 0.3s;
+    }
+    body.light-theme .toggle-btn {
+      background:#333; color:#fff;
+    }
+    body.dark-theme .toggle-btn {
+      background:#eee; color:#000;
+    }
+    .auth-btn {
+      background:#007bff; color:#fff;
+    }
+    .auth-btn:hover { background:#0056b3; }
     .glass {
       background: var(--card-bg-light);
-      border-radius: 12px;
-      padding: 20px; margin: 20px auto;
-      max-width: 900px;
-      transition: background 0.3s;
+      border-radius:12px;
+      padding:20px; margin:20px auto;
+      max-width:900px;
+      transition:background 0.3s;
     }
     body.dark-theme .glass {
       background: var(--card-bg-dark);
     }
-    h1 { text-align: center; margin-bottom: 10px; }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 900px;
-      margin: 20px auto 0;
-      padding: 0 20px;
-    }
-    .toggle-btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    body.light-theme .toggle-btn {
-      background: #333; color: #fff;
-    }
-    body.dark-theme .toggle-btn {
-      background: #eee; color: #000;
-    }
     .controls {
-      text-align: center; margin-bottom: 15px;
+      text-align:center; margin-bottom:15px;
     }
     select, input[type="text"], .btn {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      margin: 0 5px 10px;
-      font-size: 1em;
+      padding:8px 12px; border-radius:6px; margin:5px;
+      border:1px solid #aaa; font-size:1em;
     }
     body.dark-theme select,
     body.dark-theme input[type="text"] {
-      background: #222; color: #ddd; border-color: #555;
+      background:#222; color:#ddd; border-color:#555;
     }
     body.light-theme select,
     body.light-theme input[type="text"] {
-      background: #fff; color: #000;
+      background:#fff; color:#000;
     }
-    .btn {
-      cursor: pointer;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      transition: background 0.3s;
+    .btn.search, #loadMore {
+      background:#007bff; color:#fff; border:none; cursor:pointer;
+      transition:background 0.3s;
     }
-    .btn:hover {
-      background: #0056b3;
-    }
-    #searchLabel {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
+    .btn.search:hover, #loadMore:hover { background:#0056b3; }
+    #searchLabel { display:block; margin-bottom:8px; font-weight:bold; }
     #results {
-      display: flex; flex-wrap: wrap; justify-content: center;
+      display:flex; flex-wrap:wrap; justify-content:center;
     }
     .script-card {
-      width: 240px; margin: 10px;
-      border-radius: 8px; overflow: hidden;
-      transition: transform 0.2s;
-      background: var(--card-bg-light);
+      width:240px; margin:10px; border-radius:8px; overflow:hidden;
+      background: var(--card-bg-light); transition:transform .2s;
     }
     body.dark-theme .script-card {
       background: var(--card-bg-dark);
     }
-    .script-card:hover { transform: scale(1.03); }
+    .script-card:hover { transform:scale(1.03); }
     .script-card img {
-      width: 100%; height: 140px; object-fit: cover;
+      width:100%; height:140px; object-fit:cover;
     }
     .overlay-left, .overlay-right {
-      position: absolute; top: 8px; padding: 4px 8px;
-      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
-      font-size: 0.8em;
+      position:absolute; top:8px; padding:4px 8px;
+      background:rgba(0,0,0,0.5); color:#fff; border-radius:4px;
+      font-size:.8em;
     }
-    .overlay-left { left: 8px; }
-    .overlay-right { right: 8px; }
-    .script-info { padding: 10px; text-align: center; position: relative; }
+    .overlay-left { left:8px; }
+    .overlay-right { right:8px; }
+    .script-info {
+      padding:10px; text-align:center; position:relative;
+    }
     .script-info h3 {
-      margin: 5px 0; font-size: 1em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin:5px 0; font-size:1em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    #loadMore { display: block; margin: 20px auto; }
+    /* مودال السكربت */
     .modal {
-      position: fixed; top:50%; left:50%;
-      transform: translate(-50%,-50%) scale(0);
-      width: 90%; max-width: 700px;
-      background: var(--bg-light); color: var(--text-light);
-      padding:20px; border-radius:8px; transition: transform 0.3s;
-      z-index: 1000;
+      position:fixed; top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(0);
+      width:90%; max-width:700px;
+      background: var(--modal-bg-light);
+      color: var(--modal-text-light);
+      padding:20px; border-radius:8px;
+      transition:transform .3s; z-index:1000;
     }
     body.dark-theme .modal {
-      background: var(--bg-dark); color: var(--text-dark);
+      background: var(--modal-bg-dark);
+      color: var(--modal-text-dark);
     }
-    .modal.show { transform: translate(-50%,-50%) scale(1); }
+    .modal.show { transform:translate(-50%,-50%) scale(1); }
     .modal .close {
-      position: absolute; top:8px; right:12px; cursor: pointer;
-      font-size: 1.2em;
+      position:absolute; top:8px; right:12px; cursor:pointer; font-size:1.2em;
     }
     .modal .copy-btn {
-      position: absolute; bottom:12px; right:12px;
-      padding:6px 12px; border:none; cursor:pointer;
-      background: #28a745; color:#fff; border-radius:4px;
+      position:absolute; bottom:12px; right:12px;
+      padding:6px 12px; background:#28a745; color:#fff;
+      border:none; border-radius:4px; cursor:pointer;
     }
-    .modal .copy-btn:hover { background: #1e7e34; }
+    .modal .copy-btn:hover { background:#1e7e34; }
     .modal h2 { margin-top:0; text-align:center; }
     .modal pre {
       max-height:60vh; overflow-y:auto;
-      background: rgba(0,0,0,0.05); padding:10px; border-radius:4px;
+      background:rgba(0,0,0,0.05); padding:10px; border-radius:4px;
+    }
+    /* مودال التسجيل/تسجيل الدخول */
+    #authModal {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.6); display:flex;
+      align-items:center; justify-content:center; z-index:2000;
+    }
+    #authBox {
+      background:var(--modal-bg-light); color:var(--modal-text-light);
+      padding:20px; border-radius:8px; width:300px; position:relative;
+    }
+    body.dark-theme #authBox {
+      background:var(--modal-bg-dark); color:var(--modal-text-dark);
+    }
+    #authBox h3 { margin-top:0; text-align:center; }
+    #authBox input {
+      width:100%; margin:8px 0; padding:8px;
+      border:1px solid #aaa; border-radius:4px;
+    }
+    #authBox button {
+      width:100%; padding:8px; margin-top:10px;
+      border:none; border-radius:4px; background:#007bff; color:#fff;
+      cursor:pointer; transition:background .3s;
+    }
+    #authBox button:hover { background:#0056b3; }
+    #authClose {
+      position:absolute; top:8px; right:8px; cursor:pointer;
+      font-size:1.2em;
+    }
+    /* صورة الحساب */
+    #userAvatar {
+      width:32px; height:32px; border-radius:50%;
+      margin-left:10px; display:none;
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body class="light-theme">
 
   <div class="topbar">
     <h1>اكسبلويت العرب</h1>
-    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
+    <div class="buttons">
+      <img id="userAvatar" src="" alt="avatar">
+      <button id="authBtn" class="auth-btn">تسجيل / دخول</button>
+      <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
+    </div>
   </div>
 
   <div class="glass">
+    <label id="searchLabel">بحث عن: —</label>
     <div class="controls">
-      <label id="searchLabel">بحث عن: —</label><br>
       <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-      <button id="searchBtn" class="btn">بحث</button><br>
+      <button id="searchBtn" class="btn search">بحث</button><br>
       <select id="modeSelect">
         <option value="fetch">الرئيسية</option>
         <option value="free">مجانية</option>
@@ -172,6 +212,7 @@
     <button id="loadMore" class="btn" style="display:none;">المزيد</button>
   </div>
 
+  <!-- مودال عرض السكربت -->
   <div id="scriptModal" class="modal">
     <span class="close" onclick="closeModal()">✖</span>
     <h2 id="scriptTitle"></h2>
@@ -179,18 +220,123 @@
     <button class="copy-btn" id="copyBtn">نسخ</button>
   </div>
 
+  <!-- مودال التسجيل / تسجيل الدخول -->
+  <div id="authModal" style="display:none;">
+    <div id="authBox">
+      <span id="authClose">✖</span>
+      <h3 id="authTitle">تسجيل جديد</h3>
+      <input id="email" type="email" placeholder="البريد الإلكتروني">
+      <input id="password" type="password" placeholder="كلمة المرور">
+      <input id="confirmPassword" type="password" placeholder="تأكيد كلمة المرور" style="display:none;">
+      <button id="authAction">إنشاء حساب</button>
+      <p id="toggleAuth" style="text-align:center;cursor:pointer;margin-top:8px;color:#007bff;">
+        لديك حساب؟ تسجيل دخول
+      </p>
+    </div>
+  </div>
+
   <script>
+    // Firebase init
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSVCz9s7yHQtpOet9txgHl-E4XBgFmMp0",
+      authDomain: "qplkow.firebaseapp.com",
+      databaseURL: "https://qplkow-default-rtdb.firebaseio.com",
+      projectId: "qplkow",
+      storageBucket: "qplkow.appspot.com",
+      messagingSenderId: "280525591715",
+      appId: "1:280525591715:web:d2f750ebf5ceffe6641b16",
+      measurementId: "G-ZC8K2PDE60"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // DOM
+    const authBtn = document.getElementById('authBtn');
+    const authModal = document.getElementById('authModal');
+    const authBox = document.getElementById('authBox');
+    const authClose = document.getElementById('authClose');
+    const authTitle = document.getElementById('authTitle');
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const authAction = document.getElementById('authAction');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const userAvatar = document.getElementById('userAvatar');
+
+    // Show modal
+    authBtn.onclick = () => { authModal.style.display = 'flex'; };
+    authClose.onclick = () => { authModal.style.display = 'none'; };
+
+    let isRegister = true;
+    function updateAuthUI() {
+      if (isRegister) {
+        authTitle.textContent = 'تسجيل جديد';
+        confirmInput.style.display = 'block';
+        authAction.textContent = 'إنشاء حساب';
+        toggleAuth.textContent = 'لديك حساب؟ تسجيل دخول';
+      } else {
+        authTitle.textContent = 'تسجيل دخول';
+        confirmInput.style.display = 'none';
+        authAction.textContent = 'دخول';
+        toggleAuth.textContent = 'إنشاء حساب جديد';
+      }
+    }
+    toggleAuth.onclick = () => {
+      isRegister = !isRegister;
+      updateAuthUI();
+    };
+    updateAuthUI();
+
+    // Auth action
+    authAction.onclick = () => {
+      const email = emailInput.value.trim();
+      const pass  = passInput.value;
+      if (!email || !pass) return alert('يرجى ملء جميع الحقول');
+      if (isRegister) {
+        const pass2 = confirmInput.value;
+        if (pass !== pass2) return alert('كلمتا المرور غير متطابقتين');
+        auth.createUserWithEmailAndPassword(email, pass)
+          .then(res => {
+            return res.user.sendEmailVerification();
+          })
+          .then(() => {
+            alert('تم إرسال رسالة التحقق إلى بريدك');
+          })
+          .catch(err => alert(err.message));
+      } else {
+        auth.signInWithEmailAndPassword(email, pass)
+          .catch(err => alert(err.message));
+      }
+    };
+
+    // On auth state change
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // حفظ البريد في قاعدة البيانات
+        db.ref('users/' + user.uid).set({ email: user.email });
+        // إظهار الصورة (أو placeholder)
+        userAvatar.src = user.photoURL || 'https://via.placeholder.com/32';
+        userAvatar.style.display = 'block';
+        authBtn.style.display = 'none';
+        authModal.style.display = 'none';
+      } else {
+        userAvatar.style.display = 'none';
+        authBtn.style.display = 'inline-block';
+      }
+    });
+
+    // باقي كود الموقع (بحث، فلترة، ثيم، عرض سكربت...)
     let mode = 'fetch', query = '', page = 1, total = 1;
     const results = document.getElementById('results');
     const loadMore = document.getElementById('loadMore');
     const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
+    const searchBtnEl = document.getElementById('searchBtn');
     const modeSelect = document.getElementById('modeSelect');
     const searchLabel = document.getElementById('searchLabel');
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
-
-    const modal = document.getElementById('scriptModal');
+    const scriptModal = document.getElementById('scriptModal');
     const tEl = document.getElementById('scriptTitle');
     const cEl = document.getElementById('scriptContent');
     const copyBtn = document.getElementById('copyBtn');
@@ -199,36 +345,34 @@
       return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
     function apiURL() {
-      const base = 'https://scriptblox.com/api/script/';
-      const p = `&page=${page}`;
-      if (mode === 'search')
-        return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
-      return proxy(base + 
-        (mode === 'fetch' ? `fetch?page=${page}` :
-        mode === 'free' ? `fetch?mode=free${p}` :
-        mode === 'unverified' ? `fetch?verified=0${p}` :
-        mode === 'mostviewed' ? `fetch?sortBy=views&order=desc${p}` :
-        `fetch?filters=verified&legacy_filters=true${p}`)
-      );
+      const base='https://scriptblox.com/api/script/';
+      const p=`&page=${page}`;
+      if (mode==='search')
+        return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
+      return proxy(base+
+        (mode==='fetch'?`fetch?page=${page}`:
+        mode==='free'?`fetch?mode=free${p}`:
+        mode==='unverified'?`fetch?verified=0${p}`:
+        mode==='mostviewed'?`fetch?sortBy=views&order=desc${p}`:
+        `fetch?filters=verified&legacy_filters=true${p}`));
     }
 
     async function loadScripts() {
       try {
-        if (page === 1) results.innerHTML = `<p>جاري التحميل…</p>`;
-        const res = await fetch(apiURL());
-        const data = await res.json();
-        const R = data.result || data;
-        total = R.totalPages || 1;
-        if (page === 1) results.innerHTML = '';
-        if (!R.scripts || !R.scripts.length) {
-          if (page === 1) results.innerHTML = `<p>لا توجد نتائج.</p>`;
+        if(page===1) results.innerHTML=`<p>جاري التحميل…</p>`;
+        const res=await fetch(apiURL());
+        const data=await res.json();
+        const R=data.result||data; total=R.totalPages||1;
+        if(page===1) results.innerHTML='';
+        if(!R.scripts||!R.scripts.length) {
+          if(page===1) results.innerHTML=`<p>لا توجد نتائج.</p>`;
         } else {
-          R.scripts.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views = s.views || 0;
-            card.innerHTML = `
+          R.scripts.forEach(s=>{
+            const card=document.createElement('div');
+            card.className='script-card';
+            const date=new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const views=s.views||0;
+            card.innerHTML=`
               <div style="position:relative;">
                 <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
                 <div class="overlay-left">👁️ ${views}</div>
@@ -241,64 +385,57 @@
             results.appendChild(card);
           });
         }
-        loadMore.style.display = page < total ? 'block' : 'none';
+        loadMore.style.display = page<total?'block':'none';
       } catch {
-        results.innerHTML = `<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
+        results.innerHTML=`<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
       }
     }
 
-    async function showScript(slug, title) {
+    async function showScript(slug,title) {
       try {
-        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d = await res.json();
-        const sc = d.script;
-        if (sc && sc.script) {
-          tEl.textContent = title;
-          cEl.textContent = sc.script;
-          modal.classList.add('show');
+        const res=await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        const d=await res.json();
+        const sc=d.script;
+        if(sc&&sc.script) {
+          tEl.textContent=title; cEl.textContent=sc.script;
+          scriptModal.classList.add('show');
         } else alert('⚠️ غير متاح');
       } catch {
         alert('❌ فشل التحميل');
       }
     }
-    function closeModal() { modal.classList.remove('show'); }
+    function closeModal(){ scriptModal.classList.remove('show'); }
 
     function doSearch() {
-      const q = searchInput.value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
-      query = q; mode = 'search'; page = 1; results.innerHTML = '';
-      searchLabel.textContent = `بحث عن: ${q}`;
-      loadScripts();
+      const q=searchInput.value.trim();
+      if(!q) return alert('فضلاً أدخل كلمة بحث');
+      query=q; mode='search'; page=1; results.innerHTML='';
+      searchLabel.textContent=`بحث عن: ${q}`; loadScripts();
     }
 
-    searchBtn.addEventListener('click', doSearch);
-    searchInput.addEventListener('keypress', e => {
-      if (e.key === 'Enter') doSearch();
+    searchBtnEl.addEventListener('click', doSearch);
+    searchInput.addEventListener('keypress', e=>{ if(e.key==='Enter') doSearch(); });
+
+    modeSelect.addEventListener('change', ()=>{
+      mode=modeSelect.value; query=''; page=1; results.innerHTML='';
+      searchLabel.textContent='بحث عن: —'; loadScripts();
     });
 
-    modeSelect.addEventListener('change', () => {
-      mode = modeSelect.value; query = ''; page = 1; results.innerHTML = '';
-      searchLabel.textContent = 'بحث عن: —';
-      loadScripts();
+    loadMore.addEventListener('click', ()=>{
+      if(page<total){ page++; loadScripts(); }
     });
 
-    loadMore.addEventListener('click', () => {
-      if (page < total) { page++; loadScripts(); }
-    });
-
-    themeToggle.addEventListener('click', () => {
-      if (body.classList.contains('light-theme')) {
+    themeToggle.addEventListener('click', ()=>{
+      if(body.classList.contains('light-theme')) {
         body.classList.replace('light-theme','dark-theme');
-        themeToggle.textContent = 'الوضع الفاتح';
+        themeToggle.textContent='الوضع الفاتح';
       } else {
         body.classList.replace('dark-theme','light-theme');
-        themeToggle.textContent = 'الوضع الليلي';
+        themeToggle.textContent='الوضع الليلي';
       }
     });
 
-    window.addEventListener('load', () => {
-      loadScripts();
-    });
+    window.addEventListener('load', ()=>{ loadScripts(); });
   </script>
 </body>
 </html>
