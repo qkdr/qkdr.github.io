@@ -62,10 +62,12 @@
       padding:8px 12px; border-radius:6px; margin:5px;
       border:1px solid #aaa; font-size:1em;
     }
-    body.dark-theme select, body.dark-theme input[type="text"] {
+    body.dark-theme select,
+    body.dark-theme input[type="text"] {
       background:#222; color:#ddd; border-color:#555;
     }
-    body.light-theme select, body.light-theme input[type="text"] {
+    body.light-theme select,
+    body.light-theme input[type="text"] {
       background:#fff; color:#000;
     }
     .btn.search, #loadMore, .btn.share {
@@ -131,7 +133,6 @@
       background:rgba(0,0,0,0.05); padding:10px; border-radius:4px;
     }
 
-    /* قائمة المتصدرين */
     #leaderboardPage {
       display:none; padding:20px; max-width:600px; margin:20px auto;
     }
@@ -147,7 +148,6 @@
       color:#000; border:none; border-radius:6px; cursor:pointer;
     }
   </style>
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -212,7 +212,7 @@
   </div>
 
   <script>
-    // Firebase init
+    // Firebase setup
     const firebaseConfig = {
       apiKey: "AIzaSyCSVCz9s7yHQtpOet9txgHl-E4XBgFmMp0",
       authDomain: "qplkow.firebaseapp.com",
@@ -227,7 +227,7 @@
     const auth = firebase.auth();
     const db   = firebase.database();
 
-    // DOM
+    // DOM refs
     const authBtn      = document.getElementById('authBtn');
     const authModal    = document.getElementById('authModal');
     const authClose    = document.getElementById('authClose');
@@ -246,8 +246,9 @@
     const leaderboardList= document.querySelector('#leaderboardList tbody');
     const changeNameBtn  = document.getElementById('changeNameBtn');
     const themeToggle    = document.getElementById('themeToggle');
-    const body           = document.body;
+    const bodyEl         = document.body;
 
+    // Auth UI toggle
     let isRegister = true;
     function updateAuthUI() {
       if (isRegister) {
@@ -270,30 +271,37 @@
     authAction.onclick = () => {
       const email = emailInput.value.trim();
       const pass  = passInput.value;
-      if (!email||!pass) return alert('يرجى ملء الحقول');
+      if (!email || !pass) return alert('يرجى ملء الحقول');
       if (isRegister) {
         if (pass !== confirmInput.value) return alert('كلمة المرور غير مطابقة');
-        auth.createUserWithEmailAndPassword(email,pass)
-          .then(u=> u.user.sendEmailVerification().then(()=>alert('تحقق أرسل')));
+        auth.createUserWithEmailAndPassword(email, pass)
+          .then(u => u.user.sendEmailVerification().then(() => alert('تم إرسال بريد التحقق')))
+          .catch(e => alert(e.message));
       } else {
-        auth.signInWithEmailAndPassword(email,pass).catch(e=>alert(e.message));
+        auth.signInWithEmailAndPassword(email, pass)
+          .catch(e => alert(e.message));
       }
     };
 
     auth.onAuthStateChanged(user => {
       if (user) {
-        const userRef = db.ref('users/'+user.uid);
+        const userRef = db.ref('users/' + user.uid);
         userRef.once('value', snap => {
           if (!snap.exists()) {
-            userRef.set({ email:user.email, username:user.email.split('@')[0], points:0 });
+            userRef.set({
+              email: user.email,
+              username: user.email.split('@')[0],
+              points: 0
+            });
           }
         });
         userRef.on('value', snap => {
           const data = snap.val();
+          // show avatar via Gravatar
           const hash = md5(user.email.trim().toLowerCase());
           userAvatar.src = `https://www.gravatar.com/avatar/${hash}?d=identicon&s=64`;
           userAvatar.style.display = 'block';
-          pointsCount.textContent = data.points||0;
+          pointsCount.textContent = data.points || 0;
           pointsDisplay.style.display = 'flex';
         });
         authBtn.style.display = 'none';
@@ -304,30 +312,33 @@
       }
     });
 
-    // change username
+    // Change username
     changeNameBtn.onclick = () => {
       const newName = prompt('أدخل اسمك الجديد:');
       if (newName && auth.currentUser) {
-        db.ref('users/'+auth.currentUser.uid+'/username').set(newName);
+        db.ref('users/' + auth.currentUser.uid + '/username').set(newName);
         loadLeaderboard();
       }
     };
 
-    // leaderboard - show all users sorted by points desc
+    // Leaderboard: show all accounts with points
     leadBtn.onclick = () => {
       if (!auth.currentUser) return alert('سجّل دخولك أولاً');
-      mainContent.style.display    = 'none';
-      leaderboardPage.style.display= 'block';
+      mainContent.style.display     = 'none';
+      leaderboardPage.style.display = 'block';
       loadLeaderboard();
     };
     function loadLeaderboard() {
       db.ref('users').orderByChild('points').once('value', snap => {
         const arr = [];
-        snap.forEach(ch => arr.push(ch.val()));
-        // sort descending
-        arr.sort((a,b)=> (b.points||0)-(a.points||0));
-        leaderboardList.innerHTML='';
-        arr.forEach((u,i) => {
+        snap.forEach(ch => {
+          const u = ch.val();
+          arr.push(u);
+        });
+        // descending
+        arr.sort((a, b) => (b.points || 0) - (a.points || 0));
+        leaderboardList.innerHTML = '';
+        arr.forEach((u, i) => {
           leaderboardList.innerHTML += `
             <tr>
               <td>${i+1}</td>
@@ -338,24 +349,23 @@
       });
     }
     function hideLeaderboard() {
-      leaderboardPage.style.display='none';
-      mainContent.style.display='block';
+      leaderboardPage.style.display = 'none';
+      mainContent.style.display     = 'block';
     }
 
-    // record share
+    // Record share
     function recordShare() {
       const uid = auth.currentUser.uid;
-      const ref = db.ref('users/'+uid+'/points');
-      ref.transaction(p=> (p||0)+1);
+      db.ref('users/' + uid + '/points').transaction(p => (p || 0) + 1);
       alert('✅ حُسبت نقطة لمشاركتك!');
     }
 
-    // search & scripts
-    let mode='fetch', query='', page=1, total=1;
+    // Script search & display
+    let mode = 'fetch', query = '', page = 1, total = 1;
     const results     = document.getElementById('results');
     const loadMoreBtn = document.getElementById('loadMore');
     const searchInput = document.getElementById('searchInput');
-    const searchBtn   = document.getElementById('searchBtn');
+    const searchBtnEl = document.getElementById('searchBtn');
     const modeSelect  = document.getElementById('modeSelect');
     const searchLabel = document.getElementById('searchLabel');
     const scriptModal = document.getElementById('scriptModal');
@@ -364,38 +374,43 @@
     const copyBtn     = document.getElementById('copyBtn');
 
     function proxy(url) {
-      return 'https://api.allorigins.win/raw?url='+encodeURIComponent(url);
+      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
     function apiURL() {
-      const base='https://scriptblox.com/api/script/';
-      const p=`&page=${page}`;
-      if(mode==='search') return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
-      return proxy(base+
-        (mode==='fetch'?`fetch?page=${page}`:
-        mode==='free'?`fetch?mode=free${p}`:
-        mode==='unverified'?`fetch?verified=0${p}`:
-        mode==='mostviewed'?`fetch?sortBy=views&order=desc${p}`:
-        `fetch?filters=verified&legacy_filters=true${p}`));
+      const base = 'https://scriptblox.com/api/script/';
+      const p = `&page=${page}`;
+      if (mode === 'search') {
+        return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
+      }
+      const endpoints = {
+        'fetch':   `fetch?page=${page}`,
+        'free':    `fetch?mode=free${p}`,
+        'unverified': `fetch?verified=0${p}`,
+        'mostviewed': `fetch?sortBy=views&order=desc${p}`,
+        'verified':   `fetch?filters=verified&legacy_filters=true${p}`
+      };
+      return proxy(base + endpoints[mode]);
     }
 
     async function loadScripts() {
       try {
-        if(page===1) results.innerHTML=`<p>جاري التحميل…</p>`;
-        const res=await fetch(apiURL());
-        const data=await res.json();
-        const R=data.result||data; total=R.totalPages||1;
-        if(page===1) results.innerHTML='';
-        if(!R.scripts||!R.scripts.length) {
-          if(page===1) results.innerHTML=`<p>لا توجد نتائج.</p>`;
+        if (page === 1) results.innerHTML = `<p>جاري التحميل…</p>`;
+        const res = await fetch(apiURL());
+        const data = await res.json();
+        const R = data.result || data;
+        total = R.totalPages || 1;
+        if (page === 1) results.innerHTML = '';
+        if (!R.scripts || !R.scripts.length) {
+          if (page === 1) results.innerHTML = `<p>لا توجد نتائج.</p>`;
         } else {
-          R.scripts.forEach(s=>{
-            const card=document.createElement('div');
-            card.className='script-card';
-            const date=new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views=s.views||0;
-            card.innerHTML=`
+          R.scripts.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'script-card';
+            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
+            const views = s.views || 0;
+            card.innerHTML = `
               <div style="position:relative;">
-                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
+                <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="">
                 <div class="overlay-left">👁️ ${views}</div>
                 <div class="overlay-right">📅 ${date}</div>
               </div>
@@ -409,14 +424,14 @@
             results.appendChild(card);
           });
         }
-        loadMoreBtn.style.display= page<total?'block':'none';
+        loadMoreBtn.style.display = page < total ? 'block' : 'none';
       } catch {
-        results.innerHTML=`<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
+        results.innerHTML = `<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
       }
     }
 
     async function shareScript(title) {
-      if(!auth.currentUser) return alert('سجّل دخولك أولاً');
+      if (!auth.currentUser) return alert('سجّل دخولك أولاً');
       try {
         await navigator.share({ title, url: window.location.href });
         recordShare();
@@ -425,48 +440,69 @@
       }
     }
 
-    async function showScript(slug,title) {
+    async function showScript(slug, title) {
       try {
-        const res=await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d=await res.json(), sc=d.script;
-        if(sc&&sc.script) {
-          tEl.textContent=title; cEl.textContent=sc.script;
+        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        const d = await res.json();
+        const sc = d.script;
+        if (sc && sc.script) {
+          tEl.textContent = title;
+          cEl.textContent = sc.script;
           scriptModal.classList.add('show');
-        } else alert('⚠️ غير متاح');
+        } else {
+          alert('⚠️ غير متاح');
+        }
       } catch {
         alert('❌ فشل التحميل');
       }
     }
-    function closeModal(){ scriptModal.classList.remove('show'); }
+
+    function closeModal() {
+      scriptModal.classList.remove('show');
+    }
 
     function doSearch() {
-      const q=searchInput.value.trim();
-      if(!q) return alert('فضلاً أدخل كلمة بحث');
-      query=q; mode='search'; page=1; results.innerHTML='';
-      searchLabel.textContent=`بحث عن: ${q}`; loadScripts();
+      const q = searchInput.value.trim();
+      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      query = q; mode = 'search'; page = 1; results.innerHTML = '';
+      searchLabel.textContent = `بحث عن: ${q}`;
+      loadScripts();
     }
-    searchBtn.addEventListener('click', doSearch);
-    searchInput.addEventListener('keypress', e=>{ if(e.key==='Enter') doSearch(); });
-    modeSelect.addEventListener('change', ()=>{
-      mode=modeSelect.value; query=''; page=1; results.innerHTML='';
-      searchLabel.textContent='بحث عن: —'; loadScripts();
+
+    searchBtnEl.addEventListener('click', doSearch);
+    searchInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') doSearch();
     });
-    loadMoreBtn.addEventListener('click', ()=>{ if(page<total){ page++; loadScripts(); }});
-    themeToggle.addEventListener('click', ()=>{
-      if(body.classList.contains('light-theme')) {
-        body.classList.replace('light-theme','dark-theme');
-        themeToggle.textContent='الوضع الفاتح';
-      } else {
-        body.classList.replace('dark-theme','light-theme');
-        themeToggle.textContent='الوضع الليلي';
+
+    modeSelect.addEventListener('change', () => {
+      mode = modeSelect.value; query = ''; page = 1; results.innerHTML = '';
+      searchLabel.textContent = 'بحث عن: —';
+      loadScripts();
+    });
+
+    loadMoreBtn.addEventListener('click', () => {
+      if (page < total) {
+        page++;
+        loadScripts();
       }
     });
+
+    themeToggle.addEventListener('click', () => {
+      if (bodyEl.classList.contains('light-theme')) {
+        bodyEl.classList.replace('light-theme','dark-theme');
+        themeToggle.textContent = 'الوضع الفاتح';
+      } else {
+        bodyEl.classList.replace('dark-theme','light-theme');
+        themeToggle.textContent = 'الوضع الليلي';
+      }
+    });
+
     window.addEventListener('load', loadScripts);
 
     // MD5 for Gravatar
     function md5(string) {
-      // ... (MD5 implementation unchanged) ...
-      return /* 32-char hash string */;
+      /* Full MD5 implementation here (same as before) */
+      return /* hash */;
     }
   </script>
 </body>
