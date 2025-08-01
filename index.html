@@ -12,15 +12,12 @@
       --text-dark: #ffffff;
       --card-bg-light: rgba(0,0,0,0.05);
       --card-bg-dark: rgba(255,255,255,0.1);
-      --modal-bg-light: #fff;
-      --modal-text-light: #000;
-      --modal-bg-dark: #333;
-      --modal-text-dark: #fff;
+      --accent: #ffcc00;
     }
     body {
       margin:0; padding:0;
       font-family:'Tajawal',sans-serif;
-      transition:background 0.3s,color 0.3s;
+      transition:background .3s,color .3s;
     }
     body.light-theme {
       background: var(--bg-light);
@@ -31,73 +28,58 @@
       color: var(--text-dark);
     }
     .topbar {
-      display:flex; justify-content:space-between;
-      align-items:center; padding:10px 20px;
-      background:rgba(0,0,0,0.1);
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 20px; background:rgba(0,0,0,0.1);
     }
-    body.dark-theme .topbar {
-      background: rgba(255,255,255,0.1);
-    }
+    body.dark-theme .topbar { background: rgba(255,255,255,0.1); }
     .topbar h1 { margin:0; font-size:1.5em; }
-    .topbar .buttons {
-      display:flex; align-items:center;
+    .buttons { display:flex; align-items:center; }
+    .toggle-btn, .auth-btn, .lead-btn {
+      margin-left:10px; padding:8px 12px; border:none;
+      border-radius:6px; cursor:pointer; transition:background .3s;
     }
-    .toggle-btn, .auth-btn {
-      margin-left:10px; padding:8px 12px;
-      border:none; border-radius:6px; cursor:pointer;
-      transition:background 0.3s;
+    body.light-theme .toggle-btn { background:#333; color:#fff; }
+    body.dark-theme .toggle-btn  { background:#eee; color:#000; }
+    .auth-btn, .lead-btn { background:#007bff; color:#fff; }
+    .auth-btn:hover, .lead-btn:hover { background:#0056b3; }
+    #userAvatar { width:32px; height:32px; border-radius:50%; margin-left:10px; display:none; }
+    #pointsDisplay {
+      display:flex; align-items:center; font-weight:bold;
+      margin-left:5px; color: var(--accent); display:none;
     }
-    body.light-theme .toggle-btn {
-      background:#333; color:#fff;
-    }
-    body.dark-theme .toggle-btn {
-      background:#eee; color:#000;
-    }
-    .auth-btn {
-      background:#007bff; color:#fff;
-    }
-    .auth-btn:hover { background:#0056b3; }
+    #pointsDisplay img { width:20px; height:20px; margin-left:4px; }
+
     .glass {
       background: var(--card-bg-light);
-      border-radius:12px;
-      padding:20px; margin:20px auto;
-      max-width:900px;
-      transition:background 0.3s;
+      border-radius:12px; padding:20px; margin:20px auto;
+      max-width:900px; transition:background .3s;
     }
-    body.dark-theme .glass {
-      background: var(--card-bg-dark);
-    }
-    .controls {
-      text-align:center; margin-bottom:15px;
-    }
+    body.dark-theme .glass { background: var(--card-bg-dark); }
+
+    .controls { text-align:center; margin-bottom:15px; }
     select, input[type="text"], .btn {
       padding:8px 12px; border-radius:6px; margin:5px;
       border:1px solid #aaa; font-size:1em;
     }
-    body.dark-theme select,
-    body.dark-theme input[type="text"] {
+    body.dark-theme select, body.dark-theme input[type="text"] {
       background:#222; color:#ddd; border-color:#555;
     }
-    body.light-theme select,
-    body.light-theme input[type="text"] {
+    body.light-theme select, body.light-theme input[type="text"] {
       background:#fff; color:#000;
     }
-    .btn.search, #loadMore {
+    .btn.search, #loadMore, .btn.share {
       background:#007bff; color:#fff; border:none; cursor:pointer;
-      transition:background 0.3s;
+      transition:background .3s;
     }
-    .btn.search:hover, #loadMore:hover { background:#0056b3; }
+    .btn.search:hover, #loadMore:hover, .btn.share:hover { background:#0056b3; }
+
     #searchLabel { display:block; margin-bottom:8px; font-weight:bold; }
-    #results {
-      display:flex; flex-wrap:wrap; justify-content:center;
-    }
+    #results { display:flex; flex-wrap:wrap; justify-content:center; }
     .script-card {
       width:240px; margin:10px; border-radius:8px; overflow:hidden;
       background: var(--card-bg-light); transition:transform .2s;
     }
-    body.dark-theme .script-card {
-      background: var(--card-bg-dark);
-    }
+    body.dark-theme .script-card { background: var(--card-bg-dark); }
     .script-card:hover { transform:scale(1.03); }
     .script-card img {
       width:100%; height:140px; object-fit:cover;
@@ -109,26 +91,26 @@
     }
     .overlay-left { left:8px; }
     .overlay-right { right:8px; }
-    .script-info {
-      padding:10px; text-align:center; position:relative;
-    }
-    .script-info h3 {
-      margin:5px 0; font-size:1em;
+
+    .script-info { padding:10px; text-align:center; position:relative; }
+    .script-info h3 { margin:5px 0; font-size:1em;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    /* مودال السكربت */
+    .script-info .btn-group { display:flex; justify-content:space-between; }
+
+    #loadMore { display:block; margin:20px auto; }
+
+    /* مودال عرض السكربت */
     .modal {
       position:fixed; top:50%; left:50%;
       transform:translate(-50%,-50%) scale(0);
       width:90%; max-width:700px;
-      background: var(--modal-bg-light);
-      color: var(--modal-text-light);
+      background: var(--bg-light); color: var(--text-light);
       padding:20px; border-radius:8px;
       transition:transform .3s; z-index:1000;
     }
     body.dark-theme .modal {
-      background: var(--modal-bg-dark);
-      color: var(--modal-text-dark);
+      background: var(--bg-dark); color: var(--text-dark);
     }
     .modal.show { transform:translate(-50%,-50%) scale(1); }
     .modal .close {
@@ -145,38 +127,15 @@
       max-height:60vh; overflow-y:auto;
       background:rgba(0,0,0,0.05); padding:10px; border-radius:4px;
     }
-    /* مودال التسجيل/تسجيل الدخول */
-    #authModal {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.6); display:flex;
-      align-items:center; justify-content:center; z-index:2000;
+
+    /* صفحة المتصدرين */
+    #leaderboardPage {
+      display:none; padding:20px; max-width:600px; margin:20px auto;
     }
-    #authBox {
-      background:var(--modal-bg-light); color:var(--modal-text-light);
-      padding:20px; border-radius:8px; width:300px; position:relative;
-    }
-    body.dark-theme #authBox {
-      background:var(--modal-bg-dark); color:var(--modal-text-dark);
-    }
-    #authBox h3 { margin-top:0; text-align:center; }
-    #authBox input {
-      width:100%; margin:8px 0; padding:8px;
-      border:1px solid #aaa; border-radius:4px;
-    }
-    #authBox button {
-      width:100%; padding:8px; margin-top:10px;
-      border:none; border-radius:4px; background:#007bff; color:#fff;
-      cursor:pointer; transition:background .3s;
-    }
-    #authBox button:hover { background:#0056b3; }
-    #authClose {
-      position:absolute; top:8px; right:8px; cursor:pointer;
-      font-size:1.2em;
-    }
-    /* صورة الحساب */
-    #userAvatar {
-      width:32px; height:32px; border-radius:50%;
-      margin-left:10px; display:none;
+    #leaderboardPage h2 { text-align:center; margin-bottom:10px; }
+    #leaderboardList { width:100%; border-collapse: collapse; }
+    #leaderboardList th, #leaderboardList td {
+      border:1px solid #aaa; padding:8px; text-align:center;
     }
   </style>
   <!-- Firebase SDK -->
@@ -190,12 +149,24 @@
     <h1>اكسبلويت العرب</h1>
     <div class="buttons">
       <img id="userAvatar" src="" alt="avatar">
-      <button id="authBtn" class="auth-btn">تسجيل / دخول</button>
+      <div id="pointsDisplay"><img src="https://via.placeholder.com/20?text=★" alt="نقاط"> <span id="pointsCount">0</span></div>
+      <button id="authBtn" class="auth-btn">تسجيل/دخول</button>
+      <button id="leadBtn" class="lead-btn">المتصدرون</button>
       <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
     </div>
   </div>
 
-  <div class="glass">
+  <!-- متصدرون -->
+  <div id="leaderboardPage">
+    <h2>قائمة المتصدرين</h2>
+    <table id="leaderboardList">
+      <thead><tr><th>المركز</th><th>البريد</th><th>النقاط</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button class="btn" onclick="hideLeaderboard()">رجوع</button>
+  </div>
+
+  <div class="glass" id="mainContent">
     <label id="searchLabel">بحث عن: —</label>
     <div class="controls">
       <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
@@ -222,16 +193,14 @@
 
   <!-- مودال التسجيل / تسجيل الدخول -->
   <div id="authModal" style="display:none;">
-    <div id="authBox">
-      <span id="authClose">✖</span>
+    <div id="authBox" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:20px;border-radius:8px;z-index:2000;">
+      <span id="authClose" style="position:absolute;top:8px;right:8px;cursor:pointer;">✖</span>
       <h3 id="authTitle">تسجيل جديد</h3>
-      <input id="email" type="email" placeholder="البريد الإلكتروني">
-      <input id="password" type="password" placeholder="كلمة المرور">
-      <input id="confirmPassword" type="password" placeholder="تأكيد كلمة المرور" style="display:none;">
-      <button id="authAction">إنشاء حساب</button>
-      <p id="toggleAuth" style="text-align:center;cursor:pointer;margin-top:8px;color:#007bff;">
-        لديك حساب؟ تسجيل دخول
-      </p>
+      <input id="email" type="email" placeholder="البريد الإلكتروني"><br>
+      <input id="password" type="password" placeholder="كلمة المرور"><br>
+      <input id="confirmPassword" type="password" placeholder="تأكيد كلمة المرور" style="display:none;"><br>
+      <button id="authAction" class="btn">إنشاء حساب</button>
+      <p id="toggleAuth" style="text-align:center;cursor:pointer;color:#007bff;">لديك حساب؟ تسجيل دخول</p>
     </div>
   </div>
 
@@ -251,10 +220,9 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // DOM
+    // DOM elements
     const authBtn = document.getElementById('authBtn');
     const authModal = document.getElementById('authModal');
-    const authBox = document.getElementById('authBox');
     const authClose = document.getElementById('authClose');
     const authTitle = document.getElementById('authTitle');
     const emailInput = document.getElementById('email');
@@ -263,10 +231,12 @@
     const authAction = document.getElementById('authAction');
     const toggleAuth = document.getElementById('toggleAuth');
     const userAvatar = document.getElementById('userAvatar');
-
-    // Show modal
-    authBtn.onclick = () => { authModal.style.display = 'flex'; };
-    authClose.onclick = () => { authModal.style.display = 'none'; };
+    const pointsDisplay = document.getElementById('pointsDisplay');
+    const pointsCount = document.getElementById('pointsCount');
+    const leadBtn = document.getElementById('leadBtn');
+    const leaderboardPage = document.getElementById('leaderboardPage');
+    const mainContent = document.getElementById('mainContent');
+    const leaderboardList = document.querySelector('#leaderboardList tbody');
 
     let isRegister = true;
     function updateAuthUI() {
@@ -282,52 +252,74 @@
         toggleAuth.textContent = 'إنشاء حساب جديد';
       }
     }
-    toggleAuth.onclick = () => {
-      isRegister = !isRegister;
-      updateAuthUI();
-    };
+    authBtn.onclick = () => authModal.style.display = 'block';
+    authClose.onclick = () => authModal.style.display = 'none';
+    toggleAuth.onclick = () => { isRegister = !isRegister; updateAuthUI(); };
     updateAuthUI();
 
-    // Auth action
     authAction.onclick = () => {
       const email = emailInput.value.trim();
       const pass  = passInput.value;
-      if (!email || !pass) return alert('يرجى ملء جميع الحقول');
+      if (!email || !pass) return alert('يرجى ملء الحقول');
       if (isRegister) {
-        const pass2 = confirmInput.value;
-        if (pass !== pass2) return alert('كلمتا المرور غير متطابقتين');
+        if (pass !== confirmInput.value) return alert('كلمتا المرور غير متطابقتين');
         auth.createUserWithEmailAndPassword(email, pass)
-          .then(res => {
-            return res.user.sendEmailVerification();
-          })
-          .then(() => {
-            alert('تم إرسال رسالة التحقق إلى بريدك');
-          })
-          .catch(err => alert(err.message));
+          .then(res => res.user.sendEmailVerification().then(() => alert('تحقق أرسل')));
       } else {
-        auth.signInWithEmailAndPassword(email, pass)
-          .catch(err => alert(err.message));
+        auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
       }
     };
 
-    // On auth state change
     auth.onAuthStateChanged(user => {
       if (user) {
-        // حفظ البريد في قاعدة البيانات
-        db.ref('users/' + user.uid).set({ email: user.email });
-        // إظهار الصورة (أو placeholder)
+        db.ref('users/' + user.uid).once('value', snap => {
+          if (!snap.exists()) db.ref('users/' + user.uid).set({ email: user.email, points: 0 });
+        });
+        db.ref('users/' + user.uid + '/points').on('value', snap => {
+          pointsCount.textContent = snap.val() || 0;
+          pointsDisplay.style.display = 'flex';
+        });
         userAvatar.src = user.photoURL || 'https://via.placeholder.com/32';
         userAvatar.style.display = 'block';
         authBtn.style.display = 'none';
-        authModal.style.display = 'none';
       } else {
         userAvatar.style.display = 'none';
+        pointsDisplay.style.display = 'none';
         authBtn.style.display = 'inline-block';
       }
     });
 
-    // باقي كود الموقع (بحث، فلترة، ثيم، عرض سكربت...)
-    let mode = 'fetch', query = '', page = 1, total = 1;
+    // Leaderboard
+    leadBtn.onclick = () => {
+      if (!auth.currentUser) return alert('سجّل دخولك أولاً');
+      mainContent.style.display = 'none';
+      leaderboardPage.style.display = 'block';
+      // fetch top 10
+      db.ref('users').orderByChild('points').limitToLast(10).once('value', snap => {
+        const data = [];
+        snap.forEach(ch => data.push({ email: ch.val().email, points: ch.val().points }));
+        data.reverse();
+        leaderboardList.innerHTML = '';
+        data.forEach((u,i) => {
+          leaderboardList.innerHTML += `<tr><td>${i+1}</td><td>${u.email}</td><td>${u.points}</td></tr>`;
+        });
+      });
+    };
+    function hideLeaderboard() {
+      leaderboardPage.style.display = 'none';
+      mainContent.style.display = 'block';
+    }
+
+    // Sharing and points
+    function recordShare() {
+      const uid = auth.currentUser.uid;
+      const ref = db.ref('users/' + uid + '/points');
+      ref.transaction(p => (p||0) + 1);
+      alert('✅ شاركت وحصلت نقطة!');
+    }
+
+    // Site search/ display code as before
+    let mode='fetch', query='', page=1, total=1;
     const results = document.getElementById('results');
     const loadMore = document.getElementById('loadMore');
     const searchInput = document.getElementById('searchInput');
@@ -335,20 +327,19 @@
     const modeSelect = document.getElementById('modeSelect');
     const searchLabel = document.getElementById('searchLabel');
     const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
+    const bodyEl = document.body;
     const scriptModal = document.getElementById('scriptModal');
     const tEl = document.getElementById('scriptTitle');
     const cEl = document.getElementById('scriptContent');
     const copyBtn = document.getElementById('copyBtn');
 
     function proxy(url) {
-      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+      return 'https://api.allorigins.win/raw?url='+encodeURIComponent(url);
     }
     function apiURL() {
       const base='https://scriptblox.com/api/script/';
       const p=`&page=${page}`;
-      if (mode==='search')
-        return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
+      if(mode==='search') return proxy(base+`search?q=${encodeURIComponent(query)}${p}`);
       return proxy(base+
         (mode==='fetch'?`fetch?page=${page}`:
         mode==='free'?`fetch?mode=free${p}`:
@@ -380,22 +371,34 @@
               </div>
               <div class="script-info">
                 <h3>${s.title}</h3>
-                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
+                <div class="btn-group">
+                  <button class="btn share" onclick="shareScript('${s.title}')">مشاركة</button>
+                  <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
+                </div>
               </div>`;
             results.appendChild(card);
           });
         }
-        loadMore.style.display = page<total?'block':'none';
+        loadMore.style.display= page<total?'block':'none';
       } catch {
         results.innerHTML=`<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
+      }
+    }
+
+    async function shareScript(title) {
+      if(!auth.currentUser) return alert('سجّل دخولك أولاً');
+      try {
+        await navigator.share({ title, url: window.location.href });
+        recordShare();
+      } catch (err) {
+        alert('فشل المشاركة');
       }
     }
 
     async function showScript(slug,title) {
       try {
         const res=await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d=await res.json();
-        const sc=d.script;
+        const d=await res.json(), sc=d.script;
         if(sc&&sc.script) {
           tEl.textContent=title; cEl.textContent=sc.script;
           scriptModal.classList.add('show');
@@ -412,30 +415,23 @@
       query=q; mode='search'; page=1; results.innerHTML='';
       searchLabel.textContent=`بحث عن: ${q}`; loadScripts();
     }
-
     searchBtnEl.addEventListener('click', doSearch);
     searchInput.addEventListener('keypress', e=>{ if(e.key==='Enter') doSearch(); });
-
     modeSelect.addEventListener('change', ()=>{
       mode=modeSelect.value; query=''; page=1; results.innerHTML='';
       searchLabel.textContent='بحث عن: —'; loadScripts();
     });
-
-    loadMore.addEventListener('click', ()=>{
-      if(page<total){ page++; loadScripts(); }
-    });
-
+    loadMore.addEventListener('click', ()=>{ if(page<total){ page++; loadScripts(); }});
     themeToggle.addEventListener('click', ()=>{
-      if(body.classList.contains('light-theme')) {
-        body.classList.replace('light-theme','dark-theme');
+      if(bodyEl.classList.contains('light-theme')) {
+        bodyEl.classList.replace('light-theme','dark-theme');
         themeToggle.textContent='الوضع الفاتح';
       } else {
-        body.classList.replace('dark-theme','light-theme');
+        bodyEl.classList.replace('dark-theme','light-theme');
         themeToggle.textContent='الوضع الليلي';
       }
     });
-
-    window.addEventListener('load', ()=>{ loadScripts(); });
+    window.addEventListener('load', loadScripts);
   </script>
 </body>
 </html>
