@@ -12,178 +12,158 @@
       --text-dark: #ffffff;
       --card-bg-light: rgba(0,0,0,0.05);
       --card-bg-dark: rgba(255,255,255,0.1);
-      --accent: #ffcc00;
     }
     body {
-      margin:0; padding:0;
-      font-family:'Tajawal',sans-serif;
-      transition:background .3s,color .3s;
+      margin: 0; padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      transition: background 0.3s, color 0.3s;
     }
-    body.light-theme { background: var(--bg-light); color: var(--text-light); }
-    body.dark-theme  { background: var(--bg-dark);  color: var(--text-dark);  }
-
-    .topbar {
-      display:flex; justify-content:space-between; align-items:center;
-      padding:10px 20px; background:rgba(0,0,0,0.1);
+    body.light-theme {
+      background: var(--bg-light);
+      color: var(--text-light);
     }
-    body.dark-theme .topbar { background:rgba(255,255,255,0.1); }
-    .topbar h1 { margin:0; font-size:1.5em; }
-    .buttons { display:flex; align-items:center; }
-    .toggle-btn, .auth-btn, .lead-btn {
-      margin-left:10px; padding:8px 12px; border:none;
-      border-radius:6px; cursor:pointer; transition:background .3s;
+    body.dark-theme {
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
-    body.light-theme .toggle-btn { background:#333; color:#fff; }
-    body.dark-theme  .toggle-btn { background:#eee; color:#000; }
-    .auth-btn, .lead-btn { background:#007bff; color:#fff; }
-    .auth-btn:hover, .lead-btn:hover { background:#0056b3; }
-
-    #userAvatar {
-      width:36px; height:36px; border-radius:50%;
-      border:2px solid var(--accent); padding:2px;
-      display:none; margin-left:10px;
-    }
-    #pointsDisplay {
-      display:flex; align-items:center; font-weight:bold;
-      margin-left:5px; color: var(--accent);
-      border:2px solid var(--accent); border-radius:8px;
-      padding:2px 6px; display:none;
-    }
-
     .glass {
       background: var(--card-bg-light);
-      border-radius:12px; padding:20px; margin:20px auto;
-      max-width:900px; transition:background .3s;
+      border-radius: 12px;
+      padding: 20px; margin: 20px auto;
+      max-width: 900px;
+      transition: background 0.3s;
     }
-    body.dark-theme .glass { background: var(--card-bg-dark); }
-
-    .controls { text-align:center; margin-bottom:15px; }
+    body.dark-theme .glass {
+      background: var(--card-bg-dark);
+    }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+    }
+    .toggle-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    body.light-theme .toggle-btn {
+      background: #333; color: #fff;
+    }
+    body.dark-theme .toggle-btn {
+      background: #eee; color: #000;
+    }
+    .controls {
+      text-align: center; margin-bottom: 15px;
+    }
     select, input[type="text"], .btn {
-      padding:8px 12px; border-radius:6px; margin:5px;
-      border:1px solid #aaa; font-size:1em;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      margin: 0 5px 10px;
+      font-size: 1em;
     }
     body.dark-theme select,
     body.dark-theme input[type="text"] {
-      background:#222; color:#ddd; border-color:#555;
+      background: #222; color: #ddd; border-color: #555;
     }
     body.light-theme select,
     body.light-theme input[type="text"] {
-      background:#fff; color:#000;
+      background: #fff; color: #000;
     }
-    .btn.search, #loadMore, .btn.share {
-      background:#007bff; color:#fff; border:none; cursor:pointer;
-      transition:background .3s;
+    .btn {
+      cursor: pointer;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      transition: background 0.3s;
     }
-    .btn.search:hover, #loadMore:hover, .btn.share:hover { background:#0056b3; }
-
-    #searchLabel { display:block; margin-bottom:8px; font-weight:bold; }
-    #results { display:flex; flex-wrap:wrap; justify-content:center; }
+    .btn:hover {
+      background: #0056b3;
+    }
+    #searchLabel {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    #results {
+      display: flex; flex-wrap: wrap; justify-content: center;
+    }
     .script-card {
-      width:240px; margin:10px; border-radius:8px; overflow:hidden;
-      background: var(--card-bg-light); transition:transform .2s;
+      width: 240px; margin: 10px;
+      border-radius: 8px; overflow: hidden;
+      transition: transform 0.2s;
+      background: var(--card-bg-light);
     }
-    body.dark-theme .script-card { background: var(--card-bg-dark); }
-    .script-card:hover { transform:scale(1.03); }
+    body.dark-theme .script-card {
+      background: var(--card-bg-dark);
+    }
+    .script-card:hover { transform: scale(1.03); }
     .script-card img {
-      width:100%; height:140px; object-fit:cover;
+      width: 100%; height: 140px; object-fit: cover;
     }
     .overlay-left, .overlay-right {
-      position:absolute; top:8px; padding:4px 8px;
-      background:rgba(0,0,0,0.5); color:#fff; border-radius:4px;
-      font-size:.8em;
+      position: absolute; top: 8px; padding: 4px 8px;
+      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
+      font-size: 0.8em;
     }
-    .overlay-left { left:8px; }
-    .overlay-right { right:8px; }
-
-    .script-info { padding:10px; text-align:center; position:relative; }
+    .overlay-left { left: 8px; }
+    .overlay-right { right: 8px; }
+    .script-info { padding: 10px; text-align: center; position: relative; }
     .script-info h3 {
-      margin:5px 0; font-size:1em;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      margin: 5px 0; font-size: 1em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .script-info .btn-group {
-      display:flex; justify-content:space-between;
-    }
-
-    #loadMore { display:block; margin:20px auto; }
-
+    #loadMore { display: block; margin: 20px auto; }
     .modal {
-      position:fixed; top:50%; left:50%;
-      transform:translate(-50%,-50%) scale(0);
-      width:90%; max-width:700px;
+      position: fixed; top:50%; left:50%;
+      transform: translate(-50%,-50%) scale(0);
+      width: 90%; max-width: 700px;
       background: var(--bg-light); color: var(--text-light);
-      padding:20px; border-radius:8px;
-      transition:transform .3s; z-index:1000;
+      padding:20px; border-radius:8px; transition: transform 0.3s;
+      z-index: 1000;
     }
     body.dark-theme .modal {
       background: var(--bg-dark); color: var(--text-dark);
     }
-    .modal.show { transform:translate(-50%,-50%) scale(1); }
+    .modal.show { transform: translate(-50%,-50%) scale(1); }
     .modal .close {
-      position:absolute; top:8px; right:12px; cursor:pointer; font-size:1.2em;
+      position: absolute; top:8px; right:12px; cursor: pointer;
+      font-size: 1.2em;
     }
     .modal .copy-btn {
-      position:absolute; bottom:12px; right:12px;
-      padding:6px 12px; background:#28a745; color:#fff;
-      border:none; border-radius:4px; cursor:pointer;
+      position: absolute; bottom:12px; right:12px;
+      padding:6px 12px; border:none; cursor:pointer;
+      background: #28a745; color:#fff; border-radius:4px;
     }
-    .modal .copy-btn:hover { background:#1e7e34; }
+    .modal .copy-btn:hover { background: #1e7e34; }
     .modal h2 { margin-top:0; text-align:center; }
     .modal pre {
       max-height:60vh; overflow-y:auto;
-      background:rgba(0,0,0,0.05); padding:10px; border-radius:4px;
-    }
-
-    #leaderboardPage {
-      display:none; padding:20px; max-width:600px; margin:20px auto;
-    }
-    #leaderboardPage h2 { text-align:center; margin-bottom:10px; }
-    #leaderboardList {
-      width:100%; border-collapse: collapse; margin-bottom:10px;
-    }
-    #leaderboardList th, #leaderboardList td {
-      border:1px solid #aaa; padding:8px; text-align:center;
-    }
-    #changeNameBtn {
-      margin-bottom:10px; padding:8px 12px; background:var(--accent);
-      color:#000; border:none; border-radius:6px; cursor:pointer;
+      background: rgba(0,0,0,0.05); padding:10px; border-radius:4px;
     }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body class="light-theme">
 
   <div class="topbar">
     <h1>اكسبلويت العرب</h1>
-    <div class="buttons">
-      <img id="userAvatar" src="" alt="avatar">
-      <div id="pointsDisplay"><span id="pointsCount">0</span></div>
-      <button id="authBtn" class="auth-btn">تسجيل/دخول</button>
-      <button id="leadBtn" class="lead-btn">المتصدرون</button>
-      <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
-    </div>
+    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
   </div>
 
-  <div id="leaderboardPage">
-    <h2>قائمة المتصدرين</h2>
-    <button id="changeNameBtn">تغيير الاسم</button>
-    <table id="leaderboardList">
-      <thead><tr><th>المركز</th><th>الاسم</th><th>النقاط</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <button class="btn" onclick="hideLeaderboard()">رجوع</button>
-  </div>
-
-  <div class="glass" id="mainContent">
-    <label id="searchLabel">بحث عن: —</label>
+  <div class="glass">
     <div class="controls">
+      <label id="searchLabel">بحث عن: —</label><br>
       <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-      <button id="searchBtn" class="btn search">بحث</button><br>
+      <button id="searchBtn" class="btn">بحث</button><br>
       <select id="modeSelect">
         <option value="fetch">الرئيسية</option>
         <option value="free">مجانية</option>
-        <option value="unverified">غير مححقة</option>
+        <option value="unverified">غير محققة</option>
         <option value="mostviewed">الأكثر مشاهدة</option>
         <option value="verified">محققة</option>
       </select>
@@ -199,179 +179,21 @@
     <button class="copy-btn" id="copyBtn">نسخ</button>
   </div>
 
-  <div id="authModal" style="display:none;">
-    <div id="authBox" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:20px;border-radius:8px;z-index:2000;">
-      <span id="authClose" style="position:absolute;top:8px;right:8px;cursor:pointer;">✖</span>
-      <h3 id="authTitle">تسجيل جديد</h3>
-      <input id="email" type="email" placeholder="البريد الإلكتروني"><br>
-      <input id="password" type="password" placeholder="كلمة المرور"><br>
-      <input id="confirmPassword" type="password" placeholder="تأكيد كلمة المرور" style="display:none;"><br>
-      <button id="authAction" class="btn">إنشاء حساب</button>
-      <p id="toggleAuth" style="text-align:center;cursor:pointer;color:#007bff;">لديك حساب؟ تسجيل دخول</p>
-    </div>
-  </div>
-
   <script>
-    // Firebase setup
-    const firebaseConfig = {
-      apiKey: "AIzaSyCSVCz9s7yHQtpOet9txgHl-E4XBgFmMp0",
-      authDomain: "qplkow.firebaseapp.com",
-      databaseURL: "https://qplkow-default-rtdb.firebaseio.com",
-      projectId: "qplkow",
-      storageBucket: "qplkow.appspot.com",
-      messagingSenderId: "280525591715",
-      appId: "1:280525591715:web:d2f750ebf5ceffe6641b16",
-      measurementId: "G-ZC8K2PDE60"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db   = firebase.database();
-
-    // DOM refs
-    const authBtn      = document.getElementById('authBtn');
-    const authModal    = document.getElementById('authModal');
-    const authClose    = document.getElementById('authClose');
-    const authTitle    = document.getElementById('authTitle');
-    const emailInput   = document.getElementById('email');
-    const passInput    = document.getElementById('password');
-    const confirmInput = document.getElementById('confirmPassword');
-    const authAction   = document.getElementById('authAction');
-    const toggleAuth   = document.getElementById('toggleAuth');
-    const userAvatar   = document.getElementById('userAvatar');
-    const pointsDisplay= document.getElementById('pointsDisplay');
-    const pointsCount  = document.getElementById('pointsCount');
-    const leadBtn      = document.getElementById('leadBtn');
-    const leaderboardPage = document.getElementById('leaderboardPage');
-    const mainContent    = document.getElementById('mainContent');
-    const leaderboardList= document.querySelector('#leaderboardList tbody');
-    const changeNameBtn  = document.getElementById('changeNameBtn');
-    const themeToggle    = document.getElementById('themeToggle');
-    const bodyEl         = document.body;
-
-    // Auth UI toggle
-    let isRegister = true;
-    function updateAuthUI() {
-      if (isRegister) {
-        authTitle.textContent = 'تسجيل جديد';
-        confirmInput.style.display = 'block';
-        authAction.textContent = 'إنشاء حساب';
-        toggleAuth.textContent = 'لديك حساب؟ تسجيل دخول';
-      } else {
-        authTitle.textContent = 'تسجيل دخول';
-        confirmInput.style.display = 'none';
-        authAction.textContent = 'دخول';
-        toggleAuth.textContent = 'إنشاء حساب جديد';
-      }
-    }
-    authBtn.onclick     = () => authModal.style.display = 'block';
-    authClose.onclick   = () => authModal.style.display = 'none';
-    toggleAuth.onclick  = () => { isRegister = !isRegister; updateAuthUI(); };
-    updateAuthUI();
-
-    authAction.onclick = () => {
-      const email = emailInput.value.trim();
-      const pass  = passInput.value;
-      if (!email || !pass) return alert('يرجى ملء الحقول');
-      if (isRegister) {
-        if (pass !== confirmInput.value) return alert('كلمة المرور غير مطابقة');
-        auth.createUserWithEmailAndPassword(email, pass)
-          .then(u => u.user.sendEmailVerification().then(() => alert('تم إرسال بريد التحقق')))
-          .catch(e => alert(e.message));
-      } else {
-        auth.signInWithEmailAndPassword(email, pass)
-          .catch(e => alert(e.message));
-      }
-    };
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        const userRef = db.ref('users/' + user.uid);
-        userRef.once('value', snap => {
-          if (!snap.exists()) {
-            userRef.set({
-              email: user.email,
-              username: user.email.split('@')[0],
-              points: 0
-            });
-          }
-        });
-        userRef.on('value', snap => {
-          const data = snap.val();
-          // show avatar via Gravatar
-          const hash = md5(user.email.trim().toLowerCase());
-          userAvatar.src = `https://www.gravatar.com/avatar/${hash}?d=identicon&s=64`;
-          userAvatar.style.display = 'block';
-          pointsCount.textContent = data.points || 0;
-          pointsDisplay.style.display = 'flex';
-        });
-        authBtn.style.display = 'none';
-      } else {
-        userAvatar.style.display = 'none';
-        pointsDisplay.style.display = 'none';
-        authBtn.style.display = 'inline-block';
-      }
-    });
-
-    // Change username
-    changeNameBtn.onclick = () => {
-      const newName = prompt('أدخل اسمك الجديد:');
-      if (newName && auth.currentUser) {
-        db.ref('users/' + auth.currentUser.uid + '/username').set(newName);
-        loadLeaderboard();
-      }
-    };
-
-    // Leaderboard: show all accounts with points
-    leadBtn.onclick = () => {
-      if (!auth.currentUser) return alert('سجّل دخولك أولاً');
-      mainContent.style.display     = 'none';
-      leaderboardPage.style.display = 'block';
-      loadLeaderboard();
-    };
-    function loadLeaderboard() {
-      db.ref('users').orderByChild('points').once('value', snap => {
-        const arr = [];
-        snap.forEach(ch => {
-          const u = ch.val();
-          arr.push(u);
-        });
-        // descending
-        arr.sort((a, b) => (b.points || 0) - (a.points || 0));
-        leaderboardList.innerHTML = '';
-        arr.forEach((u, i) => {
-          leaderboardList.innerHTML += `
-            <tr>
-              <td>${i+1}</td>
-              <td>${u.username}</td>
-              <td>${u.points}</td>
-            </tr>`;
-        });
-      });
-    }
-    function hideLeaderboard() {
-      leaderboardPage.style.display = 'none';
-      mainContent.style.display     = 'block';
-    }
-
-    // Record share
-    function recordShare() {
-      const uid = auth.currentUser.uid;
-      db.ref('users/' + uid + '/points').transaction(p => (p || 0) + 1);
-      alert('✅ حُسبت نقطة لمشاركتك!');
-    }
-
-    // Script search & display
     let mode = 'fetch', query = '', page = 1, total = 1;
-    const results     = document.getElementById('results');
-    const loadMoreBtn = document.getElementById('loadMore');
+    const results = document.getElementById('results');
+    const loadMore = document.getElementById('loadMore');
     const searchInput = document.getElementById('searchInput');
-    const searchBtnEl = document.getElementById('searchBtn');
-    const modeSelect  = document.getElementById('modeSelect');
+    const searchBtn = document.getElementById('searchBtn');
+    const modeSelect = document.getElementById('modeSelect');
     const searchLabel = document.getElementById('searchLabel');
-    const scriptModal = document.getElementById('scriptModal');
-    const tEl         = document.getElementById('scriptTitle');
-    const cEl         = document.getElementById('scriptContent');
-    const copyBtn     = document.getElementById('copyBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    const modal = document.getElementById('scriptModal');
+    const tEl = document.getElementById('scriptTitle');
+    const cEl = document.getElementById('scriptContent');
+    const copyBtn = document.getElementById('copyBtn');
 
     function proxy(url) {
       return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
@@ -379,17 +201,15 @@
     function apiURL() {
       const base = 'https://scriptblox.com/api/script/';
       const p = `&page=${page}`;
-      if (mode === 'search') {
+      if (mode === 'search')
         return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
-      }
-      const endpoints = {
-        'fetch':   `fetch?page=${page}`,
-        'free':    `fetch?mode=free${p}`,
-        'unverified': `fetch?verified=0${p}`,
-        'mostviewed': `fetch?sortBy=views&order=desc${p}`,
-        'verified':   `fetch?filters=verified&legacy_filters=true${p}`
-      };
-      return proxy(base + endpoints[mode]);
+      return proxy(base + 
+        (mode === 'fetch' ? `fetch?page=${page}` :
+        mode === 'free' ? `fetch?mode=free${p}` :
+        mode === 'unverified' ? `fetch?verified=0${p}` :
+        mode === 'mostviewed' ? `fetch?sortBy=views&order=desc${p}` :
+        `fetch?filters=verified&legacy_filters=true${p}`)
+      );
     }
 
     async function loadScripts() {
@@ -410,33 +230,20 @@
             const views = s.views || 0;
             card.innerHTML = `
               <div style="position:relative;">
-                <img src="${s.game?.imageUrl || s.image || 'https://via.placeholder.com/240x140'}" alt="">
+                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
                 <div class="overlay-left">👁️ ${views}</div>
                 <div class="overlay-right">📅 ${date}</div>
               </div>
               <div class="script-info">
                 <h3>${s.title}</h3>
-                <div class="btn-group">
-                  <button class="btn share" onclick="shareScript('${s.title}')">مشاركة</button>
-                  <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
-                </div>
+                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
               </div>`;
             results.appendChild(card);
           });
         }
-        loadMoreBtn.style.display = page < total ? 'block' : 'none';
+        loadMore.style.display = page < total ? 'block' : 'none';
       } catch {
         results.innerHTML = `<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
-      }
-    }
-
-    async function shareScript(title) {
-      if (!auth.currentUser) return alert('سجّل دخولك أولاً');
-      try {
-        await navigator.share({ title, url: window.location.href });
-        recordShare();
-      } catch {
-        alert('فشل المشاركة');
       }
     }
 
@@ -448,18 +255,13 @@
         if (sc && sc.script) {
           tEl.textContent = title;
           cEl.textContent = sc.script;
-          scriptModal.classList.add('show');
-        } else {
-          alert('⚠️ غير متاح');
-        }
+          modal.classList.add('show');
+        } else alert('⚠️ غير متاح');
       } catch {
         alert('❌ فشل التحميل');
       }
     }
-
-    function closeModal() {
-      scriptModal.classList.remove('show');
-    }
+    function closeModal() { modal.classList.remove('show'); }
 
     function doSearch() {
       const q = searchInput.value.trim();
@@ -469,7 +271,7 @@
       loadScripts();
     }
 
-    searchBtnEl.addEventListener('click', doSearch);
+    searchBtn.addEventListener('click', doSearch);
     searchInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') doSearch();
     });
@@ -480,30 +282,23 @@
       loadScripts();
     });
 
-    loadMoreBtn.addEventListener('click', () => {
-      if (page < total) {
-        page++;
-        loadScripts();
-      }
+    loadMore.addEventListener('click', () => {
+      if (page < total) { page++; loadScripts(); }
     });
 
     themeToggle.addEventListener('click', () => {
-      if (bodyEl.classList.contains('light-theme')) {
-        bodyEl.classList.replace('light-theme','dark-theme');
+      if (body.classList.contains('light-theme')) {
+        body.classList.replace('light-theme','dark-theme');
         themeToggle.textContent = 'الوضع الفاتح';
       } else {
-        bodyEl.classList.replace('dark-theme','light-theme');
+        body.classList.replace('dark-theme','light-theme');
         themeToggle.textContent = 'الوضع الليلي';
       }
     });
 
-    window.addEventListener('load', loadScripts);
-
-    // MD5 for Gravatar
-    function md5(string) {
-      /* Full MD5 implementation here (same as before) */
-      return /* hash */;
-    }
+    window.addEventListener('load', () => {
+      loadScripts();
+    });
   </script>
 </body>
 </html>
