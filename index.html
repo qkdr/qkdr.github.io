@@ -12,6 +12,8 @@
       --text-dark: #ffffff;
       --card-bg-light: rgba(0,0,0,0.05);
       --card-bg-dark: rgba(255,255,255,0.1);
+      --frame-light: rgba(0,0,0,0.1);
+      --frame-dark: rgba(255,255,255,0.2);
     }
     body {
       margin: 0; padding: 0;
@@ -26,125 +28,120 @@
       background: var(--bg-dark);
       color: var(--text-dark);
     }
-    .glass {
-      background: var(--card-bg-light);
-      border-radius: 12px;
-      padding: 20px; margin: 20px auto;
-      max-width: 900px;
-      transition: background 0.3s;
-    }
-    body.dark-theme .glass {
-      background: var(--card-bg-dark);
-    }
-    h1 { text-align: center; margin-bottom: 10px; }
     .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 900px;
-      margin: 20px auto 0;
-      padding: 0 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 20px;
     }
     .toggle-btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
+      padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;
     }
-    body.light-theme .toggle-btn {
-      background: #333; color: #fff;
+    body.light-theme .toggle-btn { background: #333; color: #fff; }
+    body.dark-theme .toggle-btn { background: #eee; color: #000; }
+    .glass {
+      background: var(--card-bg-light);
+      padding: 20px; margin: 0 auto 20px; max-width: 900px;
+      border-radius: 12px; transition: background 0.3s;
     }
-    body.dark-theme .toggle-btn {
-      background: #eee; color: #000;
-    }
-    .controls {
-      text-align: center; margin-bottom: 15px;
-    }
+    body.dark-theme .glass { background: var(--card-bg-dark); }
+    h1 { text-align: center; }
+    .controls { text-align: center; margin-bottom: 15px; }
     select, input[type="text"], .btn {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      margin: 0 5px 10px;
-      font-size: 1em;
+      padding: 8px 12px; border-radius: 8px; border: 1px solid #aaa;
+      margin: 5px; font-size: 1em;
     }
-    body.dark-theme select,
-    body.dark-theme input[type="text"] {
+    body.dark-theme select, body.dark-theme input[type="text"] {
       background: #222; color: #ddd; border-color: #555;
     }
-    body.light-theme select,
-    body.light-theme input[type="text"] {
+    body.light-theme select, body.light-theme input[type="text"] {
       background: #fff; color: #000;
     }
     .btn {
-      cursor: pointer;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      transition: background 0.3s;
+      background: #007bff; color: #fff; border: none; cursor: pointer;
+      transition: background .3s;
     }
-    .btn:hover {
-      background: #0056b3;
-    }
-    #searchLabel {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
+    .btn:hover { background: #0056b3; }
     #results {
       display: flex; flex-wrap: wrap; justify-content: center;
     }
     .script-card {
-      width: 240px; margin: 10px;
-      border-radius: 8px; overflow: hidden;
-      transition: transform 0.2s;
       background: var(--card-bg-light);
+      width: 240px; margin: 10px; border-radius: 8px;
+      overflow: hidden; transition: transform .2s;
+      position: relative;
     }
-    body.dark-theme .script-card {
-      background: var(--card-bg-dark);
-    }
+    body.dark-theme .script-card { background: var(--card-bg-dark); }
     .script-card:hover { transform: scale(1.03); }
     .script-card img {
       width: 100%; height: 140px; object-fit: cover;
+      cursor: pointer;
     }
     .overlay-left, .overlay-right {
       position: absolute; top: 8px; padding: 4px 8px;
       background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
-      font-size: 0.8em;
+      font-size: .8em;
     }
     .overlay-left { left: 8px; }
     .overlay-right { right: 8px; }
-    .script-info { padding: 10px; text-align: center; position: relative; }
+    .script-info { padding: 10px; text-align: center; }
     .script-info h3 {
       margin: 5px 0; font-size: 1em;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     #loadMore { display: block; margin: 20px auto; }
-    .modal {
-      position: fixed; top:50%; left:50%;
-      transform: translate(-50%,-50%) scale(0);
-      width: 90%; max-width: 700px;
-      background: var(--bg-light); color: var(--text-light);
-      padding:20px; border-radius:8px; transition: transform 0.3s;
-      z-index: 1000;
+    /* DETAIL VIEW */
+    #detailContent {
+      display: none; padding: 20px; max-width: 900px; margin: 0 auto;
     }
-    body.dark-theme .modal {
-      background: var(--bg-dark); color: var(--text-dark);
+    .frame {
+      border: 1px solid var(--frame-light);
+      padding: 10px; border-radius: 8px;
+      margin-bottom: 15px;
+      transition: border-color .3s, background .3s;
     }
-    .modal.show { transform: translate(-50%,-50%) scale(1); }
-    .modal .close {
-      position: absolute; top:8px; right:12px; cursor: pointer;
-      font-size: 1.2em;
+    body.dark-theme .frame {
+      border-color: var(--frame-dark);
+      background: rgba(255,255,255,0.05);
     }
-    .modal .copy-btn {
-      position: absolute; bottom:12px; right:12px;
-      padding:6px 12px; border:none; cursor:pointer;
-      background: #28a745; color:#fff; border-radius:4px;
+    .detail-header {
+      display: flex; gap: 20px;
     }
-    .modal .copy-btn:hover { background: #1e7e34; }
-    .modal h2 { margin-top:0; text-align:center; }
-    .modal pre {
-      max-height:60vh; overflow-y:auto;
-      background: rgba(0,0,0,0.05); padding:10px; border-radius:4px;
+    .detail-header .left,
+    .detail-header .right {
+      flex: 1;
+    }
+    .detail-header .left img {
+      width: 100%; border-radius: 8px;
+    }
+    .detail-header .right h2 {
+      margin: 0; font-size: 1.5em;
+    }
+    .detail-header .right p {
+      margin: 5px 0;
+    }
+    #description, #codeBox {
+      width: 100%;
+    }
+    #description {
+      background: var(--card-bg-light);
+      padding: 10px; border-radius: 6px;
+    }
+    body.dark-theme #description {
+      background: var(--card-bg-dark);
+    }
+    #codeBox {
+      font-family: monospace;
+      background: var(--card-bg-light);
+      padding: 10px; border-radius: 6px;
+      white-space: pre-wrap; overflow-x: auto;
+    }
+    body.dark-theme #codeBox {
+      background: var(--card-bg-dark);
+    }
+    #codeCopyBtn {
+      margin-top: 10px;
+    }
+    #backBtn {
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -155,150 +152,166 @@
     <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
   </div>
 
-  <div class="glass">
-    <div class="controls">
-      <label id="searchLabel">بحث عن: —</label><br>
-      <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-      <button id="searchBtn" class="btn">بحث</button><br>
-      <select id="modeSelect">
-        <option value="fetch">الرئيسية</option>
-        <option value="free">مجانية</option>
-        <option value="unverified">غير محققة</option>
-        <option value="mostviewed">الأكثر مشاهدة</option>
-        <option value="verified">محققة</option>
-      </select>
+  <!-- MAIN VIEW -->
+  <div id="mainContent">
+    <div class="glass">
+      <div class="controls">
+        <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
+        <button id="searchBtn" class="btn">بحث</button>
+        <select id="modeSelect">
+          <option value="fetch">الرئيسية</option>
+          <option value="free">مجانية</option>
+          <option value="unverified">غير محققة</option>
+          <option value="mostviewed">الأكثر مشاهدة</option>
+          <option value="verified">محققة</option>
+        </select>
+      </div>
+      <div id="results"></div>
+      <button id="loadMore" class="btn" style="display:none;">المزيد</button>
     </div>
-    <div id="results"></div>
-    <button id="loadMore" class="btn" style="display:none;">المزيد</button>
   </div>
 
-  <div id="scriptModal" class="modal">
-    <span class="close" onclick="closeModal()">✖</span>
-    <h2 id="scriptTitle"></h2>
-    <pre id="scriptContent"></pre>
-    <button class="copy-btn" id="copyBtn">نسخ</button>
+  <!-- DETAIL VIEW -->
+  <div id="detailContent">
+    <button id="backBtn" class="btn">◀ رجوع</button>
+    <div class="frame detail-header">
+      <div class="left">
+        <img id="detailImage" src="" alt="صورة اللعبة">
+      </div>
+      <div class="right">
+        <h2 id="detailTitle"></h2>
+        <p><strong>اسم اللعبة:</strong> <span id="detailGame"></span></p>
+        <p><strong>تاريخ النشر:</strong> <span id="detailDate"></span></p>
+      </div>
+    </div>
+    <div class="frame">
+      <h3>وصف السكربت</h3>
+      <div id="description"></div>
+    </div>
+    <div class="frame">
+      <h3>الكود</h3>
+      <div id="codeBox"></div>
+      <button id="codeCopyBtn" class="btn">نسخ الكود</button>
+    </div>
   </div>
 
   <script>
-    let mode = 'fetch', query = '', page = 1, total = 1;
-    const results = document.getElementById('results');
-    const loadMore = document.getElementById('loadMore');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const modeSelect = document.getElementById('modeSelect');
-    const searchLabel = document.getElementById('searchLabel');
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
+    // Theme toggle
+    const bodyEl = document.body;
+    document.getElementById('themeToggle').onclick = () => {
+      if (bodyEl.classList.contains('light-theme')) {
+        bodyEl.classList.replace('light-theme','dark-theme');
+        event.target.textContent = 'الوضع الفاتح';
+      } else {
+        bodyEl.classList.replace('dark-theme','light-theme');
+        event.target.textContent = 'الوضع الليلي';
+      }
+    };
 
-    const modal = document.getElementById('scriptModal');
-    const tEl = document.getElementById('scriptTitle');
-    const cEl = document.getElementById('scriptContent');
-    const copyBtn = document.getElementById('copyBtn');
-
+    // CORS proxy
     function proxy(url) {
       return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
     }
-    function apiURL() {
-      const base = 'https://scriptblox.com/api/script/';
-      const p = `&page=${page}`;
-      if (mode === 'search')
-        return proxy(base + `search?q=${encodeURIComponent(query)}${p}`);
-      return proxy(base + 
-        (mode === 'fetch' ? `fetch?page=${page}` :
-        mode === 'free' ? `fetch?mode=free${p}` :
-        mode === 'unverified' ? `fetch?verified=0${p}` :
-        mode === 'mostviewed' ? `fetch?sortBy=views&order=desc${p}` :
-        `fetch?filters=verified&legacy_filters=true${p}`)
-      );
-    }
+
+    // State
+    let mode='fetch', query='', page=1, total=1;
+    const resultsEl = document.getElementById('results');
+    const loadMoreBtn = document.getElementById('loadMore');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const modeSelect = document.getElementById('modeSelect');
+    const mainContent = document.getElementById('mainContent');
+    const detailContent = document.getElementById('detailContent');
+    const backBtn = document.getElementById('backBtn');
 
     async function loadScripts() {
+      resultsEl.innerHTML = page===1 ? '<p>جاري التحميل…</p>' : resultsEl.innerHTML;
       try {
-        if (page === 1) results.innerHTML = `<p>جاري التحميل…</p>`;
-        const res = await fetch(apiURL());
+        const base = 'https://scriptblox.com/api/script/';
+        const p = `&page=${page}`;
+        let endpoint = '';
+        if (mode==='search') endpoint = `search?q=${encodeURIComponent(query)}${p}`;
+        else if (mode==='fetch') endpoint = `fetch?page=${page}`;
+        else if (mode==='free') endpoint = `fetch?mode=free${p}`;
+        else if (mode==='unverified') endpoint = `fetch?verified=0${p}`;
+        else if (mode==='mostviewed') endpoint = `fetch?sortBy=views&order=desc${p}`;
+        else endpoint = `fetch?filters=verified&legacy_filters=true${p}`;
+        const res = await fetch(proxy(base+endpoint));
         const data = await res.json();
-        const R = data.result || data;
-        total = R.totalPages || 1;
-        if (page === 1) results.innerHTML = '';
+        const R = data.result||data;
+        total = R.totalPages||1;
+        if (page===1) resultsEl.innerHTML = '';
         if (!R.scripts || !R.scripts.length) {
-          if (page === 1) results.innerHTML = `<p>لا توجد نتائج.</p>`;
+          if (page===1) resultsEl.innerHTML = '<p>لا توجد نتائج.</p>';
         } else {
           R.scripts.forEach(s => {
             const card = document.createElement('div');
             card.className = 'script-card';
             const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views = s.views || 0;
+            const views = s.views||0;
             card.innerHTML = `
-              <div style="position:relative;">
-                <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="">
-                <div class="overlay-left">👁️ ${views}</div>
-                <div class="overlay-right">📅 ${date}</div>
-              </div>
+              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="" 
+                   onclick="showDetail('${s.slug}')">
+              <div class="overlay-left">👁️ ${views}</div>
+              <div class="overlay-right">📅 ${date}</div>
               <div class="script-info">
                 <h3>${s.title}</h3>
-                <button class="btn" onclick="showScript('${s.slug}','${s.title}')">عرض</button>
               </div>`;
-            results.appendChild(card);
+            resultsEl.appendChild(card);
           });
         }
-        loadMore.style.display = page < total ? 'block' : 'none';
+        loadMoreBtn.style.display = page<total ? 'block' : 'none';
       } catch {
-        results.innerHTML = `<p>❌ خطأ في الاتصال، حاول لاحقاً</p>`;
+        resultsEl.innerHTML = '<p>❌ خطأ في الاتصال، حاول لاحقاً</p>';
       }
     }
 
-    async function showScript(slug, title) {
+    async function showDetail(slug) {
       try {
         const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const d = await res.json();
-        const sc = d.script;
-        if (sc && sc.script) {
-          tEl.textContent = title;
-          cEl.textContent = sc.script;
-          modal.classList.add('show');
-        } else alert('⚠️ غير متاح');
+        const data = await res.json();
+        const sc = data.script;
+        mainContent.style.display = 'none';
+        detailContent.style.display = 'block';
+        document.getElementById('detailImage').src = sc.game.imageUrl;
+        document.getElementById('detailTitle').textContent = sc.title;
+        document.getElementById('detailGame').textContent = sc.game.name;
+        document.getElementById('detailDate').textContent = new Date(sc.createdAt).toLocaleDateString('ar-EG');
+        document.getElementById('description').textContent = sc.features || '—';
+        document.getElementById('codeBox').textContent = sc.script;
       } catch {
-        alert('❌ فشل التحميل');
+        alert('❌ فشل جلب التفاصيل');
       }
     }
-    function closeModal() { modal.classList.remove('show'); }
 
-    function doSearch() {
+    // Events
+    backBtn.onclick = () => {
+      detailContent.style.display = 'none';
+      mainContent.style.display = 'block';
+    };
+    searchBtn.onclick = () => {
       const q = searchInput.value.trim();
       if (!q) return alert('فضلاً أدخل كلمة بحث');
-      query = q; mode = 'search'; page = 1; results.innerHTML = '';
-      searchLabel.textContent = `بحث عن: ${q}`;
-      loadScripts();
-    }
-
-    searchBtn.addEventListener('click', doSearch);
+      mode='search'; query=q; page=1; resultsEl.innerHTML=''; loadScripts();
+    };
     searchInput.addEventListener('keypress', e => {
-      if (e.key === 'Enter') doSearch();
+      if (e.key==='Enter') searchBtn.click();
     });
+    modeSelect.onchange = () => {
+      mode = modeSelect.value; query=''; page=1; resultsEl.innerHTML=''; loadScripts();
+    };
+    loadMoreBtn.onclick = () => {
+      if (page<total) { page++; loadScripts(); }
+    };
+    document.getElementById('codeCopyBtn').onclick = () => {
+      const text = document.getElementById('codeBox').textContent;
+      navigator.clipboard.writeText(text)
+        .then(()=> alert('✅ تم نسخ الكود'))
+        .catch(()=> alert('❌ فشل النسخ'));
+    };
 
-    modeSelect.addEventListener('change', () => {
-      mode = modeSelect.value; query = ''; page = 1; results.innerHTML = '';
-      searchLabel.textContent = 'بحث عن: —';
-      loadScripts();
-    });
-
-    loadMore.addEventListener('click', () => {
-      if (page < total) { page++; loadScripts(); }
-    });
-
-    themeToggle.addEventListener('click', () => {
-      if (body.classList.contains('light-theme')) {
-        body.classList.replace('light-theme','dark-theme');
-        themeToggle.textContent = 'الوضع الفاتح';
-      } else {
-        body.classList.replace('dark-theme','light-theme');
-        themeToggle.textContent = 'الوضع الليلي';
-      }
-    });
-
-    window.addEventListener('load', () => {
-      loadScripts();
-    });
+    // Initialize
+    window.addEventListener('load', loadScripts);
   </script>
 </body>
 </html>
