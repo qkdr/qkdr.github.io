@@ -1,247 +1,191 @@
 <!doctype html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>محرر بسيط ومباشر لـ Lord.lua</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>محرر وحفظ مباشر لـ Lord.lua</title>
   <style>
-    :root{--bg:#f7f7fb;--card:#fff;--muted:#666}
-    body{font-family:system-ui,Arial;direction:rtl;background:var(--bg);margin:0;padding:18px}
-    .wrap{max-width:980px;margin:0 auto}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    h1{font-size:20px;margin:0}
-    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(10,10,10,0.06);margin-top:12px}
-    label{display:block;margin:8px 0 4px;font-weight:600}
-    input[type=text], input[type=password], textarea, select {
-      width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-family:inherit;
-    }
-    textarea{height:360px; font-family: monospace; font-size:13px; white-space:pre; overflow:auto; }
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    body{font-family:system-ui,Arial;direction:rtl;background:#f5f7fb;margin:0;padding:20px}
+    .card{max-width:900px;margin:0 auto;background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 20px rgba(20,20,40,0.06)}
+    h1{margin:0 0 8px;font-size:20px}
+    .row{display:flex;gap:8px;align-items:center}
+    input[type=password]{flex:1;padding:8px;border-radius:8px;border:1px solid #ddd}
     button{padding:8px 12px;border-radius:8px;border:0;background:#0b76ef;color:#fff;cursor:pointer}
-    button.secondary{background:#6b7280}
-    .note{color:var(--muted);font-size:13px;margin-top:8px}
-    .danger{color:#b91c1c}
-    @media (max-width:720px){ .row{grid-template-columns:1fr} header{flex-direction:column;align-items:start} }
+    button.ghost{background:#6b7280}
+    textarea{width:100%;height:380px;margin-top:10px;padding:10px;font-family:monospace;font-size:13px;border-radius:8px;border:1px solid #ddd;resize:vertical}
+    .note{color:#666;font-size:13px;margin-top:8px}
+    pre#log{height:110px;overflow:auto;background:#f3f6fb;padding:8px;border-radius:8px;border:1px solid #eef2f7}
+    label{font-weight:600;margin-top:10px;display:block}
+    .small{font-size:13px;color:#444}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>محرر بسيط لـ <code>Lord.lua</code> — ملف واحد</h1>
-      <div style="text-align:left;font-size:13px;color:#444">جَهِّز الملف — أضف سطر — نفّذ</div>
-    </header>
+  <div class="card">
+    <h1>محرر بسيط — فتح، تعديل، حفظ إلى GitHub</h1>
 
-    <div class="card">
-      <div class="row">
-        <div>
-          <label>Owner (مالك المستودع)</label>
-          <input id="owner" type="text" value="qkdr" />
-        </div>
-        <div>
-          <label>Repo (المستودع)</label>
-          <input id="repo" type="text" value="Lord" />
-        </div>
-      </div>
-
-      <label>Path (مسار الملف داخل المستودع)</label>
-      <input id="path" type="text" value="Lord.lua" />
-
-      <div class="row" style="margin-top:8px">
-        <div>
-          <label>Token لـ GitHub (اختياري للرفع — لن أحتفظ به)</label>
-          <input id="token" type="password" placeholder="ألصق توكن هنا فقط عند الرفع ثم امسحه" />
-        </div>
-        <div>
-          <label>Branch (الفرع)</label>
-          <input id="branch" type="text" value="main" />
-        </div>
-      </div>
-
-      <div style="margin-top:10px" class="controls">
-        <button id="loadBtn">جلب الملف من GitHub</button>
-        <button id="downloadBtn" class="secondary">تنزيل الملف المحدث</button>
-        <button id="uploadBtn">رفع إلى GitHub</button>
-        <button id="clearTokenBtn" class="secondary">مسح التوكن الآن</button>
-      </div>
-
-      <p class="note">
-        ملاحظة أمنية: لا تشارك التوكن. أعطِ التوكن أقل صلاحيات لازمة (لملفات عامة: scope = <code>public_repo</code>). 
-        إن شككت أنه انكشف، اذهب لحساب GitHub واغِلقه (revoke).
-      </p>
+    <div class="note small">
+      الملف الافتراضي: <code>qkdr / Lord / Lord.lua</code> على الفرع <code>main</code>.
+      تقدر تغيّرهم داخل الكود لو تريد. ألصق التوكن وقت الحفظ فقط.
     </div>
 
-    <div class="card">
-      <label>اكتب السطر الذي تريد إضافته (مثال: <code>[] = ""</code>)</label>
-      <input id="newLine" type="text" placeholder='اكتب هنا السطر الجديد مثل: [] = ""' />
-
-      <div class="controls">
-        <button id="appendBtn">إضافة للسطر</button>
-        <button id="prependBtn" class="secondary">إضافة في الأعلى</button>
-        <button id="clearBtn" class="secondary">مسح الحقل</button>
-      </div>
-
-      <label style="margin-top:12px">محرر الملف (محتوى Lord.lua)</label>
-      <textarea id="editor" placeholder="محتوى Lord.lua سيظهر هنا..."></textarea>
-
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button id="formatBtn" class="secondary">ترتيب محاك</button>
-        <button id="selectAllBtn" class="secondary">تحديد الكل</button>
-      </div>
-
-      <p class="note">الوظيفة "رفع إلى GitHub" تستخدم GitHub REST API لعمل commit. إذا كان الملف غير موجود، سينشأ جديداً.</p>
+    <label>Token لـ GitHub (ألصقه فقط وقت الحفظ)</label>
+    <div class="row" style="margin-top:6px">
+      <input id="token" type="password" placeholder="ألصق هنا PAT (مثال: ghp_xxx)"/>
+      <button id="clearToken" class="ghost">مسح التوكن</button>
     </div>
 
-    <div class="card">
-      <strong>سجل الأحداث:</strong>
-      <pre id="log" style="white-space:pre-wrap;height:100px;overflow:auto;background:#f3f6fb;padding:8px;border-radius:8px"></pre>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button id="editBtn">تعديل</button>
+      <button id="saveBtn">حفظ التعديل</button>
+      <button id="reloadBtn" class="ghost">جلب الملف مرة أخرى</button>
     </div>
+
+    <label>محتوى الملف</label>
+    <textarea id="editor" disabled placeholder="سيظهر محتوى الملف هنا عند التحميل..."></textarea>
+
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button id="downloadBtn" class="ghost">تنزيل ملف .lua</button>
+      <div class="note small" style="margin-left:auto">بعد الحفظ: افتح مستودعك على GitHub وتأكد من الـ commit.</div>
+    </div>
+
+    <label style="margin-top:12px">سجل الأحداث</label>
+    <pre id="log">جارٍ التحميل...</pre>
+
+    <p class="note small" style="margin-top:10px">
+      ملاحظة: هذه الصفحة تتصل مباشرة بـ GitHub API من متصفحك. تأكد أن التوكن يملك صلاحية مناسبة (public_repo أو repo).
+    </p>
   </div>
 
 <script>
-/* ======== Utilities ======== */
-const $ = id => document.getElementById(id);
-const logEl = $('log');
-function log(...args){ const t = '['+new Date().toLocaleTimeString()+'] ' + args.join(' '); logEl.textContent = t + '\n' + logEl.textContent; }
+/* ======= إعداد (غيّر القيم إذا تريد مستودع مختلف) ======= */
+const OWNER = "qkdr";
+const REPO  = "Lord";
+const PATH  = "Lord.lua";
+const BRANCH = "main";
+/* ========================================================= */
 
+const editor = document.getElementById('editor');
+const logEl = document.getElementById('log');
+const tokenEl = document.getElementById('token');
+const editBtn = document.getElementById('editBtn');
+const saveBtn = document.getElementById('saveBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const reloadBtn = document.getElementById('reloadBtn');
+const clearTokenBtn = document.getElementById('clearToken');
+
+function writeLog(...args){ const t = new Date().toLocaleTimeString(); logEl.textContent = `[${t}] ` + args.join(' ') + "\n" + logEl.textContent; }
 function utf8_to_b64(str){ return btoa(unescape(encodeURIComponent(str||""))); }
 function b64_to_utf8(b64){ try{ return decodeURIComponent(escape(atob(b64))); }catch(e){ return atob(b64); } }
 
-/* ======== DOM ======== */
-const ownerEl = $('owner'), repoEl = $('repo'), pathEl = $('path'), branchEl = $('branch'), tokenEl = $('token');
-const loadBtn = $('loadBtn'), downloadBtn = $('downloadBtn'), uploadBtn = $('uploadBtn'), clearTokenBtn = $('clearTokenBtn');
-const editor = $('editor'), newLine = $('newLine');
-const appendBtn = $('appendBtn'), prependBtn = $('prependBtn'), clearBtn = $('clearBtn');
-const formatBtn = $('formatBtn'), selectAllBtn = $('selectAllBtn');
+const apiUrl = `https://api.github.com/repos/${encodeURIComponent(OWNER)}/${encodeURIComponent(REPO)}/contents/${encodeURIComponent(PATH)}`;
 
-/* ======== Core ======== */
-function apiBase(owner, repo, path){
-  return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodeURIComponent(path)}`;
-}
+let currentSha = null;
+let isEditing = false;
 
 async function loadFile(){
-  const owner = ownerEl.value.trim(), repo = repoEl.value.trim(), path = pathEl.value.trim(), branch = branchEl.value.trim();
-  if(!owner||!repo||!path){ alert('املأ owner, repo, path'); return; }
-  const url = apiBase(owner,repo,path) + (branch ? `?ref=${encodeURIComponent(branch)}` : '');
-  log('جلب من', url);
+  writeLog('جاري جلب الملف من GitHub...', apiUrl, `?ref=${BRANCH}`);
+  editor.disabled = true;
   try{
-    const res = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' }});
-    if(res.status===404){ editor.value = "-- الملف غير موجود (404). يمكنك إنشاءه وإضافة محتوى.\n"; log('الملف غير موجود (404)'); return; }
-    if(!res.ok) throw new Error('HTTP ' + res.status + ' ' + await res.text());
-    const json = await res.json();
-    const content = json.content ? b64_to_utf8(json.content.replace(/\n/g,'')) : '';
+    const res = await fetch(apiUrl + `?ref=${encodeURIComponent(BRANCH)}`, { headers: { Accept: 'application/vnd.github.v3+json' } });
+    if(res.status === 404){
+      editor.value = "-- الملف غير موجود (404). يمكنك إنشاءه ثم حفظ التعديل لإضافته إلى المستودع.\n";
+      currentSha = null;
+      writeLog('الملف غير موجود على المستودع. (سيتم إنشاء ملف جديد عند الحفظ)');
+      return;
+    }
+    if(!res.ok) throw new Error('HTTP '+res.status + ' ' + await res.text());
+    const j = await res.json();
+    const content = j.content ? b64_to_utf8(j.content.replace(/\n/g,'')) : '';
     editor.value = content;
-    editor.dataset.sha = json.sha || '';
-    log('تم الجلب بنجاح. sha:', editor.dataset.sha);
+    currentSha = j.sha || null;
+    writeLog('تم جلب الملف بنجاح. sha:', currentSha);
   }catch(err){
-    editor.value = `-- خطأ عند جلب الملف:\n-- ${err.message}\n`;
-    log('خطأ جلب الملف:', err.message);
+    editor.value = `-- خطأ أثناء جلب الملف:\n-- ${err.message}\n`;
+    writeLog('خطأ جلب الملف:', err.message);
+  } finally {
+    editor.scrollTop = 0;
   }
 }
 
-function appendLine(){
-  const line = newLine.value;
-  if(!line){ alert('أدخل السطر أولاً'); return; }
-  // نضيف السطر في الأسفل
-  editor.value = editor.value.replace(/\s+$/,'') + "\n" + line + "\n";
-  newLine.value = '';
-  log('أضيف سطر في الأسفل');
-}
+editBtn.addEventListener('click', ()=>{
+  if(!isEditing){
+    isEditing = true;
+    editor.disabled = false;
+    editor.focus();
+    editBtn.textContent = 'إلغاء التعديل';
+    writeLog('الوضع: تحرير مفعل');
+  } else {
+    isEditing = false;
+    editor.disabled = true;
+    editBtn.textContent = 'تعديل';
+    writeLog('الوضع: تحرير معطل');
+  }
+});
 
-function prependLine(){
-  const line = newLine.value;
-  if(!line){ alert('أدخل السطر أولاً'); return; }
-  editor.value = line + "\n" + editor.value;
-  newLine.value = '';
-  log('أضيف سطر في الأعلى');
-}
-
-function downloadFile(){
-  const blob = new Blob([editor.value], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
+downloadBtn.addEventListener('click', ()=>{
+  const blob = new Blob([editor.value], { type: 'text/plain;charset=utf-8' });
   const a = document.createElement('a');
-  a.href = url; a.download = pathEl.value || 'file.lua';
+  a.href = URL.createObjectURL(blob);
+  a.download = PATH.split('/').pop() || 'file.lua';
   document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-  log('تم تنزيل الملف محلياً');
-}
+  URL.revokeObjectURL(a.href);
+  writeLog('تم تنزيل الملف محليًا');
+});
 
-async function uploadToGitHub(){
-  const owner = ownerEl.value.trim(), repo = repoEl.value.trim(), path = pathEl.value.trim(), branch = branchEl.value.trim();
+clearTokenBtn.addEventListener('click', ()=>{
+  tokenEl.value = '';
+  writeLog('تم مسح التوكن من الحقل');
+});
+
+reloadBtn.addEventListener('click', ()=>{ loadFile(); });
+
+saveBtn.addEventListener('click', async ()=>{
   const token = tokenEl.value.trim();
-  if(!owner||!repo||!path){ alert('املأ owner, repo, path'); return; }
-  if(!token){ if(!confirm('لم تدخل توكن. تريد المتابعة بدون توكن (لن ينجح الرفع)؟')) return; }
-  const url = apiBase(owner,repo,path);
-  const headers = { Accept:'application/vnd.github.v3+json', Authorization: token ? 'token '+token : undefined };
-  log('جلب بيانات الملف قبل الرفع...');
-  let sha = null;
-  // احصل على sha إن وُجد
-  try{
-    const getRes = await fetch(url + (branch ? `?ref=${encodeURIComponent(branch)}` : ''), { headers });
-    if(getRes.status===200){
-      const j = await getRes.json();
-      sha = j.sha;
-      log('sha موجود:', sha);
-    } else if(getRes.status===404){
-      log('الملف غير موجود على المستودع — سينشأ ملف جديد.');
-    } else {
-      const txt = await getRes.text();
-      log('رد غير متوقع من GET:', getRes.status, txt);
-      // لكن نستمر ونحاول إنشاء/تحديث
-    }
-  }catch(e){
-    log('خطأ أثناء جلب الملف ( لاستشفاء sha ):', e.message);
+  if(!token){
+    alert('لا يوجد توكن. ألصق توكن GitHub (PAT) في الحقل أولاً لكي يتم الحفظ إلى المستودع.');
+    return;
   }
+  if(!confirm('هل تريد حفظ التغييرات وإرسالها إلى GitHub كمؤرّخ (commit)؟')) return;
 
-  // تحضير المحتوى
-  const content = editor.value;
-  const content_b64 = utf8_to_b64(content);
-  const body = { message: `Update ${path} via web editor`, content: content_b64 };
-  if(branch) body.branch = branch;
-  if(sha) body.sha = sha;
+  writeLog('بدء حفظ الملف إلى GitHub...');
+  const contentB64 = utf8_to_b64(editor.value);
+  const body = {
+    message: `Update ${PATH} via web editor`,
+    content: contentB64,
+    branch: BRANCH
+  };
+  if(currentSha) body.sha = currentSha;
 
-  log('إرسال PUT إلى GitHub API...');
   try{
-    const putRes = await fetch(url, { method:'PUT', headers: { 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json', Authorization: token ? 'token '+token : undefined }, body: JSON.stringify(body) });
-    const txt = await putRes.text();
-    if(putRes.status===201 || putRes.status===200){
+    const res = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    const txt = await res.text();
+    if(res.status === 200 || res.status === 201){
       const j = JSON.parse(txt);
-      editor.dataset.sha = j.content && j.content.sha ? j.content.sha : '';
-      log('نجح الرفع! commit:', j.commit && j.commit.sha ? j.commit.sha : '(unknown)');
-      alert('نجح الرفع إلى GitHub!');
+      currentSha = (j.content && j.content.sha) ? j.content.sha : currentSha;
+      writeLog('نجح الحفظ! commit sha:', j.commit && j.commit.sha ? j.commit.sha : '(unknown)');
+      alert('تم الحفظ بنجاح إلى GitHub!');
+      // بعد الحفظ نوقف التحرير تلقائياً
+      isEditing = false; editor.disabled = true; editBtn.textContent = 'تعديل';
     } else {
-      log('فشل الرفع: HTTP ' + putRes.status + ' — ' + txt);
-      alert('فشل الرفع. راجع السجل أسفل الصفحة.');
+      writeLog('فشل الحفظ:', res.status, txt);
+      alert('فشل الحفظ. افتح سجل الأحداث لمعرفة التفاصيل.');
     }
-  }catch(e){
-    log('خطأ أثناء رفع الملف:', e.message);
-    alert('حدث خطأ أثناء الرفع. افتح السجل لمزيد.');
+  }catch(err){
+    writeLog('خطأ أثناء عملية الحفظ:', err.message);
+    alert('حدث خطأ أثناء الحفظ. افتح السجل لمعرفة التفاصيل.');
   }
-}
-
-/* ======== Small helpers ======== */
-selectAllBtn.addEventListener('click', ()=>{ editor.select(); });
-clearBtn.addEventListener('click', ()=>{ newLine.value=''; });
-clearTokenBtn.addEventListener('click', ()=>{ tokenEl.value=''; log('تم مسح التوكن من الحقل'); });
-
-loadBtn.addEventListener('click', loadFile);
-downloadBtn.addEventListener('click', downloadFile);
-appendBtn.addEventListener('click', appendLine);
-prependBtn.addEventListener('click', prependLine);
-uploadBtn.addEventListener('click', async () => {
-  if(!confirm('سترفع التغييرات مباشرة إلى المستودع (ستحتاج توكن صالح). تأكد أنك تريد المتابعة.')) return;
-  await uploadToGitHub();
 });
 
-formatBtn.addEventListener('click', ()=>{
-  // بسيطة: نحافظ على نفس المحتوى، أو نقدر نعمل replace لآخر سطور
-  editor.value = editor.value.replace(/\r\n/g, '\n').replace(/\t/g,'    ');
-  log('تم تطبيق تحسين بسيط للترتيب (تحويل تبويبات إلى مسافات)');
-});
-
-/* تحميل تلقائي لأول مرة */
+/* تحميل تلقائي عند فتح الصفحة */
 loadFile();
-
 </script>
 </body>
 </html>
