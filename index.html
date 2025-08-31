@@ -1,317 +1,247 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!doctype html>
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>اكسبلويت العرب</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>محرر بسيط ومباشر لـ Lord.lua</title>
   <style>
-    :root {
-      --bg-light: #ffffff;
-      --text-light: #000000;
-      --bg-dark: #121212;
-      --text-dark: #ffffff;
-      --card-bg-light: rgba(0,0,0,0.05);
-      --card-bg-dark: rgba(255,255,255,0.1);
-      --frame-light: rgba(0,0,0,0.1);
-      --frame-dark: rgba(255,255,255,0.2);
+    :root{--bg:#f7f7fb;--card:#fff;--muted:#666}
+    body{font-family:system-ui,Arial;direction:rtl;background:var(--bg);margin:0;padding:18px}
+    .wrap{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{font-size:20px;margin:0}
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(10,10,10,0.06);margin-top:12px}
+    label{display:block;margin:8px 0 4px;font-weight:600}
+    input[type=text], input[type=password], textarea, select {
+      width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-family:inherit;
     }
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.light-theme {
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-    body.dark-theme {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 20px;
-    }
-    .toggle-btn {
-      padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;
-    }
-    body.light-theme .toggle-btn { background: #333; color: #fff; }
-    body.dark-theme .toggle-btn { background: #eee; color: #000; }
-    .glass {
-      background: var(--card-bg-light);
-      padding: 20px; margin: 0 auto 20px; max-width: 900px;
-      border-radius: 12px; transition: background 0.3s;
-    }
-    body.dark-theme .glass { background: var(--card-bg-dark); }
-    h1 { text-align: center; }
-    .controls { text-align: center; margin-bottom: 15px; }
-    select, input[type="text"], .btn {
-      padding: 8px 12px; border-radius: 8px; border: 1px solid #aaa;
-      margin: 5px; font-size: 1em;
-    }
-    body.dark-theme select, body.dark-theme input[type="text"] {
-      background: #222; color: #ddd; border-color: #555;
-    }
-    body.light-theme select, body.light-theme input[type="text"] {
-      background: #fff; color: #000;
-    }
-    .btn {
-      background: #007bff; color: #fff; border: none; cursor: pointer;
-      transition: background .3s;
-    }
-    .btn:hover { background: #0056b3; }
-    #results {
-      display: flex; flex-wrap: wrap; justify-content: center;
-    }
-    .script-card {
-      background: var(--card-bg-light);
-      width: 240px; margin: 10px; border-radius: 8px;
-      overflow: hidden; transition: transform .2s;
-      position: relative;
-    }
-    body.dark-theme .script-card { background: var(--card-bg-dark); }
-    .script-card:hover { transform: scale(1.03); }
-    .script-card img {
-      width: 100%; height: 140px; object-fit: cover;
-      cursor: pointer;
-    }
-    .overlay-left, .overlay-right {
-      position: absolute; top: 8px; padding: 4px 8px;
-      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
-      font-size: .8em;
-    }
-    .overlay-left { left: 8px; }
-    .overlay-right { right: 8px; }
-    .script-info { padding: 10px; text-align: center; }
-    .script-info h3 {
-      margin: 5px 0; font-size: 1em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    #loadMore { display: block; margin: 20px auto; }
-    /* DETAIL VIEW */
-    #detailContent {
-      display: none; padding: 20px; max-width: 900px; margin: 0 auto;
-    }
-    .frame {
-      border: 1px solid var(--frame-light);
-      padding: 10px; border-radius: 8px;
-      margin-bottom: 15px;
-      transition: border-color .3s, background .3s;
-    }
-    body.dark-theme .frame {
-      border-color: var(--frame-dark);
-      background: rgba(255,255,255,0.05);
-    }
-    .detail-header {
-      display: flex; gap: 20px;
-    }
-    .detail-header .left,
-    .detail-header .right {
-      flex: 1;
-    }
-    .detail-header .left img {
-      width: 100%; border-radius: 8px;
-    }
-    .detail-header .right h2 {
-      margin: 0; font-size: 1.5em;
-    }
-    .detail-header .right p {
-      margin: 5px 0;
-    }
-    #description, #codeBox {
-      width: 100%;
-    }
-    #description {
-      background: var(--card-bg-light);
-      padding: 10px; border-radius: 6px;
-    }
-    body.dark-theme #description {
-      background: var(--card-bg-dark);
-    }
-    #codeBox {
-      font-family: monospace;
-      background: var(--card-bg-light);
-      padding: 10px; border-radius: 6px;
-      white-space: pre-wrap; overflow-x: auto;
-    }
-    body.dark-theme #codeBox {
-      background: var(--card-bg-dark);
-    }
-    #codeCopyBtn {
-      margin-top: 10px;
-    }
-    #backBtn {
-      margin-bottom: 20px;
-    }
+    textarea{height:360px; font-family: monospace; font-size:13px; white-space:pre; overflow:auto; }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    button{padding:8px 12px;border-radius:8px;border:0;background:#0b76ef;color:#fff;cursor:pointer}
+    button.secondary{background:#6b7280}
+    .note{color:var(--muted);font-size:13px;margin-top:8px}
+    .danger{color:#b91c1c}
+    @media (max-width:720px){ .row{grid-template-columns:1fr} header{flex-direction:column;align-items:start} }
   </style>
 </head>
-<body class="light-theme">
+<body>
+  <div class="wrap">
+    <header>
+      <h1>محرر بسيط لـ <code>Lord.lua</code> — ملف واحد</h1>
+      <div style="text-align:left;font-size:13px;color:#444">جَهِّز الملف — أضف سطر — نفّذ</div>
+    </header>
 
-  <div class="topbar">
-    <h1>اكسبلويت العرب</h1>
-    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
-  </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>Owner (مالك المستودع)</label>
+          <input id="owner" type="text" value="qkdr" />
+        </div>
+        <div>
+          <label>Repo (المستودع)</label>
+          <input id="repo" type="text" value="Lord" />
+        </div>
+      </div>
 
-  <!-- MAIN VIEW -->
-  <div id="mainContent">
-    <div class="glass">
+      <label>Path (مسار الملف داخل المستودع)</label>
+      <input id="path" type="text" value="Lord.lua" />
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>Token لـ GitHub (اختياري للرفع — لن أحتفظ به)</label>
+          <input id="token" type="password" placeholder="ألصق توكن هنا فقط عند الرفع ثم امسحه" />
+        </div>
+        <div>
+          <label>Branch (الفرع)</label>
+          <input id="branch" type="text" value="main" />
+        </div>
+      </div>
+
+      <div style="margin-top:10px" class="controls">
+        <button id="loadBtn">جلب الملف من GitHub</button>
+        <button id="downloadBtn" class="secondary">تنزيل الملف المحدث</button>
+        <button id="uploadBtn">رفع إلى GitHub</button>
+        <button id="clearTokenBtn" class="secondary">مسح التوكن الآن</button>
+      </div>
+
+      <p class="note">
+        ملاحظة أمنية: لا تشارك التوكن. أعطِ التوكن أقل صلاحيات لازمة (لملفات عامة: scope = <code>public_repo</code>). 
+        إن شككت أنه انكشف، اذهب لحساب GitHub واغِلقه (revoke).
+      </p>
+    </div>
+
+    <div class="card">
+      <label>اكتب السطر الذي تريد إضافته (مثال: <code>[] = ""</code>)</label>
+      <input id="newLine" type="text" placeholder='اكتب هنا السطر الجديد مثل: [] = ""' />
+
       <div class="controls">
-        <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-        <button id="searchBtn" class="btn">بحث</button>
-        <select id="modeSelect">
-          <option value="fetch">الرئيسية</option>
-          <option value="free">مجانية</option>
-          <option value="unverified">غير محققة</option>
-          <option value="mostviewed">الأكثر مشاهدة</option>
-          <option value="verified">محققة</option>
-        </select>
+        <button id="appendBtn">إضافة للسطر</button>
+        <button id="prependBtn" class="secondary">إضافة في الأعلى</button>
+        <button id="clearBtn" class="secondary">مسح الحقل</button>
       </div>
-      <div id="results"></div>
-      <button id="loadMore" class="btn" style="display:none;">المزيد</button>
+
+      <label style="margin-top:12px">محرر الملف (محتوى Lord.lua)</label>
+      <textarea id="editor" placeholder="محتوى Lord.lua سيظهر هنا..."></textarea>
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="formatBtn" class="secondary">ترتيب محاك</button>
+        <button id="selectAllBtn" class="secondary">تحديد الكل</button>
+      </div>
+
+      <p class="note">الوظيفة "رفع إلى GitHub" تستخدم GitHub REST API لعمل commit. إذا كان الملف غير موجود، سينشأ جديداً.</p>
+    </div>
+
+    <div class="card">
+      <strong>سجل الأحداث:</strong>
+      <pre id="log" style="white-space:pre-wrap;height:100px;overflow:auto;background:#f3f6fb;padding:8px;border-radius:8px"></pre>
     </div>
   </div>
 
-  <!-- DETAIL VIEW -->
-  <div id="detailContent">
-    <button id="backBtn" class="btn">◀ رجوع</button>
-    <div class="frame detail-header">
-      <div class="left">
-        <img id="detailImage" src="" alt="صورة اللعبة">
-      </div>
-      <div class="right">
-        <h2 id="detailTitle"></h2>
-        <p><strong>اسم اللعبة:</strong> <span id="detailGame"></span></p>
-        <p><strong>تاريخ النشر:</strong> <span id="detailDate"></span></p>
-      </div>
-    </div>
-    <div class="frame">
-      <h3>وصف السكربت</h3>
-      <div id="description"></div>
-    </div>
-    <div class="frame">
-      <h3>الكود</h3>
-      <div id="codeBox"></div>
-      <button id="codeCopyBtn" class="btn">نسخ الكود</button>
-    </div>
-  </div>
+<script>
+/* ======== Utilities ======== */
+const $ = id => document.getElementById(id);
+const logEl = $('log');
+function log(...args){ const t = '['+new Date().toLocaleTimeString()+'] ' + args.join(' '); logEl.textContent = t + '\n' + logEl.textContent; }
 
-  <script>
-    // Theme toggle
-    const bodyEl = document.body;
-    document.getElementById('themeToggle').onclick = () => {
-      if (bodyEl.classList.contains('light-theme')) {
-        bodyEl.classList.replace('light-theme','dark-theme');
-        event.target.textContent = 'الوضع الفاتح';
-      } else {
-        bodyEl.classList.replace('dark-theme','light-theme');
-        event.target.textContent = 'الوضع الليلي';
-      }
-    };
+function utf8_to_b64(str){ return btoa(unescape(encodeURIComponent(str||""))); }
+function b64_to_utf8(b64){ try{ return decodeURIComponent(escape(atob(b64))); }catch(e){ return atob(b64); } }
 
-    // CORS proxy
-    function proxy(url) {
-      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+/* ======== DOM ======== */
+const ownerEl = $('owner'), repoEl = $('repo'), pathEl = $('path'), branchEl = $('branch'), tokenEl = $('token');
+const loadBtn = $('loadBtn'), downloadBtn = $('downloadBtn'), uploadBtn = $('uploadBtn'), clearTokenBtn = $('clearTokenBtn');
+const editor = $('editor'), newLine = $('newLine');
+const appendBtn = $('appendBtn'), prependBtn = $('prependBtn'), clearBtn = $('clearBtn');
+const formatBtn = $('formatBtn'), selectAllBtn = $('selectAllBtn');
+
+/* ======== Core ======== */
+function apiBase(owner, repo, path){
+  return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodeURIComponent(path)}`;
+}
+
+async function loadFile(){
+  const owner = ownerEl.value.trim(), repo = repoEl.value.trim(), path = pathEl.value.trim(), branch = branchEl.value.trim();
+  if(!owner||!repo||!path){ alert('املأ owner, repo, path'); return; }
+  const url = apiBase(owner,repo,path) + (branch ? `?ref=${encodeURIComponent(branch)}` : '');
+  log('جلب من', url);
+  try{
+    const res = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' }});
+    if(res.status===404){ editor.value = "-- الملف غير موجود (404). يمكنك إنشاءه وإضافة محتوى.\n"; log('الملف غير موجود (404)'); return; }
+    if(!res.ok) throw new Error('HTTP ' + res.status + ' ' + await res.text());
+    const json = await res.json();
+    const content = json.content ? b64_to_utf8(json.content.replace(/\n/g,'')) : '';
+    editor.value = content;
+    editor.dataset.sha = json.sha || '';
+    log('تم الجلب بنجاح. sha:', editor.dataset.sha);
+  }catch(err){
+    editor.value = `-- خطأ عند جلب الملف:\n-- ${err.message}\n`;
+    log('خطأ جلب الملف:', err.message);
+  }
+}
+
+function appendLine(){
+  const line = newLine.value;
+  if(!line){ alert('أدخل السطر أولاً'); return; }
+  // نضيف السطر في الأسفل
+  editor.value = editor.value.replace(/\s+$/,'') + "\n" + line + "\n";
+  newLine.value = '';
+  log('أضيف سطر في الأسفل');
+}
+
+function prependLine(){
+  const line = newLine.value;
+  if(!line){ alert('أدخل السطر أولاً'); return; }
+  editor.value = line + "\n" + editor.value;
+  newLine.value = '';
+  log('أضيف سطر في الأعلى');
+}
+
+function downloadFile(){
+  const blob = new Blob([editor.value], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = pathEl.value || 'file.lua';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  log('تم تنزيل الملف محلياً');
+}
+
+async function uploadToGitHub(){
+  const owner = ownerEl.value.trim(), repo = repoEl.value.trim(), path = pathEl.value.trim(), branch = branchEl.value.trim();
+  const token = tokenEl.value.trim();
+  if(!owner||!repo||!path){ alert('املأ owner, repo, path'); return; }
+  if(!token){ if(!confirm('لم تدخل توكن. تريد المتابعة بدون توكن (لن ينجح الرفع)؟')) return; }
+  const url = apiBase(owner,repo,path);
+  const headers = { Accept:'application/vnd.github.v3+json', Authorization: token ? 'token '+token : undefined };
+  log('جلب بيانات الملف قبل الرفع...');
+  let sha = null;
+  // احصل على sha إن وُجد
+  try{
+    const getRes = await fetch(url + (branch ? `?ref=${encodeURIComponent(branch)}` : ''), { headers });
+    if(getRes.status===200){
+      const j = await getRes.json();
+      sha = j.sha;
+      log('sha موجود:', sha);
+    } else if(getRes.status===404){
+      log('الملف غير موجود على المستودع — سينشأ ملف جديد.');
+    } else {
+      const txt = await getRes.text();
+      log('رد غير متوقع من GET:', getRes.status, txt);
+      // لكن نستمر ونحاول إنشاء/تحديث
     }
+  }catch(e){
+    log('خطأ أثناء جلب الملف ( لاستشفاء sha ):', e.message);
+  }
 
-    // State
-    let mode='fetch', query='', page=1, total=1;
-    const resultsEl = document.getElementById('results');
-    const loadMoreBtn = document.getElementById('loadMore');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const modeSelect = document.getElementById('modeSelect');
-    const mainContent = document.getElementById('mainContent');
-    const detailContent = document.getElementById('detailContent');
-    const backBtn = document.getElementById('backBtn');
+  // تحضير المحتوى
+  const content = editor.value;
+  const content_b64 = utf8_to_b64(content);
+  const body = { message: `Update ${path} via web editor`, content: content_b64 };
+  if(branch) body.branch = branch;
+  if(sha) body.sha = sha;
 
-    async function loadScripts() {
-      resultsEl.innerHTML = page===1 ? '<p>جاري التحميل…</p>' : resultsEl.innerHTML;
-      try {
-        const base = 'https://scriptblox.com/api/script/';
-        const p = `&page=${page}`;
-        let endpoint = '';
-        if (mode==='search') endpoint = `search?q=${encodeURIComponent(query)}${p}`;
-        else if (mode==='fetch') endpoint = `fetch?page=${page}`;
-        else if (mode==='free') endpoint = `fetch?mode=free${p}`;
-        else if (mode==='unverified') endpoint = `fetch?verified=0${p}`;
-        else if (mode==='mostviewed') endpoint = `fetch?sortBy=views&order=desc${p}`;
-        else endpoint = `fetch?filters=verified&legacy_filters=true${p}`;
-        const res = await fetch(proxy(base+endpoint));
-        const data = await res.json();
-        const R = data.result||data;
-        total = R.totalPages||1;
-        if (page===1) resultsEl.innerHTML = '';
-        if (!R.scripts || !R.scripts.length) {
-          if (page===1) resultsEl.innerHTML = '<p>لا توجد نتائج.</p>';
-        } else {
-          R.scripts.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views = s.views||0;
-            card.innerHTML = `
-              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="" 
-                   onclick="showDetail('${s.slug}')">
-              <div class="overlay-left">👁️ ${views}</div>
-              <div class="overlay-right">📅 ${date}</div>
-              <div class="script-info">
-                <h3>${s.title}</h3>
-              </div>`;
-            resultsEl.appendChild(card);
-          });
-        }
-        loadMoreBtn.style.display = page<total ? 'block' : 'none';
-      } catch {
-        resultsEl.innerHTML = '<p>❌ خطأ في الاتصال، حاول لاحقاً</p>';
-      }
+  log('إرسال PUT إلى GitHub API...');
+  try{
+    const putRes = await fetch(url, { method:'PUT', headers: { 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json', Authorization: token ? 'token '+token : undefined }, body: JSON.stringify(body) });
+    const txt = await putRes.text();
+    if(putRes.status===201 || putRes.status===200){
+      const j = JSON.parse(txt);
+      editor.dataset.sha = j.content && j.content.sha ? j.content.sha : '';
+      log('نجح الرفع! commit:', j.commit && j.commit.sha ? j.commit.sha : '(unknown)');
+      alert('نجح الرفع إلى GitHub!');
+    } else {
+      log('فشل الرفع: HTTP ' + putRes.status + ' — ' + txt);
+      alert('فشل الرفع. راجع السجل أسفل الصفحة.');
     }
+  }catch(e){
+    log('خطأ أثناء رفع الملف:', e.message);
+    alert('حدث خطأ أثناء الرفع. افتح السجل لمزيد.');
+  }
+}
 
-    async function showDetail(slug) {
-      try {
-        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
-        const data = await res.json();
-        const sc = data.script;
-        mainContent.style.display = 'none';
-        detailContent.style.display = 'block';
-        document.getElementById('detailImage').src = sc.game.imageUrl;
-        document.getElementById('detailTitle').textContent = sc.title;
-        document.getElementById('detailGame').textContent = sc.game.name;
-        document.getElementById('detailDate').textContent = new Date(sc.createdAt).toLocaleDateString('ar-EG');
-        document.getElementById('description').textContent = sc.features || '—';
-        document.getElementById('codeBox').textContent = sc.script;
-      } catch {
-        alert('❌ فشل جلب التفاصيل');
-      }
-    }
+/* ======== Small helpers ======== */
+selectAllBtn.addEventListener('click', ()=>{ editor.select(); });
+clearBtn.addEventListener('click', ()=>{ newLine.value=''; });
+clearTokenBtn.addEventListener('click', ()=>{ tokenEl.value=''; log('تم مسح التوكن من الحقل'); });
 
-    // Events
-    backBtn.onclick = () => {
-      detailContent.style.display = 'none';
-      mainContent.style.display = 'block';
-    };
-    searchBtn.onclick = () => {
-      const q = searchInput.value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
-      mode='search'; query=q; page=1; resultsEl.innerHTML=''; loadScripts();
-    };
-    searchInput.addEventListener('keypress', e => {
-      if (e.key==='Enter') searchBtn.click();
-    });
-    modeSelect.onchange = () => {
-      mode = modeSelect.value; query=''; page=1; resultsEl.innerHTML=''; loadScripts();
-    };
-    loadMoreBtn.onclick = () => {
-      if (page<total) { page++; loadScripts(); }
-    };
-    document.getElementById('codeCopyBtn').onclick = () => {
-      const text = document.getElementById('codeBox').textContent;
-      navigator.clipboard.writeText(text)
-        .then(()=> alert('✅ تم نسخ الكود'))
-        .catch(()=> alert('❌ فشل النسخ'));
-    };
+loadBtn.addEventListener('click', loadFile);
+downloadBtn.addEventListener('click', downloadFile);
+appendBtn.addEventListener('click', appendLine);
+prependBtn.addEventListener('click', prependLine);
+uploadBtn.addEventListener('click', async () => {
+  if(!confirm('سترفع التغييرات مباشرة إلى المستودع (ستحتاج توكن صالح). تأكد أنك تريد المتابعة.')) return;
+  await uploadToGitHub();
+});
 
-    // Initialize
-    window.addEventListener('load', loadScripts);
-  </script>
+formatBtn.addEventListener('click', ()=>{
+  // بسيطة: نحافظ على نفس المحتوى، أو نقدر نعمل replace لآخر سطور
+  editor.value = editor.value.replace(/\r\n/g, '\n').replace(/\t/g,'    ');
+  log('تم تطبيق تحسين بسيط للترتيب (تحويل تبويبات إلى مسافات)');
+});
+
+/* تحميل تلقائي لأول مرة */
+loadFile();
+
+</script>
 </body>
 </html>
