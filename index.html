@@ -1,317 +1,418 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>اكسبلويت العرب</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اكسبلويت العرب — نسخة فخمة</title>
+  <!-- Google Font Tajawal -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <!-- Highlight.js for code highlighting (optional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
   <style>
-    :root {
-      --bg-light: #ffffff;
-      --text-light: #000000;
-      --bg-dark: #121212;
-      --text-dark: #ffffff;
-      --card-bg-light: rgba(0,0,0,0.05);
-      --card-bg-dark: rgba(255,255,255,0.1);
-      --frame-light: rgba(0,0,0,0.1);
-      --frame-dark: rgba(255,255,255,0.2);
+    :root{
+      --bg-1: linear-gradient(135deg, rgba(11,24,42,1) 0%, rgba(20,13,48,1) 100%);
+      --accent-1: 208 100% 55%; /* hue saturation lightness in HSL for nice dynamic use */
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.04);
+      --card-glow: rgba(124,58,237,0.12);
+      --glass-border: rgba(255,255,255,0.12);
+      --muted: rgba(255,255,255,0.65);
+      --radius: 14px;
+      --max-width: 1100px;
+      --rtl: 1;
     }
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      transition: background 0.3s, color 0.3s;
+    /* Reset & base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; padding:28px 18px; font-family:'Tajawal',sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.12), transparent),
+                  radial-gradient(900px 400px at 90% 90%, rgba(16,185,129,0.07), transparent),
+                  #0b172a; color: #e6eef8; -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:100%;
     }
-    body.light-theme {
-      background: var(--bg-light);
-      color: var(--text-light);
+    .container{max-width:var(--max-width); margin:0 auto}
+
+    /* Top bar */
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    h1{margin:0; font-weight:800; font-size:1.35rem; letter-spacing:0.6px}
+    .subtitle{font-size:0.86rem; color:var(--muted)}
+
+    /* Theme toggle */
+    .controls-row{display:flex; gap:12px; align-items:center}
+    .btn{background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+         border:1px solid rgba(255,255,255,0.08); color:inherit; padding:8px 12px; border-radius:12px;
+         cursor:pointer; font-weight:600; backdrop-filter: blur(6px);}
+    .btn.secondary{background:transparent; border:1px solid rgba(255,255,255,0.06)}
+
+    /* Search area */
+    .glass-card{
+      margin-top:18px; padding:18px; border-radius:18px; overflow:hidden; position:relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06); box-shadow:0 6px 30px rgba(2,6,23,0.5);
+      backdrop-filter: blur(10px) saturate(120%);
     }
-    body.dark-theme {
-      background: var(--bg-dark);
-      color: var(--text-dark);
+    .search-row{display:flex; gap:10px; align-items:center}
+    input[type='text']{flex:1; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:inherit; font-size:1rem}
+    select{padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+
+    /* Results grid */
+    #results{display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:16px; margin-top:18px}
+    .script-card{
+      border-radius:12px; overflow:hidden; position:relative; cursor:pointer;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04); padding-bottom:10px; transition:transform .25s, box-shadow .25s;
     }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 20px;
+    .script-card:hover{transform:translateY(-6px); box-shadow:0 18px 50px rgba(2,6,23,0.6)}
+    .script-card .thumb{
+      aspect-ratio: 16/9; width:100%; object-fit:cover; display:block; border-bottom:1px solid rgba(255,255,255,0.03)
     }
-    .toggle-btn {
-      padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;
+
+    /* Image frame decoration */
+    .img-frame{padding:8px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; margin:8px;}
+    .framed{
+      position:relative; border-radius:10px; overflow:hidden; padding:6px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+      border:1px solid rgba(255,255,255,0.06);
     }
-    body.light-theme .toggle-btn { background: #333; color: #fff; }
-    body.dark-theme .toggle-btn { background: #eee; color: #000; }
-    .glass {
-      background: var(--card-bg-light);
-      padding: 20px; margin: 0 auto 20px; max-width: 900px;
-      border-radius: 12px; transition: background 0.3s;
+    .framed::after{
+      content:''; position:absolute; inset:0; pointer-events:none; border-radius:10px; box-shadow: inset 0 0 30px rgba(124,58,237,0.06);
     }
-    body.dark-theme .glass { background: var(--card-bg-dark); }
-    h1 { text-align: center; }
-    .controls { text-align: center; margin-bottom: 15px; }
-    select, input[type="text"], .btn {
-      padding: 8px 12px; border-radius: 8px; border: 1px solid #aaa;
-      margin: 5px; font-size: 1em;
+    .meta-row{display:flex; justify-content:space-between; padding:10px 12px; align-items:center}
+    .title{font-weight:700; font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .meta-small{font-size:0.82rem; color:var(--muted)}
+
+    /* Detail view */
+    #detailContent{display:none; margin-top:18px}
+    .detail-card{display:flex; gap:18px; align-items:flex-start}
+    .detail-left{flex:0 0 360px}
+    .detail-left img{width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.06)}
+    .detail-right{flex:1}
+    .frame-box{padding:14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.04)}
+    pre code{display:block; padding:12px; overflow:auto; border-radius:10px}
+
+    /* Dock (iPhone-like icons) */n
+    .dock-wrap{position:fixed; left:50%; transform:translateX(-50%); bottom:22px; z-index:999;}
+    .dock{
+      display:flex; gap:18px; padding:12px 18px; border-radius:24px; align-items:center; backdrop-filter: blur(10px) saturate(120%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
     }
-    body.dark-theme select, body.dark-theme input[type="text"] {
-      background: #222; color: #ddd; border-color: #555;
+    .dock-button{display:flex; flex-direction:column; align-items:center; gap:6px; width:56px}
+    .icon-wrap{width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); transition:transform .18s}
+    .dock-button:hover .icon-wrap{transform:translateY(-6px) scale(1.03)}
+    .dock-label{font-size:0.75rem; color:var(--muted)}
+
+    /* Small responsive tweaks */
+    @media (max-width:720px){
+      .detail-card{flex-direction:column}
+      .detail-left{flex:1}
+      .dock{gap:12px; padding:10px}
     }
-    body.light-theme select, body.light-theme input[type="text"] {
-      background: #fff; color: #000;
-    }
-    .btn {
-      background: #007bff; color: #fff; border: none; cursor: pointer;
-      transition: background .3s;
-    }
-    .btn:hover { background: #0056b3; }
-    #results {
-      display: flex; flex-wrap: wrap; justify-content: center;
-    }
-    .script-card {
-      background: var(--card-bg-light);
-      width: 240px; margin: 10px; border-radius: 8px;
-      overflow: hidden; transition: transform .2s;
-      position: relative;
-    }
-    body.dark-theme .script-card { background: var(--card-bg-dark); }
-    .script-card:hover { transform: scale(1.03); }
-    .script-card img {
-      width: 100%; height: 140px; object-fit: cover;
-      cursor: pointer;
-    }
-    .overlay-left, .overlay-right {
-      position: absolute; top: 8px; padding: 4px 8px;
-      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;
-      font-size: .8em;
-    }
-    .overlay-left { left: 8px; }
-    .overlay-right { right: 8px; }
-    .script-info { padding: 10px; text-align: center; }
-    .script-info h3 {
-      margin: 5px 0; font-size: 1em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    #loadMore { display: block; margin: 20px auto; }
-    /* DETAIL VIEW */
-    #detailContent {
-      display: none; padding: 20px; max-width: 900px; margin: 0 auto;
-    }
-    .frame {
-      border: 1px solid var(--frame-light);
-      padding: 10px; border-radius: 8px;
-      margin-bottom: 15px;
-      transition: border-color .3s, background .3s;
-    }
-    body.dark-theme .frame {
-      border-color: var(--frame-dark);
-      background: rgba(255,255,255,0.05);
-    }
-    .detail-header {
-      display: flex; gap: 20px;
-    }
-    .detail-header .left,
-    .detail-header .right {
-      flex: 1;
-    }
-    .detail-header .left img {
-      width: 100%; border-radius: 8px;
-    }
-    .detail-header .right h2 {
-      margin: 0; font-size: 1.5em;
-    }
-    .detail-header .right p {
-      margin: 5px 0;
-    }
-    #description, #codeBox {
-      width: 100%;
-    }
-    #description {
-      background: var(--card-bg-light);
-      padding: 10px; border-radius: 6px;
-    }
-    body.dark-theme #description {
-      background: var(--card-bg-dark);
-    }
-    #codeBox {
-      font-family: monospace;
-      background: var(--card-bg-light);
-      padding: 10px; border-radius: 6px;
-      white-space: pre-wrap; overflow-x: auto;
-    }
-    body.dark-theme #codeBox {
-      background: var(--card-bg-dark);
-    }
-    #codeCopyBtn {
-      margin-top: 10px;
-    }
-    #backBtn {
-      margin-bottom: 20px;
-    }
+
+    /* subtle animations */
+    .fade-in{animation:fadeIn .45s ease both}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+    /* empty / error style */
+    .empty{padding:20px; text-align:center; color:var(--muted)}
   </style>
 </head>
-<body class="light-theme">
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <h1>اكسبلويت العرب</h1>
+        <div class="subtitle">مكتبة السكربتات — نسخة فخمة وشفافة</div>
+      </div>
+      <div class="controls-row">
+        <button id="themeToggle" class="btn secondary" aria-pressed="false">الوضع الليلي / الفاتح</button>
+        <button id="refreshBtn" class="btn">تحديث</button>
+      </div>
+    </div>
 
-  <div class="topbar">
-    <h1>اكسبلويت العرب</h1>
-    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>
-  </div>
-
-  <!-- MAIN VIEW -->
-  <div id="mainContent">
-    <div class="glass">
-      <div class="controls">
-        <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">
-        <button id="searchBtn" class="btn">بحث</button>
-        <select id="modeSelect">
+    <!-- Search & Filters -->
+    <div class="glass-card">
+      <div class="search-row">
+        <input id="searchInput" type="text" placeholder="ابحث عن سكربت أو لعبة..." aria-label="بحث" />
+        <button id="searchBtn" class="btn">🔎 بحث</button>
+        <select id="modeSelect" aria-label="تصفية النتائج">
           <option value="fetch">الرئيسية</option>
           <option value="free">مجانية</option>
           <option value="unverified">غير محققة</option>
           <option value="mostviewed">الأكثر مشاهدة</option>
           <option value="verified">محققة</option>
         </select>
+        <div style="width:8px"></div>
+        <div style="display:flex; gap:8px; align-items:center">
+          <div class="meta-small">الصفحة: <span id="pageNum">1</span></div>
+        </div>
       </div>
-      <div id="results"></div>
-      <button id="loadMore" class="btn" style="display:none;">المزيد</button>
+
+      <div id="results" class="fade-in"></div>
+      <div style="text-align:center; margin-top:14px;">
+        <button id="loadMore" class="btn" style="display:none;">المزيد</button>
+      </div>
+    </div>
+
+    <!-- Detail area -->
+    <div id="detailContent" class="fade-in">
+      <div style="margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:12px">
+        <button id="backBtn" class="btn">◀ رجوع</button>
+        <div class="meta-small">تفاصيل السكربت</div>
+      </div>
+
+      <div class="detail-card" style="margin-top:12px">
+        <div class="detail-left">
+          <div class="frame-box">
+            <img id="detailImage" src="" alt="صورة اللعبة" loading="lazy" />
+          </div>
+        </div>
+        <div class="detail-right">
+          <div class="frame-box">
+            <h2 id="detailTitle">—</h2>
+            <p class="meta-small">اسم اللعبة: <strong id="detailGame">—</strong></p>
+            <p class="meta-small">تاريخ النشر: <strong id="detailDate">—</strong></p>
+            <hr style="margin:12px 0; border:none; height:1px; background:rgba(255,255,255,0.03)" />
+            <h3>وصف السكربت</h3>
+            <div id="description" style="margin-top:8px; color:var(--muted)">—</div>
+          </div>
+
+          <div class="frame-box" style="margin-top:12px">
+            <h3>الكود</h3>
+            <pre id="codeBox"><code class="hljs" id="codeContent">—</code></pre>
+            <div style="display:flex; gap:8px; margin-top:10px">
+              <button id="codeCopyBtn" class="btn">نسخ الكود</button>
+              <button id="openRawBtn" class="btn">فتح في نافذة جديدة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- .container -->
+
+  <!-- Dock -->
+  <div class="dock-wrap" role="navigation" aria-label="قائمة التطبيقات">
+    <div class="dock">
+      <div class="dock-button" onclick="goHome()">
+        <div class="icon-wrap" title="الرئيسية" aria-hidden="false">
+          <!-- Home SVG -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10.5L12 4l9 6.5" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 21V11.5h14V21" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="dock-label">الرئيسية</div>
+      </div>
+
+      <div class="dock-button" onclick="focusSearch()">
+        <div class="icon-wrap" title="بحث">
+          <!-- Search SVG -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="dock-label">بحث</div>
+      </div>
+
+      <div class="dock-button" onclick="openUpload()">
+        <div class="icon-wrap" title="رفع">
+          <!-- Upload SVG -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v12" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7l4-4 4 4" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 21H4" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="dock-label">رفع</div>
+      </div>
+
+      <div class="dock-button" onclick="openSettings()">
+        <div class="icon-wrap" title="إعدادات">
+          <!-- Settings SVG -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" stroke="white" stroke-opacity="0.95" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.86l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.86-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 0 1-4 0v-.02a1.7 1.7 0 0 0-1-1.56 1.7 1.7 0 0 0-1.86.34l-.06.06A2 2 0 0 1 2.3 16.9l.06-.06a1.7 1.7 0 0 0 .34-1.86 1.7 1.7 0 0 0-1.56-1H3a2 2 0 0 1 0-4h.02a1.7 1.7 0 0 0 1.56-1 1.7 1.7 0 0 0-.34-1.86L4.3 2.3A2 2 0 0 1 7.13.48l.06.06a1.7 1.7 0 0 0 1.86.34h.01A1.7 1.7 0 0 0 11 1v.02a2 2 0 0 1 4 0V1a1.7 1.7 0 0 0 1 .56c.72.26 1.52.15 2.2-.34l.06-.06A2 2 0 0 1 21.7 4.3l-.06.06a1.7 1.7 0 0 0-.34 1.86v.01c.4.86.12 1.88-.86 2.27z" stroke="white" stroke-opacity="0.9" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="dock-label">إعدادات</div>
+      </div>
     </div>
   </div>
 
-  <!-- DETAIL VIEW -->
-  <div id="detailContent">
-    <button id="backBtn" class="btn">◀ رجوع</button>
-    <div class="frame detail-header">
-      <div class="left">
-        <img id="detailImage" src="" alt="صورة اللعبة">
-      </div>
-      <div class="right">
-        <h2 id="detailTitle"></h2>
-        <p><strong>اسم اللعبة:</strong> <span id="detailGame"></span></p>
-        <p><strong>تاريخ النشر:</strong> <span id="detailDate"></span></p>
-      </div>
-    </div>
-    <div class="frame">
-      <h3>وصف السكربت</h3>
-      <div id="description"></div>
-    </div>
-    <div class="frame">
-      <h3>الكود</h3>
-      <div id="codeBox"></div>
-      <button id="codeCopyBtn" class="btn">نسخ الكود</button>
-    </div>
-  </div>
-
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
   <script>
-    // Theme toggle
+    // ---------- Utility & State ----------
     const bodyEl = document.body;
-    document.getElementById('themeToggle').onclick = () => {
-      if (bodyEl.classList.contains('light-theme')) {
-        bodyEl.classList.replace('light-theme','dark-theme');
-        event.target.textContent = 'الوضع الفاتح';
-      } else {
-        bodyEl.classList.replace('dark-theme','light-theme');
-        event.target.textContent = 'الوضع الليلي';
-      }
-    };
-
-    // CORS proxy
-    function proxy(url) {
-      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-    }
-
-    // State
-    let mode='fetch', query='', page=1, total=1;
     const resultsEl = document.getElementById('results');
     const loadMoreBtn = document.getElementById('loadMore');
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const modeSelect = document.getElementById('modeSelect');
-    const mainContent = document.getElementById('mainContent');
+    const pageNumEl = document.getElementById('pageNum');
     const detailContent = document.getElementById('detailContent');
-    const backBtn = document.getElementById('backBtn');
+    const mainContainer = document.querySelector('.container');
 
-    async function loadScripts() {
-      resultsEl.innerHTML = page===1 ? '<p>جاري التحميل…</p>' : resultsEl.innerHTML;
-      try {
+    let mode = 'fetch', query = '', page = 1, total = 1;
+
+    // Save theme preference
+    function saveTheme(t){ localStorage.setItem('theme', t); }
+    function loadTheme(){ return localStorage.getItem('theme') || 'dark'; }
+
+    // Setup theme on load
+    (function(){
+      const theme = loadTheme();
+      if(theme === 'light') bodyEl.style.background = '#f6f8fb', bodyEl.style.color = '#091227';
+      // otherwise default dark gradients in CSS are fine
+    })();
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', (e) => {
+      // simple toggle that changes CSS variables for quick light look
+      const curr = localStorage.getItem('theme') || 'dark';
+      if(curr === 'dark'){
+        // lightify
+        document.documentElement.style.setProperty('--bg-1', 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)');
+        document.documentElement.style.setProperty('--glass', 'rgba(0,0,0,0.04)');
+        saveTheme('light');
+        e.currentTarget.setAttribute('aria-pressed','true');
+      } else {
+        // back to dark (reload to original css background)
+        document.documentElement.style.removeProperty('--bg-1');
+        document.documentElement.style.removeProperty('--glass');
+        saveTheme('dark');
+        e.currentTarget.setAttribute('aria-pressed','false');
+      }
+    });
+
+    // CORS proxy helper (keeps previous behavior but allows override)
+    function proxy(url){
+      // prefer allorigins but allow changing to another proxy if needed
+      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+    }
+
+    // Friendly date format
+    function formatDate(iso){
+      try{ return new Date(iso).toLocaleDateString('ar-EG'); }catch{ return iso; }
+    }
+
+    // Create a card element
+    function createCard(s){
+      const card = document.createElement('article');
+      card.className = 'script-card img-frame fade-in';
+      const imgUrl = s.game?.imageUrl || s.image || 'https://via.placeholder.com/640x360?text=%D8%B5%D9%88%D8%B1%D8%A9';
+      const date = formatDate(s.createdAt);
+      const views = s.views || 0;
+      card.innerHTML = `
+        <div class="framed">
+          <img loading="lazy" class="thumb" src="${imgUrl}" alt="${escapeHtml(s.title||'صورة')}" onclick="showDetail('${s.slug}')" />
+          <div class="meta-row">
+            <div style="display:flex; gap:8px; align-items:center">
+              <div style="font-size:0.88rem">👁️ ${views}</div>
+            </div>
+            <div style="text-align:left">
+              <div class="title">${escapeHtml(s.title||'—')}</div>
+              <div class="meta-small">${date}</div>
+            </div>
+          </div>
+        </div>`;
+      return card;
+    }
+
+    // Escape helper
+    function escapeHtml(txt){ if(!txt) return ''; return String(txt).replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m];}); }
+
+    // Load scripts from API
+    async function loadScripts(){
+      if(page === 1) resultsEl.innerHTML = '<div class="empty">جاري التحميل…</div>';
+      try{
         const base = 'https://scriptblox.com/api/script/';
         const p = `&page=${page}`;
         let endpoint = '';
-        if (mode==='search') endpoint = `search?q=${encodeURIComponent(query)}${p}`;
-        else if (mode==='fetch') endpoint = `fetch?page=${page}`;
-        else if (mode==='free') endpoint = `fetch?mode=free${p}`;
-        else if (mode==='unverified') endpoint = `fetch?verified=0${p}`;
-        else if (mode==='mostviewed') endpoint = `fetch?sortBy=views&order=desc${p}`;
+        if(mode==='search') endpoint = `search?q=${encodeURIComponent(query)}${p}`;
+        else if(mode==='fetch') endpoint = `fetch?page=${page}`;
+        else if(mode==='free') endpoint = `fetch?mode=free${p}`;
+        else if(mode==='unverified') endpoint = `fetch?verified=0${p}`;
+        else if(mode==='mostviewed') endpoint = `fetch?sortBy=views&order=desc${p}`;
         else endpoint = `fetch?filters=verified&legacy_filters=true${p}`;
+
         const res = await fetch(proxy(base+endpoint));
+        if(!res.ok) throw new Error('Network');
         const data = await res.json();
-        const R = data.result||data;
-        total = R.totalPages||1;
-        if (page===1) resultsEl.innerHTML = '';
-        if (!R.scripts || !R.scripts.length) {
-          if (page===1) resultsEl.innerHTML = '<p>لا توجد نتائج.</p>';
+        const R = data.result || data;
+        total = R.totalPages || 1;
+        pageNumEl.textContent = page;
+        if(page===1) resultsEl.innerHTML = '';
+        if(!R.scripts || !R.scripts.length){
+          if(page===1) resultsEl.innerHTML = '<div class="empty">لا توجد نتائج.</div>';
         } else {
-          R.scripts.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');
-            const views = s.views||0;
-            card.innerHTML = `
-              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt="" 
-                   onclick="showDetail('${s.slug}')">
-              <div class="overlay-left">👁️ ${views}</div>
-              <div class="overlay-right">📅 ${date}</div>
-              <div class="script-info">
-                <h3>${s.title}</h3>
-              </div>`;
-            resultsEl.appendChild(card);
-          });
+          R.scripts.forEach(s => resultsEl.appendChild(createCard(s)));
         }
-        loadMoreBtn.style.display = page<total ? 'block' : 'none';
-      } catch {
-        resultsEl.innerHTML = '<p>❌ خطأ في الاتصال، حاول لاحقاً</p>';
+        loadMoreBtn.style.display = page < total ? 'inline-block' : 'none';
+      }catch(err){
+        console.error(err);
+        resultsEl.innerHTML = '<div class="empty">❌ خطأ في الاتصال. تأكد من الشبكة أو البروكسي.</div>';
       }
     }
 
-    async function showDetail(slug) {
-      try {
+    // Show detail
+    async function showDetail(slug){
+      try{
         const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));
+        if(!res.ok) throw new Error('Network');
         const data = await res.json();
-        const sc = data.script;
-        mainContent.style.display = 'none';
+        const sc = data.script || data;
+        // populate
+        document.getElementById('detailImage').src = sc.game?.imageUrl || sc.image || 'https://via.placeholder.com/640x360?text=%D8%B5%D9%88%D8%B1%D8%A9';
+        document.getElementById('detailTitle').textContent = sc.title || '—';
+        document.getElementById('detailGame').textContent = sc.game?.name || '—';
+        document.getElementById('detailDate').textContent = formatDate(sc.createdAt || sc.created_at || new Date().toISOString());
+        document.getElementById('description').textContent = sc.features || sc.description || '—';
+        const code = sc.script || sc.code || sc.content || '—';
+        const codeEl = document.getElementById('codeContent');
+        codeEl.textContent = code;
+        // highlight
+        if(window.hljs) hljs.highlightElement(codeEl);
+
+        // switch views
         detailContent.style.display = 'block';
-        document.getElementById('detailImage').src = sc.game.imageUrl;
-        document.getElementById('detailTitle').textContent = sc.title;
-        document.getElementById('detailGame').textContent = sc.game.name;
-        document.getElementById('detailDate').textContent = new Date(sc.createdAt).toLocaleDateString('ar-EG');
-        document.getElementById('description').textContent = sc.features || '—';
-        document.getElementById('codeBox').textContent = sc.script;
-      } catch {
+        window.scrollTo({top:0, behavior:'smooth'});
+      }catch(err){
+        console.error(err);
         alert('❌ فشل جلب التفاصيل');
       }
     }
 
-    // Events
-    backBtn.onclick = () => {
-      detailContent.style.display = 'none';
-      mainContent.style.display = 'block';
-    };
-    searchBtn.onclick = () => {
+    // Event handlers
+    document.getElementById('backBtn').addEventListener('click', () => { detailContent.style.display='none'; });
+    document.getElementById('searchBtn').addEventListener('click', () => {
       const q = searchInput.value.trim();
-      if (!q) return alert('فضلاً أدخل كلمة بحث');
+      if(!q) return alert('فضلاً أدخل كلمة بحث');
       mode='search'; query=q; page=1; resultsEl.innerHTML=''; loadScripts();
-    };
-    searchInput.addEventListener('keypress', e => {
-      if (e.key==='Enter') searchBtn.click();
     });
-    modeSelect.onchange = () => {
-      mode = modeSelect.value; query=''; page=1; resultsEl.innerHTML=''; loadScripts();
-    };
-    loadMoreBtn.onclick = () => {
-      if (page<total) { page++; loadScripts(); }
-    };
-    document.getElementById('codeCopyBtn').onclick = () => {
-      const text = document.getElementById('codeBox').textContent;
-      navigator.clipboard.writeText(text)
-        .then(()=> alert('✅ تم نسخ الكود'))
-        .catch(()=> alert('❌ فشل النسخ'));
-    };
+    searchInput.addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('searchBtn').click(); });
+    modeSelect.addEventListener('change', () => { mode = modeSelect.value; query=''; page=1; resultsEl.innerHTML=''; loadScripts(); });
+    loadMoreBtn.addEventListener('click', () => { if(page < total){ page++; loadScripts(); } });
+    document.getElementById('refreshBtn').addEventListener('click', () => { page = 1; resultsEl.innerHTML=''; loadScripts(); });
+
+    // Copy code
+    document.getElementById('codeCopyBtn').addEventListener('click', async () => {
+      const txt = document.getElementById('codeContent').textContent || '';
+      try{ await navigator.clipboard.writeText(txt); alert('✅ تم نسخ الكود'); }
+      catch(e){ alert('❌ فشل النسخ — قد لا تدعم متصفحك النسخ آلياً'); }
+    });
+    document.getElementById('openRawBtn').addEventListener('click', () => {
+      const txt = document.getElementById('codeContent').textContent || '';
+      const w = window.open(); w.document.write('<pre>' + escapeHtml(txt) + '</pre>');
+    });
+
+    // Dock helpers
+    function goHome(){ mode='fetch'; page=1; query=''; resultsEl.innerHTML=''; loadScripts(); }
+    function focusSearch(){ searchInput.focus(); }
+    function openUpload(){ alert('ميزة الرفع غير متاحة هنا — هذه واجهة عرض.'); }
+    function openSettings(){ alert('إعدادات افتراضية — لا توجد إعدادات متقدمة مفعلة.'); }
+
+    // Expose showDetail to global because we call it from inline onclicks
+    window.showDetail = showDetail;
+    window.goHome = goHome;
+    window.focusSearch = focusSearch;
+    window.openUpload = openUpload;
+    window.openSettings = openSettings;
 
     // Initialize
-    window.addEventListener('load', loadScripts);
+    window.addEventListener('load', () => { loadScripts(); if(window.hljs) hljs.configure({useBR:false}); });
   </script>
 </body>
 </html>
