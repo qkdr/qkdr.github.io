@@ -1,317 +1,210 @@
-<اريدYPE html>  
-<html lang="ar" dir="rtl">  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1">  
-  <title>اكسبلويت العرب</title>  
-  <style>  
-    :root {  
-      --bg-light: #ffffff;  
-      --text-light: #000000;  
-      --bg-dark: #121212;  
-      --text-dark: #ffffff;  
-      --card-bg-light: rgba(0,0,0,0.05);  
-      --card-bg-dark: rgba(255,255,255,0.1);  
-      --frame-light: rgba(0,0,0,0.1);  
-      --frame-dark: rgba(255,255,255,0.2);  
-    }  
-    body {  
-      margin: 0; padding: 0;  
-      font-family: 'Tajawal', sans-serif;  
-      transition: background 0.3s, color 0.3s;  
-    }  
-    body.light-theme {  
-      background: var(--bg-light);  
-      color: var(--text-light);  
-    }  
-    body.dark-theme {  
-      background: var(--bg-dark);  
-      color: var(--text-dark);  
-    }  
-    .topbar {  
-      display: flex; justify-content: space-between; align-items: center;  
-      padding: 10px 20px;  
-    }  
-    .toggle-btn {  
-      padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;  
-    }  
-    body.light-theme .toggle-btn { background: #333; color: #fff; }  
-    body.dark-theme .toggle-btn { background: #eee; color: #000; }  
-    .glass {  
-      background: var(--card-bg-light);  
-      padding: 20px; margin: 0 auto 20px; max-width: 900px;  
-      border-radius: 12px; transition: background 0.3s;  
-    }  
-    body.dark-theme .glass { background: var(--card-bg-dark); }  
-    h1 { text-align: center; }  
-    .controls { text-align: center; margin-bottom: 15px; }  
-    select, input[type="text"], .btn {  
-      padding: 8px 12px; border-radius: 8px; border: 1px solid #aaa;  
-      margin: 5px; font-size: 1em;  
-    }  
-    body.dark-theme select, body.dark-theme input[type="text"] {  
-      background: #222; color: #ddd; border-color: #555;  
-    }  
-    body.light-theme select, body.light-theme input[type="text"] {  
-      background: #fff; color: #000;  
-    }  
-    .btn {  
-      background: #007bff; color: #fff; border: none; cursor: pointer;  
-      transition: background .3s;  
-    }  
-    .btn:hover { background: #0056b3; }  
-    #results {  
-      display: flex; flex-wrap: wrap; justify-content: center;  
-    }  
-    .script-card {  
-      background: var(--card-bg-light);  
-      width: 240px; margin: 10px; border-radius: 8px;  
-      overflow: hidden; transition: transform .2s;  
-      position: relative;  
-    }  
-    body.dark-theme .script-card { background: var(--card-bg-dark); }  
-    .script-card:hover { transform: scale(1.03); }  
-    .script-card img {  
-      width: 100%; height: 140px; object-fit: cover;  
-      cursor: pointer;  
-    }  
-    .overlay-left, .overlay-right {  
-      position: absolute; top: 8px; padding: 4px 8px;  
-      background: rgba(0,0,0,0.5); color: #fff; border-radius: 4px;  
-      font-size: .8em;  
-    }  
-    .overlay-left { left: 8px; }  
-    .overlay-right { right: 8px; }  
-    .script-info { padding: 10px; text-align: center; }  
-    .script-info h3 {  
-      margin: 5px 0; font-size: 1em;  
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  
-    }  
-    #loadMore { display: block; margin: 20px auto; }  
-    /* DETAIL VIEW */  
-    #detailContent {  
-      display: none; padding: 20px; max-width: 900px; margin: 0 auto;  
-    }  
-    .frame {  
-      border: 1px solid var(--frame-light);  
-      padding: 10px; border-radius: 8px;  
-      margin-bottom: 15px;  
-      transition: border-color .3s, background .3s;  
-    }  
-    body.dark-theme .frame {  
-      border-color: var(--frame-dark);  
-      background: rgba(255,255,255,0.05);  
-    }  
-    .detail-header {  
-      display: flex; gap: 20px;  
-    }  
-    .detail-header .left,  
-    .detail-header .right {  
-      flex: 1;  
-    }  
-    .detail-header .left img {  
-      width: 100%; border-radius: 8px;  
-    }  
-    .detail-header .right h2 {  
-      margin: 0; font-size: 1.5em;  
-    }  
-    .detail-header .right p {  
-      margin: 5px 0;  
-    }  
-    #description, #codeBox {  
-      width: 100%;  
-    }  
-    #description {  
-      background: var(--card-bg-light);  
-      padding: 10px; border-radius: 6px;  
-    }  
-    body.dark-theme #description {  
-      background: var(--card-bg-dark);  
-    }  
-    #codeBox {  
-      font-family: monospace;  
-      background: var(--card-bg-light);  
-      padding: 10px; border-radius: 6px;  
-      white-space: pre-wrap; overflow-x: auto;  
-    }  
-    body.dark-theme #codeBox {  
-      background: var(--card-bg-dark);  
-    }  
-    #codeCopyBtn {  
-      margin-top: 10px;  
-    }  
-    #backBtn {  
-      margin-bottom: 20px;  
-    }  
-  </style>  
-</head>  
-<body class="light-theme">  
-  
-  <div class="topbar">  
-    <h1>اكسبلويت العرب</h1>  
-    <button id="themeToggle" class="toggle-btn">الوضع الليلي</button>  
-  </div>  
-  
-  <!-- MAIN VIEW -->  
-  <div id="mainContent">  
-    <div class="glass">  
-      <div class="controls">  
-        <input id="searchInput" type="text" placeholder="ابحث عن سكربت…">  
-        <button id="searchBtn" class="btn">بحث</button>  
-        <select id="modeSelect">  
-          <option value="fetch">الرئيسية</option>  
-          <option value="free">مجانية</option>  
-          <option value="unverified">غير محققة</option>  
-          <option value="mostviewed">الأكثر مشاهدة</option>  
-          <option value="verified">محققة</option>  
-        </select>  
-      </div>  
-      <div id="results"></div>  
-      <button id="loadMore" class="btn" style="display:none;">المزيد</button>  
-    </div>  
-  </div>  
-  
-  <!-- DETAIL VIEW -->  
-  <div id="detailContent">  
-    <button id="backBtn" class="btn">◀ رجوع</button>  
-    <div class="frame detail-header">  
-      <div class="left">  
-        <img id="detailImage" src="" alt="صورة اللعبة">  
-      </div>  
-      <div class="right">  
-        <h2 id="detailTitle"></h2>  
-        <p><strong>اسم اللعبة:</strong> <span id="detailGame"></span></p>  
-        <p><strong>تاريخ النشر:</strong> <span id="detailDate"></span></p>  
-      </div>  
-    </div>  
-    <div class="frame">  
-      <h3>وصف السكربت</h3>  
-      <div id="description"></div>  
-    </div>  
-    <div class="frame">  
-      <h3>الكود</h3>  
-      <div id="codeBox"></div>  
-      <button id="codeCopyBtn" class="btn">نسخ الكود</button>  
-    </div>  
-  </div>  
-  
-  <script>  
-    // Theme toggle  
-    const bodyEl = document.body;  
-    document.getElementById('themeToggle').onclick = () => {  
-      if (bodyEl.classList.contains('light-theme')) {  
-        bodyEl.classList.replace('light-theme','dark-theme');  
-        event.target.textContent = 'الوضع الفاتح';  
-      } else {  
-        bodyEl.classList.replace('dark-theme','light-theme');  
-        event.target.textContent = 'الوضع الليلي';  
-      }  
-    };  
-  
-    // CORS proxy  
-    function proxy(url) {  
-      return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);  
-    }  
-  
-    // State  
-    let mode='fetch', query='', page=1, total=1;  
-    const resultsEl = document.getElementById('results');  
-    const loadMoreBtn = document.getElementById('loadMore');  
-    const searchInput = document.getElementById('searchInput');  
-    const searchBtn = document.getElementById('searchBtn');  
-    const modeSelect = document.getElementById('modeSelect');  
-    const mainContent = document.getElementById('mainContent');  
-    const detailContent = document.getElementById('detailContent');  
-    const backBtn = document.getElementById('backBtn');  
-  
-    async function loadScripts() {  
-      resultsEl.innerHTML = page===1 ? '<p>جاري التحميل…</p>' : resultsEl.innerHTML;  
-      try {  
-        const base = 'https://scriptblox.com/api/script/';  
-        const p = `&page=${page}`;  
-        let endpoint = '';  
-        if (mode==='search') endpoint = `search?q=${encodeURIComponent(query)}${p}`;  
-        else if (mode==='fetch') endpoint = `fetch?page=${page}`;  
-        else if (mode==='free') endpoint = `fetch?mode=free${p}`;  
-        else if (mode==='unverified') endpoint = `fetch?verified=0${p}`;  
-        else if (mode==='mostviewed') endpoint = `fetch?sortBy=views&order=desc${p}`;  
-        else endpoint = `fetch?filters=verified&legacy_filters=true${p}`;  
-        const res = await fetch(proxy(base+endpoint));  
-        const data = await res.json();  
-        const R = data.result||data;  
-        total = R.totalPages||1;  
-        if (page===1) resultsEl.innerHTML = '';  
-        if (!R.scripts || !R.scripts.length) {  
-          if (page===1) resultsEl.innerHTML = '<p>لا توجد نتائج.</p>';  
-        } else {  
-          R.scripts.forEach(s => {  
-            const card = document.createElement('div');  
-            card.className = 'script-card';  
-            const date = new Date(s.createdAt).toLocaleDateString('ar-EG');  
-            const views = s.views||0;  
-            card.innerHTML = `  
-              <img src="${s.game?.imageUrl||s.image||'https://via.placeholder.com/240x140'}" alt=""   
-                   onclick="showDetail('${s.slug}')">  
-              <div class="overlay-left">👁️ ${views}</div>  
-              <div class="overlay-right">📅 ${date}</div>  
-              <div class="script-info">  
-                <h3>${s.title}</h3>  
-              </div>`;  
-            resultsEl.appendChild(card);  
-          });  
-        }  
-        loadMoreBtn.style.display = page<total ? 'block' : 'none';  
-      } catch {  
-        resultsEl.innerHTML = '<p>❌ خطأ في الاتصال، حاول لاحقاً</p>';  
-      }  
-    }  
-  
-    async function showDetail(slug) {  
-      try {  
-        const res = await fetch(proxy(`https://scriptblox.com/api/script/${slug}`));  
-        const data = await res.json();  
-        const sc = data.script;  
-        mainContent.style.display = 'none';  
-        detailContent.style.display = 'block';  
-        document.getElementById('detailImage').src = sc.game.imageUrl;  
-        document.getElementById('detailTitle').textContent = sc.title;  
-        document.getElementById('detailGame').textContent = sc.game.name;  
-        document.getElementById('detailDate').textContent = new Date(sc.createdAt).toLocaleDateString('ar-EG');  
-        document.getElementById('description').textContent = sc.features || '—';  
-        document.getElementById('codeBox').textContent = sc.script;  
-      } catch {  
-        alert('❌ فشل جلب التفاصيل');  
-      }  
-    }  
-  
-    // Events  
-    backBtn.onclick = () => {  
-      detailContent.style.display = 'none';  
-      mainContent.style.display = 'block';  
-    };  
-    searchBtn.onclick = () => {  
-      const q = searchInput.value.trim();  
-      if (!q) return alert('فضلاً أدخل كلمة بحث');  
-      mode='search'; query=q; page=1; resultsEl.innerHTML=''; loadScripts();  
-    };  
-    searchInput.addEventListener('keypress', e => {  
-      if (e.key==='Enter') searchBtn.click();  
-    });  
-    modeSelect.onchange = () => {  
-      mode = modeSelect.value; query=''; page=1; resultsEl.innerHTML=''; loadScripts();  
-    };  
-    loadMoreBtn.onclick = () => {  
-      if (page<total) { page++; loadScripts(); }  
-    };  
-    document.getElementById('codeCopyBtn').onclick = () => {  
-      const text = document.getElementById('codeBox').textContent;  
-      navigator.clipboard.writeText(text)  
-        .then(()=> alert('✅ تم نسخ الكود'))  
-        .catch(()=> alert('❌ فشل النسخ'));  
-    };  
-  
-    // Initialize  
-    window.addEventListener('load', loadScripts);  
-  </script>  
-</body>  
-</html>  
+"""
+Link Bypass Web App - Single-file Flask app
+ملف واحد (app.py) يحتوي على واجهة ويب فخمة بلغة بايثون + فريمورك Flask.
+كيفية الاستخدام:
+1) احفظ هذا الملف باسم app.py
+2) أنشئ بيئة افتراضية وثبت المكتبات:
+   python -m venv venv
+   source venv/bin/activate   # على لينكس/ماك
+   venv\Scripts\activate    # على ويندوز
+   pip install flask requests
+3) إعداد متغيرات البيئة (اختياري):
+   export BYPASS_API_URL="https://api.example.com/bypass"    # إن توفر
+   export BYPASS_API_KEY="sk_xxx"                           # إن توفر
+4) تشغيل التطبيق:
+   python app.py
+5) افتح المتصفح على http://127.0.0.1:5000
+
+ملاحظات:
+- هذا السكربت يتضمن نمط "محاكاة" (mock) عندما لا يتم توفير BYPASS_API_URL ليعمل تجريبياً.
+- تأكد قانونياً أنك تملك إذن لاستخدام أي واجهة تتجاوز حماية أو محتوى مدفوع.
+
+"""
+
+from flask import Flask, request, jsonify, render_template_string
+import os
+import time
+import re
+import requests
+import urllib.parse
+
+app = Flask(__name__)
+
+# ----- تكوينات -----
+BYPASS_API_URL = os.environ.get('BYPASS_API_URL')  # ضع رابط API هنا إذا عندك
+BYPASS_API_KEY = os.environ.get('BYPASS_API_KEY')  # مفتاح API إن وُجد
+
+# قائمة مواقع مدعومة افتراضية (يمكن تعديلها أو وضعها في ملف أو DB لاحقاً)
+SUPPORTED_SITES = [
+    "example.com",
+    "short.ly",
+    "tinyurl.com",
+    "bit.ly",
+]
+
+# ----- HTML Template (مضمنة لملف واحد) -----
+TEMPLATE = r"""
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>موقع تجاوز الروابط - فخم</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg,#0f172a 0%,#071033 100%); }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); }
+    .neon { text-shadow: 0 2px 12px rgba(99,102,241,0.35); }
+  </style>
+</head>
+<body class="min-h-screen flex items-start justify-center p-6">
+  <div class="w-full max-w-4xl">
+    <!-- Header -->
+    <header class="flex items-center justify-between py-4 px-3 glass rounded-2xl shadow-lg border border-white/6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">LB</div>
+        <div>
+          <div class="text-white font-extrabold text-xl neon">LinkBypass</div>
+          <div class="text-sm text-white/60">تجاوز الروابط بسهولة وبأمان</div>
+        </div>
+      </div>
+
+      <!-- Hamburger -->
+      <div class="relative" x-data="{open:false}">
+        <button id="menuBtn" class="p-2 rounded-lg glass" onclick="toggleMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div id="menu" class="absolute right-0 mt-3 w-56 bg-white/6 glass rounded-xl p-3 shadow-xl hidden">
+          <button onclick="navigateHome()" class="w-full text-right py-2 px-3 hover:bg-white/4 rounded-md">الرئيسية</button>
+          <button onclick="showSupported()" class="w-full text-right py-2 px-3 hover:bg-white/4 rounded-md">المواقع المدعومة</button>
+          <a href="#about" class="block text-right py-2 px-3 hover:bg-white/4 rounded-md">عن الموقع</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Card -->
+    <main class="mt-8 glass rounded-3xl p-8 shadow-2xl border border-white/5">
+      <h1 class="text-3xl font-extrabold text-white neon">أدخل الرابط لتجاوزه</h1>
+      <p class="text-white/60 mt-1">الصق الرابط في المربع واضغط "تجاوز" - النتيجة تظهر لك فوراً.</p>
+
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <div class="md:col-span-9">
+          <div class="relative">
+            <input id="urlInput" type="url" placeholder="https://example.com/short/abc" class="w-full p-4 pr-12 rounded-xl bg-white/6 text-white placeholder-white/50 outline-none" />
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/80">🔗</div>
+          </div>
+        </div>
+        <div class="md:col-span-3">
+          <button id="bypassBtn" class="w-full py-4 rounded-xl bg-white text-slate-900 font-bold hover:scale-[1.02] transition-transform">تجاوز الآن</button>
+        </div>
+      </div>
+
+      <!-- Result area -->
+      <div id="result" class="mt-6 hidden">
+        <div class="p-4 rounded-xl bg-white/5 border border-white/4">
+          <div id="statusText" class="text-white">جار المعالجة...</div>
+          <div id="resultBox" class="mt-3 hidden flex items-center gap-3">
+            <input id="finalLink" class="flex-1 p-3 rounded-md bg-white/6 text-white outline-none" readonly />
+            <button id="copyBtn" class="py-2 px-3 rounded-md glass">نسخ</button>
+            <a id="openBtn" class="py-2 px-3 rounded-md bg-indigo-600 text-white" target="_blank">فتح</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 text-sm text-white/60">
+        <strong>ملاحظة:</strong> تأكد من أن الرابط صالح. هذا الموقع يحتاج API خارجي لتركيب خدمة التجاوز الحقيقية — إن لم يتوفر يتم استخدام وضع العرض فقط.
+      </div>
+
+      <div id="supportedModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
+        <div class="w-full max-w-xl bg-white/6 glass rounded-2xl p-6">
+          <div class="flex justify-between items-center">
+            <h3 class="text-white text-lg font-bold">المواقع المدعومة</h3>
+            <button onclick="closeSupported()" class="text-white/70">✖</button>
+          </div>
+          <ul id="supportedList" class="mt-4 space-y-2 text-white/80">
+          </ul>
+        </div>
+      </div>
+
+      <footer id="about" class="mt-8 text-white/60">صُمم بواسطة LinkBypass • عدّل واطوّع الكود حسب حاجتك.</footer>
+    </main>
+  </div>
+
+<script>
+// Simple UI interactions
+function toggleMenu(){ const m=document.getElementById('menu'); m.classList.toggle('hidden'); }
+function navigateHome(){ window.scrollTo({top:0,behavior:'smooth'}); document.getElementById('menu').classList.add('hidden'); }
+function showSupported(){ fetch('/supported').then(r=>r.json()).then(d=>{ const ul=document.getElementById('supportedList'); ul.innerHTML=''; d.sites.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; ul.appendChild(li); }); document.getElementById('supportedModal').classList.remove('hidden'); document.getElementById('menu').classList.add('hidden'); }); }
+function closeSupported(){ document.getElementById('supportedModal').classList.add('hidden'); }
+
+// Main bypass logic
+document.getElementById('bypassBtn').addEventListener('click', async ()=>{
+  const url = document.getElementById('urlInput').value.trim();
+  if(!url){ alert('أدخل رابط صحيح'); return; }
+  startProcessing();
+  try{
+    const res = await fetch('/api/bypass', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({url}) });
+    const data = await res.json();
+    if(data.ok){ showResult(data.result_url); } else { showError(data.error || 'حدث خطأ'); }
+  }catch(err){ showError('فشل الاتصال بالخادم'); }
+});
+
+function startProcessing(){ document.getElementById('result').classList.remove('hidden'); document.getElementById('statusText').innerHTML = `... جاري المعالجة`; document.getElementById('resultBox').classList.add('hidden'); }
+function showResult(link){ document.getElementById('statusText').innerHTML = `نجح التجاوز!`; const input=document.getElementById('finalLink'); input.value = link; document.getElementById('openBtn').href = link; document.getElementById('resultBox').classList.remove('hidden'); }
+function showError(msg){ document.getElementById('statusText').innerHTML = `<span style='color:#fca5a5'>${msg}</span>`; }
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{ const v=document.getElementById('finalLink').value; navigator.clipboard.writeText(v).then(()=> alert('تم النسخ') ); });
+
+</script>
+</body>
+</html>
+"""
+
+# ----- Helpers -----
+URL_REGEX = re.compile(r'https?://[\w\-./?=&%]+')
+
+@app.route('/')
+def index():
+    return render_template_string(TEMPLATE)
+
+@app.route('/supported')
+def supported():
+    return jsonify({ 'sites': SUPPORTED_SITES })
+
+@app.route('/api/bypass', methods=['POST'])
+def api_bypass():
+    data = request.get_json(force=True)
+    url = (data or {}).get('url','').strip()
+    if not url or not URL_REGEX.match(url):
+        return jsonify({'ok': False, 'error': 'رابط غير صالح'}), 400
+
+    # اذا توفّر API خارجي استخدمه
+    if BYPASS_API_URL:
+        try:
+            headers = { 'Accept': 'application/json' }
+            if BYPASS_API_KEY:
+                headers['Authorization'] = f'Bearer {BYPASS_API_KEY}'
+            payload = { 'url': url }
+            resp = requests.post(BYPASS_API_URL, json=payload, headers=headers, timeout=15)
+            resp.raise_for_status()
+            jr = resp.json()
+            # نتوقع الحقل result أو link
+            result = jr.get('result') or jr.get('link') or jr.get('bypassed') or jr.get('url')
+            if not result:
+                return jsonify({'ok': False, 'error': 'API لم يعطِ رابطاً نهائياً'}), 502
+            return jsonify({'ok': True, 'result_url': result})
+        except Exception as e:
+            return jsonify({'ok': False, 'error': 'فشل الاتصال بواجهة API'}), 502
+
+    # وضع العرض (محاكاة) — لمّا لا يكون هناك API
+    time.sleep(2)  # لمحاكاة الانتظار
+    # توليد رابط نهائي افتراضي آمن
+    safe = urllib.parse.quote_plus(url)
+    fake = f"https://linkbypass.local/out?u={safe}"
+    return jsonify({'ok': True, 'result_url': fake})
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
