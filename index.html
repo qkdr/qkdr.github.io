@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zen Bypass - تجاوز الروابط المختصرة</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
@@ -22,12 +24,21 @@
             --text-secondary: rgba(255, 255, 255, 0.7);
         }
 
+        [dir="ltr"] {
+            direction: ltr;
+        }
+
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            transition: all 0.3s ease;
         }
 
         /* Animated Background */
@@ -177,11 +188,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             position: relative;
             overflow: hidden;
             animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .logo svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+            position: relative;
+            z-index: 2;
         }
 
         .logo::before {
@@ -211,6 +229,37 @@
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-button {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+        }
+
+        .lang-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-button svg {
+            width: 24px;
+            height: 24px;
         }
 
         .menu-toggle {
@@ -264,7 +313,7 @@
             left: 5%;
             right: 5%;
             margin-top: 15px;
-            background: rgba(15, 15, 35, 0.9);
+            background: rgba(15, 15, 35, 0.95);
             backdrop-filter: blur(20px) saturate(180%);
             border-radius: 20px;
             padding: 15px;
@@ -324,10 +373,21 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
+        [dir="ltr"] .menu-item:hover {
+            transform: translateX(5px);
+        }
+
         .menu-icon {
-            font-size: 20px;
             width: 24px;
-            text-align: center;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
         /* Main Container */
@@ -395,10 +455,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
             box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
             animation: iconPulse 3s ease-in-out infinite;
             position: relative;
+        }
+
+        .icon-wrapper svg {
+            width: 50px;
+            height: 50px;
+            color: white;
         }
 
         .icon-wrapper::after {
@@ -576,6 +641,11 @@
             gap: 10px;
         }
 
+        .bypass-button span svg {
+            width: 20px;
+            height: 20px;
+        }
+
         .bypass-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -666,8 +736,12 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 18px;
             animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .success-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
         @keyframes successPop {
@@ -697,6 +771,14 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-button svg {
+            width: 18px;
+            height: 18px;
         }
 
         .copy-button:hover {
@@ -777,6 +859,15 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .site-card svg {
+            width: 20px;
+            height: 20px;
         }
 
         .site-card::before {
@@ -945,17 +1036,23 @@
             padding-right: 25px;
             position: relative;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .plan-features li::before {
-            content: '•';
+        [dir="ltr"] .plan-features li {
+            padding-right: 0;
+            padding-left: 25px;
+        }
+
+        .plan-features li svg {
+            width: 16px;
+            height: 16px;
             color: #667eea;
-            font-size: 20px;
-            position: absolute;
-            right: 0;
         }
 
-        .payment-methods {
+        .payment-methods, .custom-plans, .supported-services {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             padding: 30px;
@@ -964,7 +1061,7 @@
             margin-bottom: 30px;
         }
 
-        .payment-methods h3 {
+        .payment-methods h3, .custom-plans h3, .supported-services h3 {
             color: white;
             font-size: 22px;
             margin-bottom: 20px;
@@ -977,56 +1074,21 @@
         .payment-methods li {
             color: rgba(255, 255, 255, 0.8);
             padding: 12px 0;
-            padding-right: 30px;
-            position: relative;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .payment-methods li::before {
-            content: '•';
+        .payment-methods li svg {
+            width: 20px;
+            height: 20px;
             color: #667eea;
-            font-size: 24px;
-            position: absolute;
-            right: 0;
         }
 
-        .custom-plans {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .custom-plans h3 {
-            color: white;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        .custom-plans p {
+        .custom-plans p, .supported-services p {
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.8;
-        }
-
-        .supported-services {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .supported-services h3 {
-            color: white;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        .supported-services p {
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 15px;
         }
 
         .api-link {
@@ -1035,13 +1097,19 @@
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .api-link svg {
+            width: 18px;
+            height: 18px;
         }
 
         .api-link:hover {
             color: #764ba2;
-            gap: 10px;
+            gap: 12px;
         }
 
         /* Telegram Channels Page */
@@ -1132,9 +1200,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(42, 171, 238, 0.4);
+        }
+
+        .channel-icon svg {
+            width: 30px;
+            height: 30px;
+            color: white;
         }
 
         .channel-name {
@@ -1156,7 +1229,12 @@
             font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+        }
+
+        .channel-subscribers svg {
+            width: 16px;
+            height: 16px;
         }
 
         /* Status Page */
@@ -1233,8 +1311,18 @@
         }
 
         .stat-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon svg {
+            width: 40px;
+            height: 40px;
+            color: #667eea;
         }
 
         .stat-label {
@@ -1260,7 +1348,9 @@
         }
 
         .uptime-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 20px;
             background: rgba(76, 175, 80, 0.2);
             border: 1px solid rgba(76, 175, 80, 0.4);
@@ -1269,6 +1359,149 @@
             font-size: 14px;
             font-weight: 600;
             margin-top: 10px;
+        }
+
+        .uptime-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Language Modal */
+        .language-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .language-modal.active {
+            display: flex;
+        }
+
+        .language-content {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+            animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .language-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .language-header svg {
+            width: 60px;
+            height: 60px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .language-header h2 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .language-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+
+        .language-options {
+            display: grid;
+            gap: 20px;
+        }
+
+        .language-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-option:hover {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .language-option.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .language-flag {
+            font-size: 40px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .language-info h3 {
+            color: white;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .language-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        [dir="ltr"] .close-modal {
+            right: auto;
+            left: 20px;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .close-modal svg {
+            width: 20px;
+            height: 20px;
         }
 
         /* Footer */
@@ -1334,6 +1567,10 @@
             .pricing-cards {
                 grid-template-columns: 1fr;
             }
+
+            .language-content {
+                padding: 40px 25px;
+            }
         }
 
         /* Hide class */
@@ -1355,35 +1592,42 @@
     <header>
         <div class="header-container">
             <div class="logo-container">
-                <div class="logo">⚡</div>
+                <div class="logo">
+                    <i data-lucide="zap"></i>
+                </div>
                 <span class="logo-text">Zen Bypass</span>
             </div>
-            <button class="menu-toggle" id="menuToggle">
-                <span class="menu-line"></span>
-                <span class="menu-line"></span>
-                <span class="menu-line"></span>
-            </button>
+            <div class="header-actions">
+                <button class="lang-button" onclick="openLanguageModal()">
+                    <i data-lucide="languages"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle">
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                </button>
+            </div>
         </div>
         <div class="dropdown-menu" id="dropdownMenu">
             <a class="menu-item" onclick="showPage('home')">
-                <span class="menu-icon">🏠</span>
-                <span>الرئيسية</span>
+                <span class="menu-icon"><i data-lucide="home"></i></span>
+                <span data-i18n="nav.home">الرئيسية</span>
             </a>
             <a class="menu-item" onclick="showPage('sites')">
-                <span class="menu-icon">🌐</span>
-                <span>المواقع المدعومة</span>
+                <span class="menu-icon"><i data-lucide="globe"></i></span>
+                <span data-i18n="nav.supported">المواقع المدعومة</span>
             </a>
             <a class="menu-item" onclick="showPage('api')">
-                <span class="menu-icon">🔌</span>
-                <span>API</span>
+                <span class="menu-icon"><i data-lucide="code"></i></span>
+                <span data-i18n="nav.api">API</span>
             </a>
             <a class="menu-item" onclick="showPage('telegram')">
-                <span class="menu-icon">✈️</span>
-                <span>قنوات التليجرام</span>
+                <span class="menu-icon"><i data-lucide="send"></i></span>
+                <span data-i18n="nav.telegram">قنوات التليجرام</span>
             </a>
             <a class="menu-item" onclick="showPage('status')">
-                <span class="menu-icon">📊</span>
-                <span>الحالة</span>
+                <span class="menu-icon"><i data-lucide="activity"></i></span>
+                <span data-i18n="nav.status">الحالة</span>
             </a>
         </div>
     </header>
@@ -1391,37 +1635,45 @@
     <!-- Home Section -->
     <div class="container" id="homePage">
         <div class="main-section card-3d" id="mainCard">
-            <div class="icon-wrapper">💀</div>
-            <h1>Zen Bypass</h1>
-            <p class="description">
+            <div class="icon-wrapper">
+                <i data-lucide="shield-check"></i>
+            </div>
+            <h1 data-i18n="home.title">Zen Bypass</h1>
+            <p class="description" data-i18n="home.description">
                 احصل على نتيجتك فوراً. تجاوز Linkvertise، Loot-Link، Rekonise،<br>
                 Work.ink، Shrtfly، Rinku.pro، وغيرها الكثير من المختصرات.
             </p>
 
             <div class="input-container">
                 <div class="input-wrapper">
-                    <input type="text" id="urlInput" placeholder="أدخل الرابط المختصر هنا...">
+                    <input type="text" id="urlInput" data-i18n-placeholder="home.inputPlaceholder" placeholder="أدخل الرابط المختصر هنا...">
                 </div>
             </div>
 
             <button class="bypass-button" id="bypassButton" onclick="bypassLink()">
-                <span>🚀 تجاوز الآن</span>
+                <span>
+                    <i data-lucide="rocket"></i>
+                    <span data-i18n="home.bypassButton">تجاوز الآن</span>
+                </span>
             </button>
 
             <div class="error-message" id="errorMessage"></div>
 
             <div class="loading-container" id="loadingContainer">
                 <div class="spinner"></div>
-                <div class="loading-text">جاري التجاوز... يرجى الانتظار</div>
+                <div class="loading-text" data-i18n="home.loading">جاري التجاوز... يرجى الانتظار</div>
             </div>
 
             <div class="result-container" id="resultContainer">
                 <div class="result-title">
-                    <span class="success-icon">✓</span>
-                    تم التجاوز بنجاح!
+                    <span class="success-icon"><i data-lucide="check"></i></span>
+                    <span data-i18n="home.success">تم التجاوز بنجاح!</span>
                 </div>
                 <div class="result-link" id="resultLink"></div>
-                <button class="copy-button" onclick="copyResult()">📋 نسخ الرابط</button>
+                <button class="copy-button" onclick="copyResult()">
+                    <i data-lucide="copy"></i>
+                    <span data-i18n="home.copy">نسخ الرابط</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1429,20 +1681,20 @@
     <!-- Supported Sites Section -->
     <div class="container supported-sites" id="sitesPage">
         <div class="sites-container">
-            <h2 class="sites-title">🌐 المواقع المدعومة</h2>
+            <h2 class="sites-title" data-i18n="sites.title">المواقع المدعومة</h2>
             <div class="sites-grid">
-                <div class="site-card">🔗 Linkvertise</div>
-                <div class="site-card">💰 Loot-Link</div>
-                <div class="site-card">🎯 Rekonise</div>
-                <div class="site-card">💼 Work.ink</div>
-                <div class="site-card">🦋 Shrtfly</div>
-                <div class="site-card">🌟 Rinku.pro</div>
-                <div class="site-card">⚡ Boost.ink</div>
-                <div class="site-card">🔥 Sub2unlock</div>
-                <div class="site-card">🎪 Mboost.me</div>
-                <div class="site-card">🎨 Social-unlock</div>
-                <div class="site-card">🎭 Letsboost</div>
-                <div class="site-card">🌈 والمزيد...</div>
+                <div class="site-card"><i data-lucide="link"></i> Linkvertise</div>
+                <div class="site-card"><i data-lucide="dollar-sign"></i> Loot-Link</div>
+                <div class="site-card"><i data-lucide="target"></i> Rekonise</div>
+                <div class="site-card"><i data-lucide="briefcase"></i> Work.ink</div>
+                <div class="site-card"><i data-lucide="bug"></i> Shrtfly</div>
+                <div class="site-card"><i data-lucide="star"></i> Rinku.pro</div>
+                <div class="site-card"><i data-lucide="zap"></i> Boost.ink</div>
+                <div class="site-card"><i data-lucide="flame"></i> Sub2unlock</div>
+                <div class="site-card"><i data-lucide="trophy"></i> Mboost.me</div>
+                <div class="site-card"><i data-lucide="share-2"></i> Social-unlock</div>
+                <div class="site-card"><i data-lucide="trending-up"></i> Letsboost</div>
+                <div class="site-card"><i data-lucide="sparkles"></i> <span data-i18n="sites.more">والمزيد...</span></div>
             </div>
         </div>
     </div>
@@ -1451,9 +1703,9 @@
     <div class="container api-page" id="apiPage">
         <div class="api-container">
             <div class="api-header">
-                <div class="api-badge">PRICING</div>
+                <div class="api-badge" data-i18n="api.badge">PRICING</div>
                 <h1 class="api-title">API</h1>
-                <p class="api-description">
+                <p class="api-description" data-i18n="api.description">
                     هل أنت مطور يريد دمج هذا في موقعك أو البوت الخاص بك؟<br>
                     لا تقلق. خدمة API الخاصة بنا متاحة على مدار الساعة طوال أيام الأسبوع،<br>
                     والأسعار تبدأ من 5 دولار شهرياً أو دولار واحد لكل 1000 طلب ناجح.
@@ -1461,51 +1713,54 @@
             </div>
 
             <div class="pricing-section">
-                <h2 class="section-title">الخطط</h2>
+                <h2 class="section-title" data-i18n="api.plansTitle">الخطط</h2>
                 <div class="pricing-cards">
                     <div class="pricing-card">
-                        <h3 class="plan-name">Monthly Subscription</h3>
-                        <div class="plan-price">$5 <span>/month</span></div>
-                        <p class="plan-description">طلبات غير محدودة مع وصول دائم.</p>
+                        <h3 class="plan-name" data-i18n="api.monthly.name">Monthly Subscription</h3>
+                        <div class="plan-price">$5 <span data-i18n="api.monthly.period">/month</span></div>
+                        <p class="plan-description" data-i18n="api.monthly.desc">طلبات غير محدودة مع وصول دائم.</p>
                         <ul class="plan-features">
-                            <li>مثالي لتطبيقات الإنتاج</li>
-                            <li>بدون حدود يومية</li>
-                            <li>توفر API على مدار الساعة</li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.monthly.feat1">مثالي لتطبيقات الإنتاج</span></li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.monthly.feat2">بدون حدود يومية</span></li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.monthly.feat3">توفر API على مدار الساعة</span></li>
                         </ul>
                     </div>
 
                     <div class="pricing-card">
-                        <h3 class="plan-name">Pay-as-you-go</h3>
-                        <div class="plan-price">$1 <span>/1,000 requests</span></div>
-                        <p class="plan-description">أرصدة مرنة أو Server Boost لكل 1000 طلب.</p>
+                        <h3 class="plan-name" data-i18n="api.payg.name">Pay-as-you-go</h3>
+                        <div class="plan-price">$1 <span data-i18n="api.payg.period">/1,000 requests</span></div>
+                        <p class="plan-description" data-i18n="api.payg.desc">أرصدة مرنة أو Server Boost لكل 1000 طلب.</p>
                         <ul class="plan-features">
-                            <li>يتم احتساب التجاوزات الناجحة فقط</li>
-                            <li>لا يتم احتساب ذاكرة التخزين المؤقت</li>
-                            <li>تطبيق قواعد Boost</li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.payg.feat1">يتم احتساب التجاوزات الناجحة فقط</span></li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.payg.feat2">لا يتم احتساب ذاكرة التخزين المؤقت</span></li>
+                            <li><i data-lucide="check-circle"></i> <span data-i18n="api.payg.feat3">تطبيق قواعد Boost</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="payment-methods">
-                <h3>Payment Methods</h3>
+                <h3 data-i18n="api.payment.title">Payment Methods</h3>
                 <ul>
-                    <li>Cryptocurrency (LTC, USDT, ETH)</li>
-                    <li>Binance</li>
-                    <li>PayPal Friends and Family</li>
+                    <li><i data-lucide="bitcoin"></i> Cryptocurrency (LTC, USDT, ETH)</li>
+                    <li><i data-lucide="credit-card"></i> Binance</li>
+                    <li><i data-lucide="wallet"></i> PayPal Friends and Family</li>
                 </ul>
             </div>
 
             <div class="custom-plans">
-                <h3>Custom Plans</h3>
-                <p>قد تتطلب المشاريع ذات الحجم الكبير خطة مخصصة. اتصل بنا لمناقشة احتياجاتك.</p>
+                <h3 data-i18n="api.custom.title">Custom Plans</h3>
+                <p data-i18n="api.custom.desc">قد تتطلب المشاريع ذات الحجم الكبير خطة مخصصة. اتصل بنا لمناقشة احتياجاتك.</p>
             </div>
 
             <div class="supported-services">
-                <h3>Supported Services</h3>
-                <p>عرض جميع التجاوزات المدعومة في النقطة النهائية أدناه.</p>
-                <a href="#" class="api-link">/supported →</a>
-                <p style="margin-top: 20px;">يمكنك أيضاً استخدام المفتاح لتجاوز CAPTCHA على موقعنا.</p>
+                <h3 data-i18n="api.supported.title">Supported Services</h3>
+                <p data-i18n="api.supported.desc">عرض جميع التجاوزات المدعومة في النقطة النهائية أدناه.</p>
+                <a href="https://api.izen.lol/v1/supported" class="api-link" target="_blank">
+                    /supported
+                    <i data-lucide="arrow-right"></i>
+                </a>
+                <p style="margin-top: 20px;" data-i18n="api.supported.captcha">يمكنك أيضاً استخدام المفتاح لتجاوز CAPTCHA على موقعنا.</p>
             </div>
         </div>
     </div>
@@ -1514,79 +1769,79 @@
     <div class="container telegram-page" id="telegramPage">
         <div class="telegram-container">
             <div class="telegram-header">
-                <h1 class="telegram-title">✈️ قنوات التليجرام</h1>
-                <p class="telegram-subtitle">تابع قنواتنا الرسمية على التليجرام للحصول على آخر التحديثات والأخبار</p>
+                <h1 class="telegram-title" data-i18n="telegram.title">قنوات التليجرام</h1>
+                <p class="telegram-subtitle" data-i18n="telegram.subtitle">تابع قنواتنا الرسمية على التليجرام للحصول على آخر التحديثات والأخبار</p>
             </div>
 
             <div class="channels-grid">
                 <a href="https://t.me/zenbypass" class="channel-card" target="_blank">
-                    <div class="channel-icon">✈️</div>
-                    <div class="channel-name">Zen Bypass Official</div>
-                    <div class="channel-description">القناة الرسمية - تحديثات، أخبار، ومميزات جديدة</div>
-                    <div class="channel-subscribers">👥 15.2K متابع</div>
+                    <div class="channel-icon"><i data-lucide="send"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch1.name">Zen Bypass Official</div>
+                    <div class="channel-description" data-i18n="telegram.ch1.desc">القناة الرسمية - تحديثات، أخبار، ومميزات جديدة</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 15.2K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_news" class="channel-card" target="_blank">
-                    <div class="channel-icon">📢</div>
-                    <div class="channel-name">Zen News</div>
-                    <div class="channel-description">آخر الأخبار والإعلانات المهمة</div>
-                    <div class="channel-subscribers">👥 12.8K متابع</div>
+                    <div class="channel-icon"><i data-lucide="megaphone"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch2.name">Zen News</div>
+                    <div class="channel-description" data-i18n="telegram.ch2.desc">آخر الأخبار والإعلانات المهمة</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 12.8K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_support" class="channel-card" target="_blank">
-                    <div class="channel-icon">💬</div>
-                    <div class="channel-name">Zen Support</div>
-                    <div class="channel-description">الدعم الفني والمساعدة على مدار الساعة</div>
-                    <div class="channel-subscribers">👥 8.5K متابع</div>
+                    <div class="channel-icon"><i data-lucide="message-circle"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch3.name">Zen Support</div>
+                    <div class="channel-description" data-i18n="telegram.ch3.desc">الدعم الفني والمساعدة على مدار الساعة</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 8.5K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_api" class="channel-card" target="_blank">
-                    <div class="channel-icon">🔌</div>
-                    <div class="channel-name">Zen API Developers</div>
-                    <div class="channel-description">للمطورين - دروس وأكواد وتحديثات API</div>
-                    <div class="channel-subscribers">👥 6.3K متابع</div>
+                    <div class="channel-icon"><i data-lucide="code"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch4.name">Zen API Developers</div>
+                    <div class="channel-description" data-i18n="telegram.ch4.desc">للمطورين - دروس وأكواد وتحديثات API</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 6.3K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_updates" class="channel-card" target="_blank">
-                    <div class="channel-icon">🔄</div>
-                    <div class="channel-name">Zen Updates</div>
-                    <div class="channel-description">تحديثات النظام والصيانة</div>
-                    <div class="channel-subscribers">👥 10.1K متابع</div>
+                    <div class="channel-icon"><i data-lucide="refresh-cw"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch5.name">Zen Updates</div>
+                    <div class="channel-description" data-i18n="telegram.ch5.desc">تحديثات النظام والصيانة</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 10.1K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_tips" class="channel-card" target="_blank">
-                    <div class="channel-icon">💡</div>
-                    <div class="channel-name">Zen Tips & Tricks</div>
-                    <div class="channel-description">نصائح وحيل لاستخدام الخدمة بشكل أفضل</div>
-                    <div class="channel-subscribers">👥 7.9K متابع</div>
+                    <div class="channel-icon"><i data-lucide="lightbulb"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch6.name">Zen Tips & Tricks</div>
+                    <div class="channel-description" data-i18n="telegram.ch6.desc">نصائح وحيل لاستخدام الخدمة بشكل أفضل</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 7.9K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_community" class="channel-card" target="_blank">
-                    <div class="channel-icon">👥</div>
-                    <div class="channel-name">Zen Community</div>
-                    <div class="channel-description">مجتمع المستخدمين - نقاشات ومشاركات</div>
-                    <div class="channel-subscribers">👥 11.4K متابع</div>
+                    <div class="channel-icon"><i data-lucide="users"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch7.name">Zen Community</div>
+                    <div class="channel-description" data-i18n="telegram.ch7.desc">مجتمع المستخدمين - نقاشات ومشاركات</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 11.4K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_premium" class="channel-card" target="_blank">
-                    <div class="channel-icon">⭐</div>
-                    <div class="channel-name">Zen Premium</div>
-                    <div class="channel-description">محتوى حصري للمشتركين المميزين</div>
-                    <div class="channel-subscribers">👥 4.2K متابع</div>
+                    <div class="channel-icon"><i data-lucide="crown"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch8.name">Zen Premium</div>
+                    <div class="channel-description" data-i18n="telegram.ch8.desc">محتوى حصري للمشتركين المميزين</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 4.2K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_beta" class="channel-card" target="_blank">
-                    <div class="channel-icon">🧪</div>
-                    <div class="channel-name">Zen Beta Testing</div>
-                    <div class="channel-description">اختبار الميزات الجديدة قبل الإطلاق</div>
-                    <div class="channel-subscribers">👥 3.6K متابع</div>
+                    <div class="channel-icon"><i data-lucide="flask"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch9.name">Zen Beta Testing</div>
+                    <div class="channel-description" data-i18n="telegram.ch9.desc">اختبار الميزات الجديدة قبل الإطلاق</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 3.6K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
 
                 <a href="https://t.me/zenbypass_announcements" class="channel-card" target="_blank">
-                    <div class="channel-icon">📣</div>
-                    <div class="channel-name">Zen Announcements</div>
-                    <div class="channel-description">الإعلانات الرسمية الهامة فقط</div>
-                    <div class="channel-subscribers">👥 9.7K متابع</div>
+                    <div class="channel-icon"><i data-lucide="bell"></i></div>
+                    <div class="channel-name" data-i18n="telegram.ch10.name">Zen Announcements</div>
+                    <div class="channel-description" data-i18n="telegram.ch10.desc">الإعلانات الرسمية الهامة فقط</div>
+                    <div class="channel-subscribers"><i data-lucide="users"></i> 9.7K <span data-i18n="telegram.followers">متابع</span></div>
                 </a>
             </div>
         </div>
@@ -1596,31 +1851,64 @@
     <div class="container status-page" id="statusPage">
         <div class="status-container">
             <div class="status-header">
-                <h1 class="status-title">📊 حالة النظام</h1>
-                <p class="status-subtitle">مراقبة مباشرة لأداء وإحصائيات الخدمة</p>
+                <h1 class="status-title" data-i18n="status.title">حالة النظام</h1>
+                <p class="status-subtitle" data-i18n="status.subtitle">مراقبة مباشرة لأداء وإحصائيات الخدمة</p>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon">🚀</div>
-                    <div class="stat-label">عدد التجاوزات</div>
+                    <div class="stat-icon"><i data-lucide="rocket"></i></div>
+                    <div class="stat-label" data-i18n="status.bypasses">عدد التجاوزات</div>
                     <div class="stat-value" id="bypassCount">0</div>
-                    <div class="stat-unit">تجاوز</div>
+                    <div class="stat-unit" data-i18n="status.bypassUnit">تجاوز</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">🌐</div>
-                    <div class="stat-label">الخدمات المدعومة</div>
+                    <div class="stat-icon"><i data-lucide="globe"></i></div>
+                    <div class="stat-label" data-i18n="status.services">الخدمات المدعومة</div>
                     <div class="stat-value">50+</div>
-                    <div class="stat-unit">موقع</div>
+                    <div class="stat-unit" data-i18n="status.servicesUnit">موقع</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-label">الخدمة</div>
+                    <div class="stat-icon"><i data-lucide="clock"></i></div>
+                    <div class="stat-label" data-i18n="status.uptime">الخدمة</div>
                     <div class="stat-value" id="uptimeValue">0</div>
-                    <div class="stat-unit" id="uptimeUnit">دقيقة</div>
-                    <div class="uptime-badge">🟢 متصل</div>
+                    <div class="stat-unit" id="uptimeUnit" data-i18n="status.minute">دقيقة</div>
+                    <div class="uptime-badge">
+                        <i data-lucide="circle"></i>
+                        <span data-i18n="status.online">متصل</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div class="language-modal" id="languageModal">
+        <div class="language-content">
+            <button class="close-modal" onclick="closeLanguageModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="language-header">
+                <i data-lucide="languages"></i>
+                <h2 data-i18n="lang.title">اختر اللغة</h2>
+                <p data-i18n="lang.subtitle">Select Language</p>
+            </div>
+            <div class="language-options">
+                <div class="language-option" onclick="changeLanguage('ar')">
+                    <div class="language-flag">🇸🇦</div>
+                    <div class="language-info">
+                        <h3>العربية</h3>
+                        <p>Arabic</p>
+                    </div>
+                </div>
+                <div class="language-option" onclick="changeLanguage('en')">
+                    <div class="language-flag">🇺🇸</div>
+                    <div class="language-info">
+                        <h3>English</h3>
+                        <p>الإنجليزية</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1629,16 +1917,283 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p class="footer-text">© 2025 Zen Bypass - جميع الحقوق محفوظة</p>
+            <p class="footer-text" data-i18n="footer.copyright">© 2025 Zen Bypass - جميع الحقوق محفوظة</p>
             <div class="footer-links">
-                <a href="#" class="footer-link">الشروط والأحكام</a>
-                <a href="#" class="footer-link">سياسة الخصوصية</a>
-                <a href="#" class="footer-link">اتصل بنا</a>
+                <a href="#" class="footer-link" data-i18n="footer.terms">الشروط والأحكام</a>
+                <a href="#" class="footer-link" data-i18n="footer.privacy">سياسة الخصوصية</a>
+                <a href="#" class="footer-link" data-i18n="footer.contact">اتصل بنا</a>
             </div>
         </div>
     </footer>
 
     <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Translations
+        const translations = {
+            ar: {
+                nav: {
+                    home: "الرئيسية",
+                    supported: "المواقع المدعومة",
+                    api: "API",
+                    telegram: "قنوات التليجرام",
+                    status: "الحالة"
+                },
+                home: {
+                    title: "Zen Bypass",
+                    description: "احصل على نتيجتك فوراً. تجاوز Linkvertise، Loot-Link، Rekonise، Work.ink، Shrtfly، Rinku.pro، وغيرها الكثير من المختصرات.",
+                    inputPlaceholder: "أدخل الرابط المختصر هنا...",
+                    bypassButton: "تجاوز الآن",
+                    loading: "جاري التجاوز... يرجى الانتظار",
+                    success: "تم التجاوز بنجاح!",
+                    copy: "نسخ الرابط",
+                    errorEmpty: "⚠️ يرجى إدخال رابط صحيح!",
+                    errorInvalid: "⚠️ الرابط غير صحيح! يرجى التحقق من الرابط وحاول مرة أخرى.",
+                    errorFailed: "❌ فشل التجاوز! يرجى التحقق من الرابط أو المحاولة لاحقاً.",
+                    errorGeneral: "❌ حدث خطأ! يرجى المحاولة مرة أخرى لاحقاً."
+                },
+                sites: {
+                    title: "المواقع المدعومة",
+                    more: "والمزيد..."
+                },
+                api: {
+                    badge: "PRICING",
+                    description: "هل أنت مطور يريد دمج هذا في موقعك أو البوت الخاص بك؟ لا تقلق. خدمة API الخاصة بنا متاحة على مدار الساعة طوال أيام الأسبوع، والأسعار تبدأ من 5 دولار شهرياً أو دولار واحد لكل 1000 طلب ناجح.",
+                    plansTitle: "الخطط",
+                    monthly: {
+                        name: "Monthly Subscription",
+                        period: "/شهر",
+                        desc: "طلبات غير محدودة مع وصول دائم.",
+                        feat1: "مثالي لتطبيقات الإنتاج",
+                        feat2: "بدون حدود يومية",
+                        feat3: "توفر API على مدار الساعة"
+                    },
+                    payg: {
+                        name: "Pay-as-you-go",
+                        period: "/1,000 طلب",
+                        desc: "أرصدة مرنة أو Server Boost لكل 1000 طلب.",
+                        feat1: "يتم احتساب التجاوزات الناجحة فقط",
+                        feat2: "لا يتم احتساب ذاكرة التخزين المؤقت",
+                        feat3: "تطبيق قواعد Boost"
+                    },
+                    payment: {
+                        title: "Payment Methods"
+                    },
+                    custom: {
+                        title: "Custom Plans",
+                        desc: "قد تتطلب المشاريع ذات الحجم الكبير خطة مخصصة. اتصل بنا لمناقشة احتياجاتك."
+                    },
+                    supported: {
+                        title: "Supported Services",
+                        desc: "عرض جميع التجاوزات المدعومة في النقطة النهائية أدناه.",
+                        captcha: "يمكنك أيضاً استخدام المفتاح لتجاوز CAPTCHA على موقعنا."
+                    }
+                },
+                telegram: {
+                    title: "قنوات التليجرام",
+                    subtitle: "تابع قنواتنا الرسمية على التليجرام للحصول على آخر التحديثات والأخبار",
+                    followers: "متابع",
+                    ch1: { name: "Zen Bypass Official", desc: "القناة الرسمية - تحديثات، أخبار، ومميزات جديدة" },
+                    ch2: { name: "Zen News", desc: "آخر الأخبار والإعلانات المهمة" },
+                    ch3: { name: "Zen Support", desc: "الدعم الفني والمساعدة على مدار الساعة" },
+                    ch4: { name: "Zen API Developers", desc: "للمطورين - دروس وأكواد وتحديثات API" },
+                    ch5: { name: "Zen Updates", desc: "تحديثات النظام والصيانة" },
+                    ch6: { name: "Zen Tips & Tricks", desc: "نصائح وحيل لاستخدام الخدمة بشكل أفضل" },
+                    ch7: { name: "Zen Community", desc: "مجتمع المستخدمين - نقاشات ومشاركات" },
+                    ch8: { name: "Zen Premium", desc: "محتوى حصري للمشتركين المميزين" },
+                    ch9: { name: "Zen Beta Testing", desc: "اختبار الميزات الجديدة قبل الإطلاق" },
+                    ch10: { name: "Zen Announcements", desc: "الإعلانات الرسمية الهامة فقط" }
+                },
+                status: {
+                    title: "حالة النظام",
+                    subtitle: "مراقبة مباشرة لأداء وإحصائيات الخدمة",
+                    bypasses: "عدد التجاوزات",
+                    bypassUnit: "تجاوز",
+                    services: "الخدمات المدعومة",
+                    servicesUnit: "موقع",
+                    uptime: "الخدمة",
+                    minute: "دقيقة",
+                    hour: "ساعة",
+                    day: "يوم",
+                    week: "أسبوع",
+                    month: "شهر",
+                    online: "متصل"
+                },
+                lang: {
+                    title: "اختر اللغة",
+                    subtitle: "Select Language"
+                },
+                footer: {
+                    copyright: "© 2025 Zen Bypass - جميع الحقوق محفوظة",
+                    terms: "الشروط والأحكام",
+                    privacy: "سياسة الخصوصية",
+                    contact: "اتصل بنا"
+                }
+            },
+            en: {
+                nav: {
+                    home: "Home",
+                    supported: "Supported Sites",
+                    api: "API",
+                    telegram: "Telegram Channels",
+                    status: "Status"
+                },
+                home: {
+                    title: "Zen Bypass",
+                    description: "Get your results instantly. Bypass Linkvertise, Loot-Link, Rekonise, Work.ink, Shrtfly, Rinku.pro, and many more shorteners.",
+                    inputPlaceholder: "Enter shortened link here...",
+                    bypassButton: "Bypass Now",
+                    loading: "Bypassing... Please wait",
+                    success: "Successfully bypassed!",
+                    copy: "Copy Link",
+                    errorEmpty: "⚠️ Please enter a valid link!",
+                    errorInvalid: "⚠️ Invalid link! Please check the link and try again.",
+                    errorFailed: "❌ Bypass failed! Please check the link or try later.",
+                    errorGeneral: "❌ An error occurred! Please try again later."
+                },
+                sites: {
+                    title: "Supported Sites",
+                    more: "And more..."
+                },
+                api: {
+                    badge: "PRICING",
+                    description: "Are you a developer who wants to integrate this into your website or bot? Don't worry. Our API service is available 24/7, and pricing starts at $5/month or $1 per 1,000 successful requests.",
+                    plansTitle: "Plans",
+                    monthly: {
+                        name: "Monthly Subscription",
+                        period: "/month",
+                        desc: "Unlimited requests with always-on access.",
+                        feat1: "Ideal for production apps",
+                        feat2: "No daily caps",
+                        feat3: "24/7 API availability"
+                    },
+                    payg: {
+                        name: "Pay-as-you-go",
+                        period: "/1,000 requests",
+                        desc: "Flexible credits or Server Boost per 1,000 requests.",
+                        feat1: "Only successful bypasses count",
+                        feat2: "Caches are not counted",
+                        feat3: "Boost rules apply"
+                    },
+                    payment: {
+                        title: "Payment Methods"
+                    },
+                    custom: {
+                        title: "Custom Plans",
+                        desc: "High-volume projects may require a custom plan. Contact us to discuss your needs."
+                    },
+                    supported: {
+                        title: "Supported Services",
+                        desc: "View all supported bypasses at the endpoint below.",
+                        captcha: "You may also use the key to bypass the CAPTCHA on our website."
+                    }
+                },
+                telegram: {
+                    title: "Telegram Channels",
+                    subtitle: "Follow our official Telegram channels for the latest updates and news",
+                    followers: "followers",
+                    ch1: { name: "Zen Bypass Official", desc: "Official channel - updates, news, and new features" },
+                    ch2: { name: "Zen News", desc: "Latest news and important announcements" },
+                    ch3: { name: "Zen Support", desc: "Technical support and assistance 24/7" },
+                    ch4: { name: "Zen API Developers", desc: "For developers - tutorials, codes and API updates" },
+                    ch5: { name: "Zen Updates", desc: "System updates and maintenance" },
+                    ch6: { name: "Zen Tips & Tricks", desc: "Tips and tricks for better service usage" },
+                    ch7: { name: "Zen Community", desc: "User community - discussions and shares" },
+                    ch8: { name: "Zen Premium", desc: "Exclusive content for premium subscribers" },
+                    ch9: { name: "Zen Beta Testing", desc: "Test new features before launch" },
+                    ch10: { name: "Zen Announcements", desc: "Important official announcements only" }
+                },
+                status: {
+                    title: "System Status",
+                    subtitle: "Real-time monitoring of service performance and statistics",
+                    bypasses: "Total Bypasses",
+                    bypassUnit: "bypass",
+                    services: "Supported Services",
+                    servicesUnit: "site",
+                    uptime: "Uptime",
+                    minute: "minute",
+                    hour: "hour",
+                    day: "day",
+                    week: "week",
+                    month: "month",
+                    online: "Online"
+                },
+                lang: {
+                    title: "Choose Language",
+                    subtitle: "اختر اللغة"
+                },
+                footer: {
+                    copyright: "© 2025 Zen Bypass - All Rights Reserved",
+                    terms: "Terms & Conditions",
+                    privacy: "Privacy Policy",
+                    contact: "Contact Us"
+                }
+            }
+        };
+
+        // Current language
+        let currentLang = localStorage.getItem('language') || 'ar';
+
+        // Apply language
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            // Change HTML direction
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Translate all elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const keys = element.getAttribute('data-i18n').split('.');
+                let value = translations[lang];
+                keys.forEach(key => {
+                    value = value[key];
+                });
+                element.textContent = value;
+            });
+            
+            // Translate placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const keys = element.getAttribute('data-i18n-placeholder').split('.');
+                let value = translations[lang];
+                keys.forEach(key => {
+                    value = value[key];
+                });
+                element.placeholder = value;
+            });
+            
+            // Update active language option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelectorAll('.language-option').forEach(option => {
+                if (option.getAttribute('onclick').includes(`'${lang}'`)) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        // Change language
+        function changeLanguage(lang) {
+            applyLanguage(lang);
+            closeLanguageModal();
+        }
+
+        // Open/Close language modal
+        function openLanguageModal() {
+            document.getElementById('languageModal').classList.add('active');
+            lucide.createIcons();
+        }
+
+        function closeLanguageModal() {
+            document.getElementById('languageModal').classList.remove('active');
+        }
+
+        // Apply saved language on load
+        applyLanguage(currentLang);
+
         // Create Particles
         function createParticles() {
             const container = document.getElementById('particlesContainer');
@@ -1690,14 +2245,12 @@
 
         // Page Navigation
         function showPage(page) {
-            // Hide all pages
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('sitesPage').classList.remove('active');
             document.getElementById('apiPage').classList.remove('active');
             document.getElementById('telegramPage').classList.remove('active');
             document.getElementById('statusPage').classList.remove('active');
 
-            // Show selected page
             switch(page) {
                 case 'home':
                     document.getElementById('homePage').style.display = 'block';
@@ -1717,10 +2270,14 @@
                     break;
             }
 
-            // Close menu
             dropdownMenu.classList.remove('active');
             menuToggle.classList.remove('active');
+            lucide.createIcons();
         }
+
+        // API Key
+        const API_KEY = 'd2fe0743-247c-4ae2-80b7-96bdc6baa072';
+        const API_BASE = 'https://api.izen.lol/v1';
 
         // Bypass Link Function
         async function bypassLink() {
@@ -1731,60 +2288,58 @@
             const errorMessage = document.getElementById('errorMessage');
             const bypassButton = document.getElementById('bypassButton');
 
-            // Reset UI
             resultContainer.classList.remove('active');
             errorMessage.classList.remove('active');
             loadingContainer.classList.remove('active');
 
-            // Validate URL
             if (!url) {
-                errorMessage.textContent = '⚠️ يرجى إدخال رابط صحيح!';
+                errorMessage.textContent = translations[currentLang].home.errorEmpty;
                 errorMessage.classList.add('active');
                 return;
             }
 
             if (!isValidUrl(url)) {
-                errorMessage.textContent = '⚠️ الرابط غير صحيح! يرجى التحقق من الرابط وحاول مرة أخرى.';
+                errorMessage.textContent = translations[currentLang].home.errorInvalid;
                 errorMessage.classList.add('active');
                 return;
             }
 
-            // Show loading
             loadingContainer.classList.add('active');
             bypassButton.disabled = true;
 
             try {
-                // استخدم API الخاص بك هنا
-                const apiUrl = `https://api.bypass.vip/bypass?url=${encodeURIComponent(url)}`;
+                const apiUrl = `${API_BASE}/bypass?url=${encodeURIComponent(url)}`;
                 
-                const response = await fetch(apiUrl);
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'x-api-key': API_KEY
+                    }
+                });
+                
                 const data = await response.json();
 
-                // Hide loading
                 loadingContainer.classList.remove('active');
                 bypassButton.disabled = false;
 
                 if (data.success && data.destination) {
-                    // Show result
                     document.getElementById('resultLink').textContent = data.destination;
                     resultContainer.classList.add('active');
-                    
-                    // Increment bypass counter
                     incrementBypassCount();
+                    lucide.createIcons();
                 } else {
-                    errorMessage.textContent = '❌ ' + (data.message || 'فشل التجاوز! يرجى التحقق من الرابط أو المحاولة لاحقاً.');
+                    errorMessage.textContent = translations[currentLang].home.errorFailed;
                     errorMessage.classList.add('active');
                 }
             } catch (error) {
                 loadingContainer.classList.remove('active');
                 bypassButton.disabled = false;
-                errorMessage.textContent = '❌ حدث خطأ! يرجى المحاولة مرة أخرى لاحقاً.';
+                errorMessage.textContent = translations[currentLang].home.errorGeneral;
                 errorMessage.classList.add('active');
                 console.error('Error:', error);
             }
         }
 
-        // Validate URL
         function isValidUrl(string) {
             try {
                 new URL(string);
@@ -1794,29 +2349,29 @@
             }
         }
 
-        // Copy Result
         function copyResult() {
             const resultLink = document.getElementById('resultLink').textContent;
             navigator.clipboard.writeText(resultLink).then(() => {
-                const copyButton = event.target;
-                const originalText = copyButton.textContent;
-                copyButton.textContent = '✓ تم النسخ!';
+                const copyButton = event.target.closest('.copy-button');
+                const originalHTML = copyButton.innerHTML;
+                copyButton.innerHTML = '<i data-lucide="check"></i><span>' + translations[currentLang].home.copy + ' ✓</span>';
+                lucide.createIcons();
                 copyButton.style.background = 'rgba(76, 175, 80, 0.4)';
                 setTimeout(() => {
-                    copyButton.textContent = originalText;
+                    copyButton.innerHTML = originalHTML;
                     copyButton.style.background = '';
+                    lucide.createIcons();
                 }, 2000);
             });
         }
 
-        // Enter key support
         document.getElementById('urlInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 bypassLink();
             }
         });
 
-        // Status Counter Functions
+        // Status Counters
         let bypassCount = parseInt(localStorage.getItem('bypassCount') || '0');
         let startTime = parseInt(localStorage.getItem('startTime') || Date.now());
 
@@ -1849,15 +2404,13 @@
         }
 
         function updateStatusCounters() {
-            // Update bypass count
             const bypassCounter = document.getElementById('bypassCount');
             if (bypassCounter) {
                 animateCounter(bypassCounter, 0, bypassCount, 1500);
             }
 
-            // Update uptime
             updateUptime();
-            setInterval(updateUptime, 60000); // Update every minute
+            setInterval(updateUptime, 60000);
         }
 
         function updateUptime() {
@@ -1874,29 +2427,36 @@
             const uptimeUnit = document.getElementById('uptimeUnit');
 
             if (uptimeValue && uptimeUnit) {
+                const lang = translations[currentLang].status;
                 if (months > 0) {
                     uptimeValue.textContent = months;
-                    uptimeUnit.textContent = `شهر ${days % 30} يوم ${hours % 24} ساعة`;
+                    uptimeUnit.textContent = `${lang.month} ${days % 30} ${lang.day} ${hours % 24} ${lang.hour}`;
                 } else if (weeks > 0) {
                     uptimeValue.textContent = weeks;
-                    uptimeUnit.textContent = `أسبوع ${days % 7} يوم ${hours % 24} ساعة`;
+                    uptimeUnit.textContent = `${lang.week} ${days % 7} ${lang.day} ${hours % 24} ${lang.hour}`;
                 } else if (days > 0) {
                     uptimeValue.textContent = days;
-                    uptimeUnit.textContent = `يوم ${hours % 24} ساعة ${minutes % 60} دقيقة`;
+                    uptimeUnit.textContent = `${lang.day} ${hours % 24} ${lang.hour} ${minutes % 60} ${lang.minute}`;
                 } else if (hours > 0) {
                     uptimeValue.textContent = hours;
-                    uptimeUnit.textContent = `ساعة ${minutes % 60} دقيقة`;
+                    uptimeUnit.textContent = `${lang.hour} ${minutes % 60} ${lang.minute}`;
                 } else {
                     uptimeValue.textContent = minutes;
-                    uptimeUnit.textContent = 'دقيقة';
+                    uptimeUnit.textContent = lang.minute;
                 }
             }
         }
 
-        // Initialize
         if (!localStorage.getItem('startTime')) {
             localStorage.setItem('startTime', Date.now());
         }
+
+        // Close modal on outside click
+        document.getElementById('languageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'languageModal') {
+                closeLanguageModal();
+            }
+        });
     </script>
 </body>
-</html>
+    </html>
