@@ -1,210 +1,883 @@
-"""
-Link Bypass Web App - Single-file Flask app
-ملف واحد (app.py) يحتوي على واجهة ويب فخمة بلغة بايثون + فريمورك Flask.
-كيفية الاستخدام:
-1) احفظ هذا الملف باسم app.py
-2) أنشئ بيئة افتراضية وثبت المكتبات:
-   python -m venv venv
-   source venv/bin/activate   # على لينكس/ماك
-   venv\Scripts\activate    # على ويندوز
-   pip install flask requests
-3) إعداد متغيرات البيئة (اختياري):
-   export BYPASS_API_URL="https://api.example.com/bypass"    # إن توفر
-   export BYPASS_API_KEY="sk_xxx"                           # إن توفر
-4) تشغيل التطبيق:
-   python app.py
-5) افتح المتصفح على http://127.0.0.1:5000
-
-ملاحظات:
-- هذا السكربت يتضمن نمط "محاكاة" (mock) عندما لا يتم توفير BYPASS_API_URL ليعمل تجريبياً.
-- تأكد قانونياً أنك تملك إذن لاستخدام أي واجهة تتجاوز حماية أو محتوى مدفوع.
-
-"""
-
-from flask import Flask, request, jsonify, render_template_string
-import os
-import time
-import re
-import requests
-import urllib.parse
-
-app = Flask(__name__)
-
-# ----- تكوينات -----
-BYPASS_API_URL = os.environ.get('BYPASS_API_URL')  # ضع رابط API هنا إذا عندك
-BYPASS_API_KEY = os.environ.get('BYPASS_API_KEY')  # مفتاح API إن وُجد
-
-# قائمة مواقع مدعومة افتراضية (يمكن تعديلها أو وضعها في ملف أو DB لاحقاً)
-SUPPORTED_SITES = [
-    "example.com",
-    "short.ly",
-    "tinyurl.com",
-    "bit.ly",
-]
-
-# ----- HTML Template (مضمنة لملف واحد) -----
-TEMPLATE = r"""
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>موقع تجاوز الروابط - فخم</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg,#0f172a 0%,#071033 100%); }
-    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); }
-    .neon { text-shadow: 0 2px 12px rgba(99,102,241,0.35); }
-  </style>
-</head>
-<body class="min-h-screen flex items-start justify-center p-6">
-  <div class="w-full max-w-4xl">
-    <!-- Header -->
-    <header class="flex items-center justify-between py-4 px-3 glass rounded-2xl shadow-lg border border-white/6">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">LB</div>
-        <div>
-          <div class="text-white font-extrabold text-xl neon">LinkBypass</div>
-          <div class="text-sm text-white/60">تجاوز الروابط بسهولة وبأمان</div>
-        </div>
-      </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Bypass - تجاوز الروابط المختصرة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      <!-- Hamburger -->
-      <div class="relative" x-data="{open:false}">
-        <button id="menuBtn" class="p-2 rounded-lg glass" onclick="toggleMenu()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-        <div id="menu" class="absolute right-0 mt-3 w-56 bg-white/6 glass rounded-xl p-3 shadow-xl hidden">
-          <button onclick="navigateHome()" class="w-full text-right py-2 px-3 hover:bg-white/4 rounded-md">الرئيسية</button>
-          <button onclick="showSupported()" class="w-full text-right py-2 px-3 hover:bg-white/4 rounded-md">المواقع المدعومة</button>
-          <a href="#about" class="block text-right py-2 px-3 hover:bg-white/4 rounded-md">عن الموقع</a>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            padding: 20px 5%;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: rotateLogo 3s ease-in-out infinite;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes rotateLogo {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.05); }
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .menu-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active .menu-line:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+
+        .menu-toggle.active .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active .menu-line:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 5%;
+            right: 5%;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            transform: translateY(-20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 99;
+        }
+
+        .dropdown-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Main Section */
+        .main-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .main-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        /* Input Section */
+        .input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            animation: slideInRight 1s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 20px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input[type="text"]:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button */
+        .bypass-button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .bypass-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .bypass-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .bypass-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .bypass-button:active {
+            transform: translateY(-1px);
+        }
+
+        .bypass-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bypass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .loading-container.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* Result Section */
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-title {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-icon {
+            width: 30px;
+            height: 30px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            animation: successPop 0.5s ease-out;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .result-link {
+            color: white;
+            font-size: 16px;
+            word-break: break-all;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-button {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Supported Sites Section */
+        .supported-sites {
+            display: none;
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .supported-sites.active {
+            display: block;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .sites-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .sites-title {
+            color: white;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .site-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        .site-card:nth-child(even) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .site-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Error Message */
+        .error-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(244, 67, 54, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 30px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+
+            .main-section {
+                padding: 30px 20px;
+            }
+
+            .sites-container {
+                padding: 30px 20px;
+            }
+
+            .sites-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">⚡</div>
+                <span class="logo-text">Zen Bypass</span>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <span class="menu-line"></span>
+                <span class="menu-line"></span>
+                <span class="menu-line"></span>
+            </button>
         </div>
-      </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a class="menu-item" onclick="showHome()">🏠 الرئيسية</a>
+            <a class="menu-item" onclick="showSupportedSites()">🌐 المواقع المدعومة</a>
+        </div>
     </header>
 
-    <!-- Main Card -->
-    <main class="mt-8 glass rounded-3xl p-8 shadow-2xl border border-white/5">
-      <h1 class="text-3xl font-extrabold text-white neon">أدخل الرابط لتجاوزه</h1>
-      <p class="text-white/60 mt-1">الصق الرابط في المربع واضغط "تجاوز" - النتيجة تظهر لك فوراً.</p>
+    <!-- Main Container -->
+    <div class="container" id="homeSection">
+        <div class="main-section">
+            <div class="icon-wrapper">💀</div>
+            <h1>Zen Bypass</h1>
+            <p class="description">
+                احصل على نتيجتك فوراً. تجاوز Linkvertise، Loot-Link، Rekonise،<br>
+                Work.ink، Shrtfly، Rinku.pro، وغيرها الكثير من المختصرات.
+            </p>
 
-      <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-        <div class="md:col-span-9">
-          <div class="relative">
-            <input id="urlInput" type="url" placeholder="https://example.com/short/abc" class="w-full p-4 pr-12 rounded-xl bg-white/6 text-white placeholder-white/50 outline-none" />
-            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/80">🔗</div>
-          </div>
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="urlInput" placeholder="أدخل الرابط المختصر هنا...">
+                </div>
+            </div>
+
+            <button class="bypass-button" id="bypassButton" onclick="bypassLink()">
+                <span>🚀 تجاوز الآن</span>
+            </button>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="loading-container" id="loadingContainer">
+                <div class="spinner"></div>
+                <div class="loading-text">جاري التجاوز... يرجى الانتظار</div>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="result-title">
+                    <span class="success-icon">✓</span>
+                    تم التجاوز بنجاح!
+                </div>
+                <div class="result-link" id="resultLink"></div>
+                <button class="copy-button" onclick="copyResult()">📋 نسخ الرابط</button>
+            </div>
         </div>
-        <div class="md:col-span-3">
-          <button id="bypassBtn" class="w-full py-4 rounded-xl bg-white text-slate-900 font-bold hover:scale-[1.02] transition-transform">تجاوز الآن</button>
+    </div>
+
+    <!-- Supported Sites Section -->
+    <div class="supported-sites" id="supportedSection">
+        <div class="sites-container">
+            <h2 class="sites-title">🌐 المواقع المدعومة</h2>
+            <div class="sites-grid">
+                <div class="site-card">🔗 Linkvertise</div>
+                <div class="site-card">💰 Loot-Link</div>
+                <div class="site-card">🎯 Rekonise</div>
+                <div class="site-card">💼 Work.ink</div>
+                <div class="site-card">🦋 Shrtfly</div>
+                <div class="site-card">🌟 Rinku.pro</div>
+                <div class="site-card">⚡ Boost.ink</div>
+                <div class="site-card">🔥 Sub2unlock</div>
+                <div class="site-card">🎪 Mboost.me</div>
+                <div class="site-card">🎨 Social-unlock</div>
+                <div class="site-card">🎭 Letsboost</div>
+                <div class="site-card">🌈 والمزيد...</div>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- Result area -->
-      <div id="result" class="mt-6 hidden">
-        <div class="p-4 rounded-xl bg-white/5 border border-white/4">
-          <div id="statusText" class="text-white">جار المعالجة...</div>
-          <div id="resultBox" class="mt-3 hidden flex items-center gap-3">
-            <input id="finalLink" class="flex-1 p-3 rounded-md bg-white/6 text-white outline-none" readonly />
-            <button id="copyBtn" class="py-2 px-3 rounded-md glass">نسخ</button>
-            <a id="openBtn" class="py-2 px-3 rounded-md bg-indigo-600 text-white" target="_blank">فتح</a>
-          </div>
-        </div>
-      </div>
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Zen Bypass - جميع الحقوق محفوظة</p>
+    </footer>
 
-      <div class="mt-6 text-sm text-white/60">
-        <strong>ملاحظة:</strong> تأكد من أن الرابط صالح. هذا الموقع يحتاج API خارجي لتركيب خدمة التجاوز الحقيقية — إن لم يتوفر يتم استخدام وضع العرض فقط.
-      </div>
+    <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
 
-      <div id="supportedModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
-        <div class="w-full max-w-xl bg-white/6 glass rounded-2xl p-6">
-          <div class="flex justify-between items-center">
-            <h3 class="text-white text-lg font-bold">المواقع المدعومة</h3>
-            <button onclick="closeSupported()" class="text-white/70">✖</button>
-          </div>
-          <ul id="supportedList" class="mt-4 space-y-2 text-white/80">
-          </ul>
-        </div>
-      </div>
+        createParticles();
 
-      <footer id="about" class="mt-8 text-white/60">صُمم بواسطة LinkBypass • عدّل واطوّع الكود حسب حاجتك.</footer>
-    </main>
-  </div>
+        // Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
 
-<script>
-// Simple UI interactions
-function toggleMenu(){ const m=document.getElementById('menu'); m.classList.toggle('hidden'); }
-function navigateHome(){ window.scrollTo({top:0,behavior:'smooth'}); document.getElementById('menu').classList.add('hidden'); }
-function showSupported(){ fetch('/supported').then(r=>r.json()).then(d=>{ const ul=document.getElementById('supportedList'); ul.innerHTML=''; d.sites.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; ul.appendChild(li); }); document.getElementById('supportedModal').classList.remove('hidden'); document.getElementById('menu').classList.add('hidden'); }); }
-function closeSupported(){ document.getElementById('supportedModal').classList.add('hidden'); }
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('active');
+        });
 
-// Main bypass logic
-document.getElementById('bypassBtn').addEventListener('click', async ()=>{
-  const url = document.getElementById('urlInput').value.trim();
-  if(!url){ alert('أدخل رابط صحيح'); return; }
-  startProcessing();
-  try{
-    const res = await fetch('/api/bypass', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({url}) });
-    const data = await res.json();
-    if(data.ok){ showResult(data.result_url); } else { showError(data.error || 'حدث خطأ'); }
-  }catch(err){ showError('فشل الاتصال بالخادم'); }
-});
+        // Show/Hide Sections
+        function showHome() {
+            document.getElementById('homeSection').style.display = 'block';
+            document.getElementById('supportedSection').classList.remove('active');
+            dropdownMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
 
-function startProcessing(){ document.getElementById('result').classList.remove('hidden'); document.getElementById('statusText').innerHTML = `... جاري المعالجة`; document.getElementById('resultBox').classList.add('hidden'); }
-function showResult(link){ document.getElementById('statusText').innerHTML = `نجح التجاوز!`; const input=document.getElementById('finalLink'); input.value = link; document.getElementById('openBtn').href = link; document.getElementById('resultBox').classList.remove('hidden'); }
-function showError(msg){ document.getElementById('statusText').innerHTML = `<span style='color:#fca5a5'>${msg}</span>`; }
+        function showSupportedSites() {
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('supportedSection').classList.add('active');
+            dropdownMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
 
-document.getElementById('copyBtn').addEventListener('click', ()=>{ const v=document.getElementById('finalLink').value; navigator.clipboard.writeText(v).then(()=> alert('تم النسخ') ); });
+        // Bypass Link Function
+        async function bypassLink() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value.trim();
+            const loadingContainer = document.getElementById('loadingContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            const bypassButton = document.getElementById('bypassButton');
 
-</script>
+            // Reset UI
+            resultContainer.classList.remove('active');
+            errorMessage.classList.remove('active');
+            loadingContainer.classList.remove('active');
+
+            // Validate URL
+            if (!url) {
+                errorMessage.textContent = '⚠️ يرجى إدخال رابط صحيح!';
+                errorMessage.classList.add('active');
+                return;
+            }
+
+            if (!isValidUrl(url)) {
+                errorMessage.textContent = '⚠️ الرابط غير صحيح! يرجى التحقق من الرابط وحاول مرة أخرى.';
+                errorMessage.classList.add('active');
+                return;
+            }
+
+            // Show loading
+            loadingContainer.classList.add('active');
+            bypassButton.disabled = true;
+
+            try {
+                // استخدم API الخاص بك هنا - هذا مثال
+                const apiUrl = `https://api.bypass.vip/bypass?url=${encodeURIComponent(url)}`;
+                
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Hide loading
+                loadingContainer.classList.remove('active');
+                bypassButton.disabled = false;
+
+                if (data.success && data.destination) {
+                    // Show result
+                    document.getElementById('resultLink').textContent = data.destination;
+                    resultContainer.classList.add('active');
+                } else {
+                    errorMessage.textContent = '❌ ' + (data.message || 'فشل التجاوز! يرجى التحقق من الرابط أو المحاولة لاحقاً.');
+                    errorMessage.classList.add('active');
+                }
+            } catch (error) {
+                loadingContainer.classList.remove('active');
+                bypassButton.disabled = false;
+                errorMessage.textContent = '❌ حدث خطأ! يرجى المحاولة مرة أخرى لاحقاً.';
+                errorMessage.classList.add('active');
+                console.error('Error:', error);
+            }
+        }
+
+        // Validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Copy Result
+        function copyResult() {
+            const resultLink = document.getElementById('resultLink').textContent;
+            navigator.clipboard.writeText(resultLink).then(() => {
+                const copyButton = event.target;
+                const originalText = copyButton.textContent;
+                copyButton.textContent = '✓ تم النسخ!';
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Enter key support
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                bypassLink();
+            }
+        });
+    </script>
 </body>
 </html>
-"""
-
-# ----- Helpers -----
-URL_REGEX = re.compile(r'https?://[\w\-./?=&%]+')
-
-@app.route('/')
-def index():
-    return render_template_string(TEMPLATE)
-
-@app.route('/supported')
-def supported():
-    return jsonify({ 'sites': SUPPORTED_SITES })
-
-@app.route('/api/bypass', methods=['POST'])
-def api_bypass():
-    data = request.get_json(force=True)
-    url = (data or {}).get('url','').strip()
-    if not url or not URL_REGEX.match(url):
-        return jsonify({'ok': False, 'error': 'رابط غير صالح'}), 400
-
-    # اذا توفّر API خارجي استخدمه
-    if BYPASS_API_URL:
-        try:
-            headers = { 'Accept': 'application/json' }
-            if BYPASS_API_KEY:
-                headers['Authorization'] = f'Bearer {BYPASS_API_KEY}'
-            payload = { 'url': url }
-            resp = requests.post(BYPASS_API_URL, json=payload, headers=headers, timeout=15)
-            resp.raise_for_status()
-            jr = resp.json()
-            # نتوقع الحقل result أو link
-            result = jr.get('result') or jr.get('link') or jr.get('bypassed') or jr.get('url')
-            if not result:
-                return jsonify({'ok': False, 'error': 'API لم يعطِ رابطاً نهائياً'}), 502
-            return jsonify({'ok': True, 'result_url': result})
-        except Exception as e:
-            return jsonify({'ok': False, 'error': 'فشل الاتصال بواجهة API'}), 502
-
-    # وضع العرض (محاكاة) — لمّا لا يكون هناك API
-    time.sleep(2)  # لمحاكاة الانتظار
-    # توليد رابط نهائي افتراضي آمن
-    safe = urllib.parse.quote_plus(url)
-    fake = f"https://linkbypass.local/out?u={safe}"
-    return jsonify({'ok': True, 'result_url': fake})
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
