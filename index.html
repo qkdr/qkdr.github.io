@@ -1112,6 +1112,34 @@
             gap: 12px;
         }
 
+        .contact-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #2AABEE, #229ED9);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(42, 171, 238, 0.4);
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .contact-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(42, 171, 238, 0.6);
+        }
+
         /* Telegram Channels Page */
         .telegram-page {
             display: none;
@@ -1396,6 +1424,7 @@
             max-width: 500px;
             width: 90%;
             animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
         }
 
         .language-header {
@@ -1529,6 +1558,7 @@
             justify-content: center;
             gap: 30px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .footer-link {
@@ -1536,10 +1566,44 @@
             text-decoration: none;
             font-size: 14px;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link svg {
+            width: 16px;
+            height: 16px;
         }
 
         .footer-link:hover {
             color: white;
+        }
+
+        .footer-telegram {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #2AABEE, #229ED9);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(42, 171, 238, 0.3);
+            margin-top: 10px;
+        }
+
+        .footer-telegram svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-telegram:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(42, 171, 238, 0.5);
         }
 
         /* Responsive */
@@ -1751,6 +1815,10 @@
             <div class="custom-plans">
                 <h3 data-i18n="api.custom.title">Custom Plans</h3>
                 <p data-i18n="api.custom.desc">قد تتطلب المشاريع ذات الحجم الكبير خطة مخصصة. اتصل بنا لمناقشة احتياجاتك.</p>
+                <a href="https://t.me/F_HFP" target="_blank" class="contact-button">
+                    <i data-lucide="send"></i>
+                    <span data-i18n="api.contact">تواصل معنا</span>
+                </a>
             </div>
 
             <div class="supported-services">
@@ -1921,8 +1989,11 @@
             <div class="footer-links">
                 <a href="#" class="footer-link" data-i18n="footer.terms">الشروط والأحكام</a>
                 <a href="#" class="footer-link" data-i18n="footer.privacy">سياسة الخصوصية</a>
-                <a href="#" class="footer-link" data-i18n="footer.contact">اتصل بنا</a>
             </div>
+            <a href="https://t.me/F_HFP" target="_blank" class="footer-telegram">
+                <i data-lucide="send"></i>
+                <span data-i18n="footer.contact">اتصل بنا</span>
+            </a>
         </div>
     </footer>
 
@@ -1988,7 +2059,8 @@
                         title: "Supported Services",
                         desc: "عرض جميع التجاوزات المدعومة في النقطة النهائية أدناه.",
                         captcha: "يمكنك أيضاً استخدام المفتاح لتجاوز CAPTCHA على موقعنا."
-                    }
+                    },
+                    contact: "تواصل معنا"
                 },
                 telegram: {
                     title: "قنوات التليجرام",
@@ -2087,7 +2159,8 @@
                         title: "Supported Services",
                         desc: "View all supported bypasses at the endpoint below.",
                         captcha: "You may also use the key to bypass the CAPTCHA on our website."
-                    }
+                    },
+                    contact: "Contact Us"
                 },
                 telegram: {
                     title: "Telegram Channels",
@@ -2140,11 +2213,9 @@
             currentLang = lang;
             localStorage.setItem('language', lang);
             
-            // Change HTML direction
             document.documentElement.setAttribute('lang', lang);
             document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
             
-            // Translate all elements
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const keys = element.getAttribute('data-i18n').split('.');
                 let value = translations[lang];
@@ -2154,7 +2225,6 @@
                 element.textContent = value;
             });
             
-            // Translate placeholders
             document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
                 const keys = element.getAttribute('data-i18n-placeholder').split('.');
                 let value = translations[lang];
@@ -2164,7 +2234,6 @@
                 element.placeholder = value;
             });
             
-            // Update active language option
             document.querySelectorAll('.language-option').forEach(option => {
                 option.classList.remove('active');
             });
@@ -2175,13 +2244,11 @@
             });
         }
 
-        // Change language
         function changeLanguage(lang) {
             applyLanguage(lang);
             closeLanguageModal();
         }
 
-        // Open/Close language modal
         function openLanguageModal() {
             document.getElementById('languageModal').classList.add('active');
             lucide.createIcons();
@@ -2191,7 +2258,6 @@
             document.getElementById('languageModal').classList.remove('active');
         }
 
-        // Apply saved language on load
         applyLanguage(currentLang);
 
         // Create Particles
@@ -2275,11 +2341,11 @@
             lucide.createIcons();
         }
 
-        // API Key
+        // API Configuration
         const API_KEY = 'd2fe0743-247c-4ae2-80b7-96bdc6baa072';
         const API_BASE = 'https://api.izen.lol/v1';
 
-        // Bypass Link Function
+        // Bypass Link Function with proper API response handling
         async function bypassLink() {
             const urlInput = document.getElementById('urlInput');
             const url = urlInput.value.trim();
@@ -2322,13 +2388,27 @@
                 loadingContainer.classList.remove('active');
                 bypassButton.disabled = false;
 
-                if (data.success && data.destination) {
+                console.log('API Response:', data); // For debugging
+
+                // Check for successful bypass and extract destination
+                if (data && data.result) {
+                    document.getElementById('resultLink').textContent = data.result;
+                    resultContainer.classList.add('active');
+                    incrementBypassCount();
+                    lucide.createIcons();
+                } else if (data && data.destination) {
                     document.getElementById('resultLink').textContent = data.destination;
                     resultContainer.classList.add('active');
                     incrementBypassCount();
                     lucide.createIcons();
+                } else if (data && data.bypassed_url) {
+                    document.getElementById('resultLink').textContent = data.bypassed_url;
+                    resultContainer.classList.add('active');
+                    incrementBypassCount();
+                    lucide.createIcons();
                 } else {
-                    errorMessage.textContent = translations[currentLang].home.errorFailed;
+                    const errorMsg = data.message || data.error || translations[currentLang].home.errorFailed;
+                    errorMessage.textContent = '❌ ' + errorMsg;
                     errorMessage.classList.add('active');
                 }
             } catch (error) {
