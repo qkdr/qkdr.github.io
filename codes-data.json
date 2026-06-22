@@ -1,84 +1,224 @@
-{
-  "_meta": {
-    "تعليمات": "هذا الملف يحتوي كل ألعاب وأكواد الموقع. عدّله بحرية ثم احفظه - الموقع يقرأ منه مباشرة.",
-    "لإضافة لعبة جديدة": "أضف عنصر جديد داخل مصفوفة games بنفس شكل الألعاب الموجودة.",
-    "لإضافة كود جديد": "أضف عنصر داخل active أو expired لأي لعبة.",
-    "ملاحظة الصورة": "حقل image يقبل رابط صورة مباشر (يبدأ بـ https://...).",
-    "ملاحظة source": "حقل sourceUrl هو رابط الموقع الذي نقلت منه الأكواد (يظهر كزر 'المصدر' في الموقع).",
-    "آخر تحديث": "2026-06-22"
-  },
-  "games": [
+/**
+ * ====================================================
+ *   لوكرX — سكربت سحب أكواد روبلكس من beebom.com
+ * ====================================================
+ *
+ *  كيف تستخدمه؟
+ *  1. افتح أي صفحة كودات على beebom.com في المتصفح
+ *     مثال: https://beebom.com/demon-born-codes/
+ *  2. افتح DevTools (F12) → Console
+ *  3. الصق هذا السكربت كله واضغط Enter
+ *  4. انسخ الـ JSON الناتج وضعه في codes-data.json
+ *
+ *  أو استخدم النسخة الأوتوماتيكية في الأسفل لعدة ألعاب
+ * ====================================================
+ */
+
+(function() {
+
+  // ─────────────────────────────────────────────
+  //  إعدادات الألعاب — عدّل هنا فقط
+  // ─────────────────────────────────────────────
+  const GAMES_CONFIG = [
     {
-      "id": "sail-your-boat",
-      "name": "Sail Your Boat",
-      "nameAr": "سيل يور بوت",
-      "emoji": "⛵",
-      "image": "https://images.unsplash.com/photo-1500627965408-b5f2c0ff5b3a?w=600&h=400&fit=crop",
-      "sourceUrl": "https://beebom.com/sail-your-boat-codes/",
-      "sourceName": "Beebom",
-      "description": "اجمع عملات وخبرة وابني قاربك واستكشف الجزر.",
-      "active": [
-        { "code": "likes1k", "reward": "2x سرعة الشراع لمدة 5 دقائق", "isNew": true },
-        { "code": "members100k", "reward": "2x كاش لمدة 5 دقائق", "isNew": true },
-        { "code": "update1", "reward": "2x خبرة الوقود لمدة 5 دقائق", "isNew": true }
-      ],
-      "expired": [
-        { "code": "RELEASE", "reward": "مكافأة إطلاق اللعبة" },
-        { "code": "SAIL", "reward": "مكافأة ترحيبية" },
-        { "code": "BOAT", "reward": "مكافأة مبكرة" }
-      ]
+      id: "demon-born",
+      nameAr: "ديمون بورن",
+      emoji: "👹",
+      description: "اختر بين سلاير قوي أو مسار الظلام كشيطان في عالم مفتوح.",
+      url: "https://beebom.com/demon-born-codes/",
     },
-    {
-      "id": "blox-fruits",
-      "name": "Blox Fruits",
-      "nameAr": "بلوكس فروت",
-      "emoji": "🍈",
-      "image": "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=400&fit=crop",
-      "sourceUrl": "https://beebom.com/blox-fruits-codes/",
-      "sourceName": "Beebom",
-      "description": "قاتل وحوش، اجمع فروت القوى، وابني أقوى محارب في البحار.",
-      "active": [
-        { "code": "FUDGE100", "reward": "خبرة مضاعفة لمدة 20 دقيقة", "isNew": true },
-        { "code": "STARCODEHEO", "reward": "خبرة مضاعفة وعملات إضافية", "isNew": false }
-      ],
-      "expired": [
-        { "code": "KITT_AND_TASHA", "reward": "خبرة مضاعفة لمدة 20 دقيقة" },
-        { "code": "JCWK", "reward": "مكافأة تحديث قديم" }
-      ]
-    },
-    {
-      "id": "pet-simulator-99",
-      "name": "Pet Simulator 99",
-      "nameAr": "بت سيميوليتر 99",
-      "emoji": "🐾",
-      "image": "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=400&fit=crop",
-      "sourceUrl": "https://beebom.com/pet-simulator-99-codes/",
-      "sourceName": "Beebom",
-      "description": "اجمع حيوانات نادرة وافتح صناديق وارفع حظك.",
-      "active": [
-        { "code": "FREEBOOST", "reward": "تعزيز سرعة وحظ لفترة محدودة", "isNew": true },
-        { "code": "LUCKY99", "reward": "زيادة فرصة ظهور الحيوانات النادرة", "isNew": false }
-      ],
-      "expired": [
-        { "code": "LAUNCHWEEK", "reward": "عملات مجانية إصدار الإطلاق" }
-      ]
-    },
-    {
-      "id": "grow-a-garden",
-      "name": "Grow a Garden",
-      "nameAr": "جرو أ جاردن",
-      "emoji": "🌱",
-      "image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&h=400&fit=crop",
-      "sourceUrl": "https://beebom.com/grow-a-garden-codes/",
-      "sourceName": "Beebom",
-      "description": "ازرع، احصد، وطوّر حديقتك إلى مزرعة ضخمة.",
-      "active": [
-        { "code": "HARVESTDAY", "reward": "بذور نادرة مجانية", "isNew": true },
-        { "code": "SUNNYBOOST", "reward": "تسريع نمو النباتات", "isNew": false }
-      ],
-      "expired": [
-        { "code": "SPROUT1", "reward": "بذرة ترحيبية" }
-      ]
+    // أضف ألعاب أخرى هنا:
+    // { id: "blox-fruits", nameAr: "بلوكس فروتس", emoji: "🍎",
+    //   description: "...", url: "https://beebom.com/blox-fruits-codes/" },
+  ];
+
+  // ─────────────────────────────────────────────
+  //  دوال المساعدة
+  // ─────────────────────────────────────────────
+
+  function cleanText(t) {
+    return (t || "").replace(/\s+/g, " ").trim();
+  }
+
+  function isNewCode(liEl) {
+    return /\bNEW\b|==NEW==/i.test(liEl.textContent || "");
+  }
+
+  /**
+   * من عنصر <li> نستخرج الكود والمكافأة
+   * beebom يضع الكود في <strong> وبعده النقطتين والمكافأة
+   */
+  function extractCodeAndReward(liEl) {
+    let fullText = cleanText(liEl.textContent)
+      .replace(/\(?==?NEW==?\)?/gi, "")
+      .replace(/\(\s*NEW\s*\)/gi, "")
+      .trim();
+
+    // الكود في bold
+    const bold = liEl.querySelector("strong, b");
+    if (bold) {
+      const code = cleanText(bold.textContent);
+      let reward = fullText.slice(code.length).replace(/^[\s:–\-—]+/, "").trim();
+      return { code, reward: reward || "مكافأة مجانية" };
     }
-  ]
-}
+
+    // لا يوجد bold
+    if (fullText.includes(":")) {
+      const [code, ...rest] = fullText.split(":");
+      return { code: code.trim(), reward: rest.join(":").trim() || "مكافأة مجانية" };
+    }
+
+    return { code: fullText, reward: "مكافأة مجانية" };
+  }
+
+  /**
+   * جلب أول <ul> أو <ol> بعد عنصر معين،
+   * يوقف عند العنوان التالي h2/h3/h4
+   */
+  function getListAfter(headingEl) {
+    if (!headingEl) return [];
+    let el = headingEl.nextElementSibling;
+    while (el) {
+      const tag = el.tagName.toLowerCase();
+      if (tag === "ul" || tag === "ol") {
+        return Array.from(el.querySelectorAll("li"));
+      }
+      if (["h2", "h3", "h4"].includes(tag)) break;
+      el = el.nextElementSibling;
+    }
+    return [];
+  }
+
+  // ─────────────────────────────────────────────
+  //  سحب البيانات من الصفحة الحالية
+  // ─────────────────────────────────────────────
+
+  function scrapeCurrentPage(gameConfig) {
+    const headings = Array.from(document.querySelectorAll("h2, h3, h4"));
+
+    let activeHeading = null;
+    let expiredHeading = null;
+
+    for (const h of headings) {
+      const text = h.textContent.toLowerCase();
+      if (text.includes("expired")) {
+        expiredHeading = h;
+      } else if (
+        text.includes("all new") ||
+        text.includes("working") ||
+        text.includes("active") ||
+        text.includes("new codes") ||
+        text.includes("all codes")
+      ) {
+        activeHeading = h;
+      }
+    }
+
+    // أكواد نشطة
+    let activeItems = getListAfter(activeHeading);
+    if (activeItems.length === 0) {
+      // fallback: أول ul في المقال
+      const article = document.querySelector("article, .entry-content, .post-content");
+      const firstUl = article ? article.querySelector("ul") : document.querySelector("ul");
+      if (firstUl) activeItems = Array.from(firstUl.querySelectorAll("li"));
+    }
+
+    const active = activeItems
+      .map(li => {
+        const { code, reward } = extractCodeAndReward(li);
+        return code.length > 1 ? { code, reward, isNew: isNewCode(li) } : null;
+      })
+      .filter(Boolean);
+
+    // أكواد منتهية
+    const expiredItems = getListAfter(expiredHeading);
+    const expired = expiredItems
+      .map(li => {
+        const { code, reward } = extractCodeAndReward(li);
+        return code.length > 1 ? { code, reward } : null;
+      })
+      .filter(Boolean);
+
+    // صورة الصفحة
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    const image = ogImg ? ogImg.content.split("?")[0] : "";
+
+    // اسم اللعبة من العنوان
+    const h1 = document.querySelector("h1");
+    const rawTitle = h1 ? h1.textContent.trim() : document.title;
+    const gameName = rawTitle.replace(/codes?\s*\(.*\)/i, "").trim();
+
+    return {
+      id: gameConfig ? gameConfig.id : slugify(gameName),
+      name: gameName,
+      nameAr: gameConfig ? gameConfig.nameAr : gameName,
+      emoji: gameConfig ? gameConfig.emoji : "🎮",
+      description: gameConfig ? gameConfig.description : "",
+      image,
+      sourceUrl: window.location.href,
+      sourceName: "Beebom",
+      active,
+      expired,
+    };
+  }
+
+  function slugify(text) {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  // ─────────────────────────────────────────────
+  //  التشغيل — الصفحة الحالية
+  // ─────────────────────────────────────────────
+
+  // ابحث عن اللعبة المطابقة للرابط الحالي
+  const currentUrl = window.location.href;
+  const matchedGame = GAMES_CONFIG.find(g => currentUrl.includes(g.url.replace("https://beebom.com", "").replace(/\/$/, "")));
+
+  const gameData = scrapeCurrentPage(matchedGame || null);
+
+  // بناء JSON الكامل
+  const finalJSON = {
+    games: [gameData]
+  };
+
+  const jsonString = JSON.stringify(finalJSON, null, 2);
+
+  // ─────────────────────────────────────────────
+  //  عرض النتيجة + تنزيل تلقائي
+  // ─────────────────────────────────────────────
+
+  console.log("%c✅ لوكرX — تم سحب البيانات!", "color:#00F5C3;font-size:16px;font-weight:bold;");
+  console.log(`%c⚡ أكواد نشطة: ${gameData.active.length}`, "color:#FFC93C;font-weight:bold;");
+  console.log(`%c🕓 أكواد منتهية: ${gameData.expired.length}`, "color:#B7A8DE;font-weight:bold;");
+  console.log("\n%c📋 الـ JSON الناتج:", "color:#9B5DE5;font-weight:bold;");
+  console.log(jsonString);
+
+  // تنزيل الملف تلقائياً
+  const blob = new Blob([jsonString], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "codes-data.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  console.log("\n%c📥 تم تنزيل codes-data.json تلقائياً!", "color:#00F5C3;font-size:14px;font-weight:bold;");
+  console.log("%c👉 ضعه بجانب index.html وافتح الموقع", "color:#FF5CA8;font-size:13px;");
+
+  // عرض نافذة منبثقة بالملخص
+  setTimeout(() => {
+    const msg = [
+      "✅ لوكرX — اكتمل السحب!",
+      "",
+      `🎮 اللعبة: ${gameData.nameAr || gameData.name}`,
+      `⚡ أكواد نشطة: ${gameData.active.length}`,
+      `🕓 أكواد منتهية: ${gameData.expired.length}`,
+      "",
+      "📥 تم تنزيل codes-data.json تلقائياً",
+      "👉 ضعه بجانب index.html وافتح الموقع"
+    ].join("\n");
+    alert(msg);
+  }, 500);
+
+  return finalJSON;
+
+})();
